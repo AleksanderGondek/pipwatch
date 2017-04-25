@@ -1,3 +1,5 @@
+"""This module contains logic responsible starting the pipwatch api."""
+
 from logging import getLogger, Logger
 
 from flask import Flask
@@ -8,10 +10,14 @@ from pipwatch_api.configuration import configure_flask_application, configure_lo
 app = Flask(__name__)
 api = Api(app)
 
+
 @api.route("/hello")
 class HelloWorld(Resource):
-    def get(self):
+    """Api resource test."""
+    def get(self):  # pylint: disable=no-self-use
+        """Return hello world."""
         return {"hello": "world"}
+
 
 if __name__ == "__main__":
     configure_logger()
