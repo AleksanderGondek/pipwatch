@@ -7,9 +7,9 @@ from typing import Optional
 
 from flask import Flask
 
-PATH_TO_CONFIGURATION_FILE = path.join(path.dirname(path.abspath(__file__)), "..", "config.ini")
-PATH_TO_LOG_CONFIGURATION_FILE = path.join(path.dirname(path.abspath(__file__)), "..", "logging.conf")
-PATH_TO_LOG_FILE = path.join(path.dirname(path.abspath(__file__)), "..", "./pipwatch-api.log")
+PATH_TO_CONFIGURATION_FILE = path.join(path.dirname(path.abspath(__file__)), "../..", "config.ini")
+PATH_TO_LOG_CONFIGURATION_FILE = path.join(path.dirname(path.abspath(__file__)), "../..", "logging.conf")
+PATH_TO_LOG_FILE = path.join(path.dirname(path.abspath(__file__)), "../..", "./pipwatch-api.log")
 
 
 CONFIGURATION_FILE: Optional[ConfigParser] = None

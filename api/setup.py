@@ -1,7 +1,9 @@
 from setuptools import setup, find_packages
 
+from pipwatch_api.version import VERSION
+
 setup(
     name="pipwatch_api",
-    version="0.0.1",
+    version=VERSION,
     packages=find_packages(),
 )
