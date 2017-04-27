@@ -44,3 +44,8 @@ def configure_flask_application(application: Flask) -> None:
     application.config["RESTPLUS_MASK_SWAGGER "] = configuration.getboolean(section="flask-restplus", option="mask_swagger", fallback=False)  # noqa: E501
     application.config["RESTPLUS_SWAGGER_UI_DOC_EXPANSION"] = configuration.get(section="flask-restplus", option="swagger_ui_doc_expansion", fallback="list")  # noqa: E501
     application.config["RESTPLUS_VALIDATE "] = configuration.getboolean(section="flask-restplus", option="validate", fallback=True)  # noqa: E501
+
+    application.config["SQLALCHEMY_DATABASE_URI"] = configuration.get(section="sql-alchemy", option="database_uri", fallback="sqlite:////db.sqlite")  # noqa: E501
+    application.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = configuration.getboolean(section="sql-alchemy", option="track_modifications", fallback=False)  # noqa: E501
+
+    application.config["PIPWATCHAPI_RESET_DB_ON_START"] = configuration.getboolean(section="pipwatch-api", option="resest_db_on_start", fallback=True)  # noqa: E501
