@@ -6,11 +6,12 @@ from os import path
 from typing import Optional
 
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
 
 PATH_TO_CONFIGURATION_FILE = path.join(path.dirname(path.abspath(__file__)), "../..", "config.ini")
 PATH_TO_LOG_CONFIGURATION_FILE = path.join(path.dirname(path.abspath(__file__)), "../..", "logging.conf")
 PATH_TO_LOG_FILE = path.join(path.dirname(path.abspath(__file__)), "../..", "./pipwatch-api.log")
-
 
 CONFIGURATION_FILE: Optional[ConfigParser] = None
 
@@ -28,6 +29,17 @@ def load_config_file() -> ConfigParser:
 def configure_logger() -> None:
     """Apply settings from configuration file to loggers."""
     config.fileConfig(PATH_TO_LOG_CONFIGURATION_FILE)
+
+
+def configure_sqlalchemy(application: Flask, sql_alchemy_instance: SQLAlchemy) -> None:
+    """Initialize SQLAlchemy for flask application."""
+    sql_alchemy_instance.init_app(app=application)
+    if not application.config.get("PIPWATCHAPI_RESET_DB_ON_START"):
+        return
+
+    with application.app_context():
+        sql_alchemy_instance.drop_all()
+        sql_alchemy_instance.create_all()
 
 
 def configure_flask_application(application: Flask) -> None:

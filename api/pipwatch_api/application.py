@@ -2,15 +2,18 @@
 
 from flask import Flask
 
-from pipwatch_api.core.configuration import configure_flask_application
-from pipwatch_api.datastore import initialize_database
+from pipwatch_api.core.configuration import configure_flask_application, configure_sqlalchemy
+from pipwatch_api.datastore.models import DATABASE
 from pipwatch_api.namespaces.version_one import get_api_version_one
 
 
 def get_flask_application() -> Flask:
-    """Return configured restplus api application/"""
+    """Return configured restplus api application."""
     app: Flask = Flask(__name__)
+
     configure_flask_application(application=app)
-    initialize_database(application=app)
+    configure_sqlalchemy(application=app, sql_alchemy_instance=DATABASE)
+
     app.register_blueprint(blueprint=get_api_version_one())
+
     return app
