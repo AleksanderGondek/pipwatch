@@ -2,7 +2,8 @@
 from flask import Blueprint
 from flask_restplus import Api
 
-from pipwatch_api.namespaces.v1.common.status import STATUS_NAMESPACE
+from pipwatch_api.namespaces.v1.status import status_namespace
+from pipwatch_api.namespaces.v1.tags import tags_namespace
 from pipwatch_api.version import VERSION
 
 
@@ -14,6 +15,7 @@ def get_api_version_one() -> Blueprint:
                           version=VERSION,
                           description="API for interacting witch pipwatch")
 
-    api_version_one.add_namespace(STATUS_NAMESPACE)
+    api_version_one.add_namespace(status_namespace)
+    api_version_one.add_namespace(tags_namespace)
 
     return version_one_blueprint

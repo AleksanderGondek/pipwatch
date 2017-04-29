@@ -102,7 +102,7 @@ class RequirementsFile(DATABASE.Model):
     def __repr__(self) -> str:
         """Return class instance representation."""
         return "{0}({1!r},{2!r},{3!r})".format(self.__class__.__module__ + "." + self.__class__.__name__,
-                                                     self.full_path, self.status, self.project_id)
+                                               self.full_path, self.status, self.project_id)
 
 
 class Requirement(DATABASE.Model):
