@@ -1,5 +1,7 @@
 """This module contains logic for handling operations on tag-related requests."""
 
+from typing import Dict
+
 from flask import request
 from flask_restplus import Namespace, Resource, fields
 
@@ -35,7 +37,7 @@ class Tags(Resource):
         if not request.json:
             return None, 400
 
-        created_tag = self.datastore.create(document=request.json)
+        created_tag: TagModel = self.datastore.create(document=request.json)
         return created_tag, 201
 
 
@@ -52,7 +54,7 @@ class Tag(Resource):
     @tags_namespace.response(200, "Tag found.")
     def get(self, tag_id: int):
         """Return tag with given id."""
-        document = self.datastore.read(document_id=tag_id)
+        document: TagModel = self.datastore.read(document_id=tag_id)
         if not document:
             return None, 404
 
@@ -66,8 +68,8 @@ class Tag(Resource):
         if not request.json:
             return None, 400
 
-        received_document = request.json
-        updated_document = self.datastore.update(document_id=tag_id, document=received_document)
+        received_document: Dict = request.json
+        updated_document: TagModel = self.datastore.update(document_id=tag_id, document=received_document)
         if not updated_document:
             return None, 404
 

@@ -9,7 +9,7 @@ from pipwatch_api.namespaces.version_one import get_api_version_one
 
 def get_flask_application() -> Flask:
     """Return configured restplus api application."""
-    app: Flask = Flask(__name__)
+    app = Flask(__name__)
 
     configure_flask_application(application=app)
     configure_sqlalchemy(application=app, sql_alchemy_instance=DATABASE)

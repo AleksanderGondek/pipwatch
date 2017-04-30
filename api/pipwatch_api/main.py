@@ -13,3 +13,4 @@ if __name__ == "__main__":
     log.info("Attempting to start application")
     app = get_flask_application()
     app.run()
+    log.info("Application started")
