@@ -60,13 +60,13 @@ class Project(DATABASE.Model):
     tags = DATABASE.relationship("Tag", secondary=TAGS, backref=DATABASE.backref("projects", lazy="dynamic"))
     requirements_files = DATABASE.relationship("RequirementsFile", backref="project", lazy="dynamic")
 
-    def __init__(self, name: str = "", namespace: str = "", url: str = "", namespace_id: int = "") -> None:
+    def __init__(self, name: str = "", url: str = "", namespace_id: int = -1) -> None:
         """Initialize class instance."""
         self.name = name
-        self.namespace = namespace
         self.url = url
 
-        self.namespace_id = namespace_id
+        if namespace_id >= 0:
+            self.namespace_id = namespace_id
 
     def __str__(self) -> str:
         """Return class representation."""
@@ -93,7 +93,8 @@ class RequirementsFile(DATABASE.Model):
         self.full_path = full_path
         self.status = status
 
-        self.project_id = project_id
+        if project_id >= 0:
+            self.project_id = project_id
 
     def __str__(self) -> str:
         """Return class representation."""
@@ -125,7 +126,8 @@ class Requirement(DATABASE.Model):
         self.desired_version = desired_version
         self.status = status
 
-        self.requirements_file_id = requirements_file_id
+        if requirements_file_id >= 0:
+            self.requirements_file_id = requirements_file_id
 
     def __str__(self) -> str:
         """Return class representation."""

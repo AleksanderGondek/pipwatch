@@ -1,6 +1,6 @@
 """This module contains logic for handling operations on tag-related requests."""
 
-from typing import Dict
+from typing import Dict  # noqa: F401 Imported for type definition
 
 from flask import request
 from flask_restplus import Namespace, Resource, fields
@@ -42,7 +42,7 @@ class Tags(Resource):
 
 
 @tags_namespace.route("/<int:tag_id>")
-@tags_namespace.response(404, 'Tag not found.')
+@tags_namespace.response(404, "Tag not found.")
 class Tag(Resource):
     """Resource representing operations on single tag."""
     def __init__(self, *args, **kwargs):

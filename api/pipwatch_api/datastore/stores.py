@@ -3,7 +3,7 @@
 from typing import Dict, Generic, List, Optional, TypeVar
 
 from sqlalchemy.orm.exc import NoResultFound
-from flask_sqlalchemy import Model, SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 
 
 T = TypeVar("T")
@@ -16,7 +16,7 @@ class DefaultStore(Generic[T]):
         """
         Initialize datastore instance.
 
-        :param model: SQLAlchemy entity model which datastore will work upon (table). 
+        :param model: SQLAlchemy entity model which datastore will work upon (table).
         :param database: SQLAlchemy instance which should be used to connect to database.
         """
         self.model: T = model

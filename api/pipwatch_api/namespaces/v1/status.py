@@ -1,7 +1,7 @@
 """This module contains logic for returning API status."""
 from flask_restplus import Namespace, Resource, fields
 
-status_namespace = Namespace("/status", description="Check if API is responsive.")  # pylint: disable=invalid-name
+status_namespace = Namespace("status", description="Check if API is responsive.")  # pylint: disable=invalid-name
 status_representation = status_namespace.model("Status", {  # pylint: disable=invalid-name
     "status": fields.String(required=True, description="Current API status (i.e. 'OK)'")
 })
