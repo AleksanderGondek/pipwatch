@@ -7,15 +7,20 @@ from flask_restplus import Namespace, Resource, fields
 
 from pipwatch_api.datastore.models import DATABASE
 from pipwatch_api.datastore.models import Project as ProjectModel
-from pipwatch_api.datastore.stores import DefaultStore
+from pipwatch_api.datastore.stores import ProjectStore
+
+from pipwatch_api.namespaces.v1.tags import tag_representation_structure
+
 
 projects_namespace = Namespace("projects", description="")  # pylint: disable=invalid-name
+tag_representation = projects_namespace.model("Tag", tag_representation_structure)  # pylint: disable=invalid-name
 project_representation_structure = {  # pylint: disable=invalid-name
     "id": fields.Integer(readOnly=True, description=""),
     "name": fields.String(required=True, description=""),
     "url": fields.String(required=True, description=""),
     "namespace_id": fields.Integer(attribute="namespace.id"),
-    "namespace": fields.String(attribute="namespace.name")
+    "namespace": fields.String(attribute="namespace.name"),
+    "tags": fields.List(fields.Nested(tag_representation))
 }
 project_representation = projects_namespace.model("Project",  # pylint: disable=invalid-name
                                                   project_representation_structure)
@@ -27,7 +32,7 @@ class Projects(Resource):
     def __init__(self, *args, **kwargs):
         """To be described."""
         super().__init__(*args, **kwargs)
-        self.datastore = DefaultStore(model=ProjectModel, database=DATABASE)
+        self.datastore = ProjectStore(model=ProjectModel, database=DATABASE)
 
     @projects_namespace.marshal_list_with(project_representation)
     def get(self):
@@ -53,7 +58,7 @@ class Project(Resource):
     def __init__(self, *args, **kwargs):
         """To be described."""
         super().__init__(*args, **kwargs)
-        self.datastore = DefaultStore(model=ProjectModel, database=DATABASE)
+        self.datastore = ProjectStore(model=ProjectModel, database=DATABASE)
 
     @projects_namespace.marshal_with(project_representation)
     @projects_namespace.response(200, "Namespace found.")

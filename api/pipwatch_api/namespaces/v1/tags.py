@@ -10,10 +10,11 @@ from pipwatch_api.datastore.models import Tag as TagModel
 from pipwatch_api.datastore.stores import DefaultStore
 
 tags_namespace = Namespace("tags", description="")  # pylint: disable=invalid-name
-tag_representation = tags_namespace.model("Tag", {  # pylint: disable=invalid-name
+tag_representation_structure = {  # pylint: disable=invalid-name
     "id": fields.Integer(readOnly=True, description=""),
     "name": fields.String(required=True, description="")
-})
+}
+tag_representation = tags_namespace.model("Tag", tag_representation_structure)  # pylint: disable=invalid-name
 
 
 @tags_namespace.route("/")
