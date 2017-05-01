@@ -18,11 +18,14 @@ class Tag(DATABASE.Model):
 
     def __str__(self) -> str:
         """Return class instance human-friendly representation."""
-        return "<Tag {0!r}>".format(self.name)
+        return "<Tag {self.name!r}>".format(self=self)
 
     def __repr__(self) -> str:
         """Return class instance representation."""
-        return "{0}({1!r})".format(self.__class__.__module__ + "." + self.__class__.__name__, self.name)
+        return "<{class_name}({self.name!r})>".format(
+            class_name=self.__class__.__module__ + "." + self.__class__.__name__,
+            self=self
+        )
 
 
 TAGS = DATABASE.Table("tags",
@@ -42,11 +45,14 @@ class Namespace(DATABASE.Model):
 
     def __str__(self) -> str:
         """Return class representation."""
-        return "<Namespace {0!r}>".format(self.name)
+        return "<Namespace {self.name!r}>".format(self=self)
 
     def __repr__(self) -> str:
         """Return class instance representation."""
-        return "{0}({1!r})".format(self.__class__.__module__ + "." + self.__class__.__name__, self.name)
+        return "<{class_name}({self.name!r})>".format(
+            class_name=self.__class__.__module__ + "." + self.__class__.__name__,
+            self=self
+        )
 
 
 class Project(DATABASE.Model):
@@ -70,12 +76,14 @@ class Project(DATABASE.Model):
 
     def __str__(self) -> str:
         """Return class representation."""
-        return "<Project {1!r} from {0!r}>".format(self.namespace, self.name)
+        return "<Project {self.name!r}>".format(self=self)
 
     def __repr__(self) -> str:
         """Return class instance representation."""
-        return "{0}({1!r},{2!r})".format(self.__class__.__module__ + "." + self.__class__.__name__,
-                                         self.name, self.namespace_id)
+        return "<{class_name}({self.name!r},{self.namespace_id!r})>".format(
+            class_name=self.__class__.__module__ + "." + self.__class__.__name__,
+            self=self
+        )
 
 
 class RequirementsFile(DATABASE.Model):
@@ -98,12 +106,20 @@ class RequirementsFile(DATABASE.Model):
 
     def __str__(self) -> str:
         """Return class representation."""
-        return "<RequirementsFile {0!r}>".format(self.full_path)
+        return "<RequirementsFile {self.full_path!r}>".format(self=self)
 
     def __repr__(self) -> str:
         """Return class instance representation."""
-        return "{0}({1!r},{2!r},{3!r})".format(self.__class__.__module__ + "." + self.__class__.__name__,
-                                               self.full_path, self.status, self.project_id)
+        return (
+            "<{class_name}("
+            "{self.full_path!r},"
+            "{self.status!r},"
+            "{self.project_id!r})"
+            ">".format(
+                class_name=self.__class__.__module__ + "." + self.__class__.__name__,
+                self=self
+            )
+        )
 
 
 class Requirement(DATABASE.Model):
@@ -131,14 +147,19 @@ class Requirement(DATABASE.Model):
 
     def __str__(self) -> str:
         """Return class representation."""
-        return "<Requirement {0!r} ({1!r})>".format(self.name, self.current_version)
+        return "<Requirement {self.name!r}({self.current_version!r})>".format(self=self)
 
     def __repr__(self) -> str:
         """Return class instance representation."""
-        return "{0}({1!r},{2!r},{3!r},{4!r},{5!r})".format(self.__class__.__module__ + "." +
-                                                           self.__class__.__name__,
-                                                           self.name,
-                                                           self.current_version,
-                                                           self.desired_version,
-                                                           self.status,
-                                                           self.requirements_file_id)
+        return (
+            "<{class_name}("
+            "{self.name!r},"
+            "{self.current_version!r},"
+            "{self.desired_version!r},"
+            "{self.status!r},"
+            "{self.requirements_file_id!r})"
+            ">".format(
+                class_name=self.__class__.__module__ + "." + self.__class__.__name__,
+                self=self
+            )
+        )
