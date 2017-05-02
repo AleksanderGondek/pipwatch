@@ -60,7 +60,7 @@ class Requirement(Resource):
     @requirements_namespace.marshal_with(requirement_repr)
     @requirements_namespace.response(200, "Requirement found.")
     def get(self, requirement_id: int):
-        """Return project with given id."""
+        """Return requirement with given id."""
         document: RequirementModel = self.datastore.read(document_id=requirement_id)
         if not document:
             return None, 404
