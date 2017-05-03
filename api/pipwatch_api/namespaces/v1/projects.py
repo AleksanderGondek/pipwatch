@@ -9,6 +9,7 @@ from pipwatch_api.datastore.models import DATABASE
 from pipwatch_api.datastore.models import Project as ProjectModel
 from pipwatch_api.datastore.stores import ProjectStore
 
+from pipwatch_api.namespaces.v1.requirements_files import requirements_file_simple_repr_structure
 from pipwatch_api.namespaces.v1.tags import tag_representation_structure
 
 
@@ -24,6 +25,14 @@ project_representation_structure = {  # pylint: disable=invalid-name
 }
 project_representation = projects_namespace.model("Project",  # pylint: disable=invalid-name
                                                   project_representation_structure)
+requirements_file_simple_repr = projects_namespace.model("RequirementsFile",  # pylint: disable=invalid-name
+                                                         requirements_file_simple_repr_structure)
+project_repr_req_files = projects_namespace.inherit("Project with requirements files",  # pylint: disable=invalid-name
+                                                    project_representation, {
+                                                        "requirements_files": fields.List(
+                                                            fields.Nested(requirements_file_simple_repr)
+                                                        )
+                                                    })
 
 
 @projects_namespace.route("/")
@@ -40,8 +49,8 @@ class Projects(Resource):
         return self.datastore.read_all()
 
     @projects_namespace.doc("create_project")
-    @projects_namespace.expect(project_representation)
-    @projects_namespace.marshal_with(project_representation, code=201)
+    @projects_namespace.expect(project_repr_req_files)
+    @projects_namespace.marshal_with(project_repr_req_files, code=201)
     def post(self):
         """Create a new project."""
         if not request.json:
@@ -60,7 +69,7 @@ class Project(Resource):
         super().__init__(*args, **kwargs)
         self.datastore = ProjectStore(model=ProjectModel, database=DATABASE)
 
-    @projects_namespace.marshal_with(project_representation)
+    @projects_namespace.marshal_with(project_repr_req_files)
     @projects_namespace.response(200, "Namespace found.")
     def get(self, project_id: int):
         """Return project with given id."""
@@ -70,8 +79,8 @@ class Project(Resource):
 
         return document, 200
 
-    @projects_namespace.expect(project_representation)
-    @projects_namespace.marshal_with(project_representation, code=200)
+    @projects_namespace.expect(project_repr_req_files)
+    @projects_namespace.marshal_with(project_repr_req_files, code=200)
     @projects_namespace.response(400, "Invalid request.")
     def put(self, project_id: int):
         """Update project with given id."""
