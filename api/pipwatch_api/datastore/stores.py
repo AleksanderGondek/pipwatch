@@ -1,9 +1,9 @@
 """This module should contain datastores used to work on database."""
 
-from typing import Dict, Generic, List, Optional, TypeVar
+from typing import Dict, Generic, List, NamedTuple, Optional, TypeVar
 
 from sqlalchemy.orm.exc import NoResultFound
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy, Model
 
 from pipwatch_api.datastore.models import Tag
 
@@ -14,8 +14,6 @@ T = TypeVar("T")
 class DefaultStore(Generic[T]):
     """Generic datastore which can be used to work on any entity in database."""
 
-    COLUMNS_TO_IGNORE: List[str] = ["id"]
-
     def __init__(self, model: T = None, database: SQLAlchemy = None) -> None:
         """
         Initialize datastore instance.
@@ -23,12 +21,13 @@ class DefaultStore(Generic[T]):
         :param model: SQLAlchemy entity model which datastore will work upon (table).
         :param database: SQLAlchemy instance which should be used to connect to database.
         """
+        self.columns_to_ignore: List[str] = ["id"]
         self.model: T = model
         self.database: SQLAlchemy = database
 
     def _naive_get_columns_names(self) -> List[str]:
         """Return list of keys that model object instance should contain."""
-        return [name for name in self.model.__table__.columns.keys() if name not in self.COLUMNS_TO_IGNORE]
+        return [name for name in self.model.__table__.columns.keys() if name not in self.columns_to_ignore]
 
     def _additional_document_handler(self, entity: T = None, document: Dict = None):
         """
@@ -95,31 +94,58 @@ class DefaultStore(Generic[T]):
         self.database.session.commit()
 
 
-class ProjectStore(DefaultStore):
-    """Datastore that should be used for CRUD operations on 'pipwatch_api.datastore.models.Project'."""
+NestedDocument = NamedTuple("NestedDocument", ("property_name", str),
+                            ("document_model", Model), ("differentiator_property", str))
 
-    COLUMNS_TO_IGNORE: List[str] = ["id", "tags"]
 
-    def _additional_document_handler(self, entity: T = None, document: Dict = None):
-        """
-        Persist changes made to project tags.
+class WithNestedDocumentsStore(DefaultStore):
+    """To be described."""
 
-        This method will make sure that any tags removed from project model will be also untagged in database,
-        and any tags added to model, will also be tagged.
-        """
-        # Tag names are unique in table
-        tag_names_from_entity = {tag.name for tag in entity.tags}
-        tag_names_from_document = {tag.get("name", "") for tag in document.get("tags", []) if tag.get("name", "")}
-        if not tag_names_from_entity and not tag_names_from_document:
+    def __init__(self, model: T = None, database: SQLAlchemy = None,
+                 nested_documents_specs: List[NestedDocument]=None) -> None:
+        """To be described."""
+        super().__init__(model=model, database=database)
+        self.nested_documents_specs: List[NestedDocument] = nested_documents_specs
+        self._load_nested_documents_properties_names()
+
+    def _load_nested_documents_properties_names(self) -> None:
+        """To be described."""
+        for property_name, _, _ in self.nested_documents_specs:
+            self.columns_to_ignore.append(property_name)
+
+    def _persist_nested_document(self, entity: T = None, document: Dict = None,
+                                 nested_doc_key: str = "", nested_doc_model: Model = None,
+                                 differentiator_property: str = "") -> None:
+        """To be described."""
+        ids_from_entity = {getattr(nested_document, differentiator_property) for nested_document
+                           in getattr(entity, nested_doc_key)
+                           if getattr(nested_document, differentiator_property, None)}
+        ids_from_document = {nested_document.get(differentiator_property, "") for nested_document
+                             in document.get(nested_doc_key, [])
+                             if nested_document.get(differentiator_property, "")}
+        if not ids_from_entity and not ids_from_document:
             return
 
-        tag_names_to_add = tag_names_from_document - tag_names_from_entity
+        ids_to_be_added = ids_from_document - ids_from_entity
         try:
-            tags_to_add = Tag.query.filter(Tag.name.in_(tag_names_to_add)).all()
+            sub_documents_to_add = nested_doc_model.query.filter(
+                getattr(nested_doc_model, differentiator_property).in_(ids_to_be_added)
+            ).all()
         except NoResultFound:
-            tags_to_add = []
+            sub_documents_to_add = []
 
-        for tag in tags_to_add:
-            entity.tags.append(tag)
+        for sub_document in sub_documents_to_add:
+            getattr(entity, nested_doc_key).append(sub_document)
 
-        entity.tags = [tag for tag in entity.tags if tag.name in tag_names_from_document]
+        setattr(entity, nested_doc_key, [sub_document for sub_document
+                                         in getattr(entity, nested_doc_key, [])
+                                         if getattr(sub_document, differentiator_property) in ids_from_document])
+
+
+    def _additional_document_handler(self, entity: T = None, document: Dict = None):
+        """To be described."""
+        for nested_doc_key, nested_doc_model, differentiator_property in self.nested_documents_specs:
+            self._persist_nested_document(entity=entity, document=document,
+                                          nested_doc_key=nested_doc_key,
+                                          nested_doc_model=nested_doc_model,
+                                          differentiator_property=differentiator_property)
