@@ -14,7 +14,7 @@ from pipwatch_api.namespaces.v1.requirements import requirement_repr_structure
 
 requirements_files_namespace = Namespace("requirements-files", description="")  # pylint: disable=invalid-name
 requirements_file_simple_repr_structure = {  # pylint: disable=invalid-name
-    "id": fields.Integer(readOnly=True, description=""),
+    "id": fields.Integer(required=False, description=""),
     "full_path": fields.String(required=True, description=""),
     "status": fields.String(required=True, description=""),
     "project_id": fields.Integer(required=True, attribute="project.id"),

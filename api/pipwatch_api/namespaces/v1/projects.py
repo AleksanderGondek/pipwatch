@@ -5,12 +5,16 @@ from typing import Dict  # noqa: F401 Imported for type definition
 from flask import request
 from flask_restplus import Namespace, Resource, fields
 
-from pipwatch_api.datastore.models import DATABASE
+from pipwatch_api.datastore.models import DATABASE, RequirementsFile, Tag
 from pipwatch_api.datastore.models import Project as ProjectModel
-from pipwatch_api.datastore.stores import WithNestedDocumentsStore
+from pipwatch_api.datastore.stores import NestedDocument, WithNestedDocumentsStore
 
 from pipwatch_api.namespaces.v1.requirements_files import requirements_file_simple_repr_structure
 from pipwatch_api.namespaces.v1.tags import tag_representation_structure
+
+
+TagNestedDocument = NestedDocument("tags", Tag ,"name")
+RequirementsFilesNestedDocument = NestedDocument("requirements", RequirementsFile, "id")
 
 
 projects_namespace = Namespace("projects", description="")  # pylint: disable=invalid-name
@@ -41,7 +45,9 @@ class Projects(Resource):
     def __init__(self, *args, **kwargs):
         """To be described."""
         super().__init__(*args, **kwargs)
-        self.datastore = WithNestedDocumentsStore(model=ProjectModel, database=DATABASE)
+        self.datastore = WithNestedDocumentsStore(model=ProjectModel, database=DATABASE,
+                                                  nested_documents_specs=[TagNestedDocument,
+                                                                          RequirementsFilesNestedDocument])
 
     @projects_namespace.marshal_list_with(project_representation)
     def get(self):
@@ -67,7 +73,9 @@ class Project(Resource):
     def __init__(self, *args, **kwargs):
         """To be described."""
         super().__init__(*args, **kwargs)
-        self.datastore = WithNestedDocumentsStore(model=ProjectModel, database=DATABASE)
+        self.datastore = WithNestedDocumentsStore(model=ProjectModel, database=DATABASE,
+                                                  nested_documents_specs=[TagNestedDocument,
+                                                                          RequirementsFilesNestedDocument])
 
     @projects_namespace.marshal_with(project_repr_req_files)
     @projects_namespace.response(200, "Namespace found.")

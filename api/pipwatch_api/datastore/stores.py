@@ -5,8 +5,6 @@ from typing import Dict, Generic, List, NamedTuple, Optional, TypeVar
 from sqlalchemy.orm.exc import NoResultFound
 from flask_sqlalchemy import SQLAlchemy, Model
 
-from pipwatch_api.datastore.models import Tag
-
 
 T = TypeVar("T")
 
@@ -94,8 +92,8 @@ class DefaultStore(Generic[T]):
         self.database.session.commit()
 
 
-NestedDocument = NamedTuple("NestedDocument", ("property_name", str),
-                            ("document_model", Model), ("differentiator_property", str))
+NestedDocument = NamedTuple("NestedDocument", [("property_name", str),
+                            ("document_model", Model), ("differentiator_property", str)])
 
 
 class WithNestedDocumentsStore(DefaultStore):
