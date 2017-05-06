@@ -93,28 +93,54 @@ class DefaultStore(Generic[T]):
 
 
 NestedDocument = NamedTuple("NestedDocument", [("property_name", str),
-                            ("document_model", Model), ("differentiator_property", str)])
+                                               ("document_model", Model),
+                                               ("differentiator_property", str)])
 
 
 class WithNestedDocumentsStore(DefaultStore):
-    """To be described."""
+    """Generic datastore which can be used to work on entites from database, which contain nested entites.
+
+    For example - a sqlalchemy.model with many-to-one relationship, encompasses other model in single list.
+    This class makes it easy to persist changes not only to entity, but with those columns which interacts with it.
+    """
 
     def __init__(self, model: T = None, database: SQLAlchemy = None,
-                 nested_documents_specs: List[NestedDocument]=None) -> None:
-        """To be described."""
+                 nested_documents_specs: List[NestedDocument] = None) -> None:
+        """
+        Initialize datastore instance.
+
+        :param model: SQLAlchemy entity model which datastore will work upon (table).
+        :param database: SQLAlchemy instance which should be used to connect to database.
+        :param nested_documents_specs: List[NestedDocuments]: list which specifies details about
+        nested entities connected to given model. It should be a tuple, containing of key under which
+        nested entity is attached to model, model representing nested entity and attribute name which should
+        be used to differentiate between nested documents.
+        """
         super().__init__(model=model, database=database)
         self.nested_documents_specs: List[NestedDocument] = nested_documents_specs
         self._load_nested_documents_properties_names()
 
     def _load_nested_documents_properties_names(self) -> None:
-        """To be described."""
+        """Load names of properties which are nested entities (and thus, should be ignored in default operations)."""
         for property_name, _, _ in self.nested_documents_specs:
             self.columns_to_ignore.append(property_name)
 
-    def _persist_nested_document(self, entity: T = None, document: Dict = None,
+    @staticmethod
+    def _persist_nested_document(entity: T = None, document: Dict = None,
                                  nested_doc_key: str = "", nested_doc_model: Model = None,
                                  differentiator_property: str = "") -> None:
-        """To be described."""
+        """
+        Persist any changes made to nested properties of given sqlalchemy model.
+
+        For example: if entity with tags (many-to-one relationship) will have tag removed, and than it will
+        be stored via this class, this method will ensure the tag is removed.
+
+        :param entity: entity upon which we are performing operations.
+        :param document: dictionary which represents user request for given model.
+        :param nested_doc_key: key under which nested entity is attached to model.
+        :param nested_doc_model: model which represents nested entity.
+        :param differentiator_property: attribute name which should  be used to differentiate between nested entities.
+        """
         ids_from_entity = {getattr(nested_document, differentiator_property) for nested_document
                            in getattr(entity, nested_doc_key)
                            if getattr(nested_document, differentiator_property, None)}
@@ -139,9 +165,8 @@ class WithNestedDocumentsStore(DefaultStore):
                                          in getattr(entity, nested_doc_key, [])
                                          if getattr(sub_document, differentiator_property) in ids_from_document])
 
-
     def _additional_document_handler(self, entity: T = None, document: Dict = None):
-        """To be described."""
+        """Ensure any changes made to nested documents are persisted."""
         for nested_doc_key, nested_doc_model, differentiator_property in self.nested_documents_specs:
             self._persist_nested_document(entity=entity, document=document,
                                           nested_doc_key=nested_doc_key,

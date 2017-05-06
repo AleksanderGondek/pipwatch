@@ -12,7 +12,8 @@ from pipwatch_api.datastore.stores import DefaultStore
 from pipwatch_api.namespaces.v1.requirements import requirement_repr_structure
 
 
-requirements_files_namespace = Namespace("requirements-files", description="")  # pylint: disable=invalid-name
+requirements_files_namespace = Namespace("requirements-files",  # pylint: disable=invalid-name
+                                         description="CRUD operations on requirements-files")
 requirements_file_simple_repr_structure = {  # pylint: disable=invalid-name
     "id": fields.Integer(readOnly=True, description=""),
     "full_path": fields.String(required=True, description=""),
@@ -23,7 +24,7 @@ requirements_file_simple_repr = requirements_files_namespace.model("Requirements
                                                                    requirements_file_simple_repr_structure)
 requirement_repr = requirements_files_namespace.model("Requirement",  # pylint: disable=invalid-name
                                                       requirement_repr_structure)
-requirements_file_repr = requirements_files_namespace.inherit("Requirements-file with requirements",  # pylint: disable=invalid-name
+requirements_file_repr = requirements_files_namespace.inherit("Reqs-file detailed",  # pylint: disable=invalid-name
                                                               requirements_file_simple_repr,
                                                               {
                                                                   "requirements": fields.List(
@@ -36,7 +37,7 @@ requirements_file_repr = requirements_files_namespace.inherit("Requirements-file
 class RequirementsFiles(Resource):
     """Resource representing requirements-files collection."""
     def __init__(self, *args, **kwargs):
-        """To be described."""
+        """Initialize resource instance."""
         super().__init__(*args, **kwargs)
         self.datastore = DefaultStore(model=RequirementsFileModel, database=DATABASE)
 
@@ -62,7 +63,7 @@ class RequirementsFiles(Resource):
 class RequirementsFile(Resource):
     """Resource representing operations on single requirement."""
     def __init__(self, *args, **kwargs):
-        """To be described."""
+        """Initialize resource instance."""
         super().__init__(*args, **kwargs)
         self.datastore = DefaultStore(model=RequirementsFileModel, database=DATABASE)
 

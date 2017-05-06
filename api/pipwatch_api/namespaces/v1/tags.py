@@ -9,7 +9,8 @@ from pipwatch_api.datastore.models import DATABASE
 from pipwatch_api.datastore.models import Tag as TagModel
 from pipwatch_api.datastore.stores import DefaultStore
 
-tags_namespace = Namespace("tags", description="")  # pylint: disable=invalid-name
+tags_namespace = Namespace("tags",  # pylint: disable=invalid-name
+                           description="CRUD operations on tags")
 tag_representation_structure = {  # pylint: disable=invalid-name
     "id": fields.Integer(readOnly=True, description=""),
     "name": fields.String(required=True, description="")
@@ -21,7 +22,7 @@ tag_representation = tags_namespace.model("Tag", tag_representation_structure)  
 class Tags(Resource):
     """Resource representing tags collection."""
     def __init__(self, *args, **kwargs):
-        """To be described."""
+        """Initialize resource instance."""
         super().__init__(*args, **kwargs)
         self.datastore = DefaultStore(model=TagModel, database=DATABASE)
 
@@ -47,7 +48,7 @@ class Tags(Resource):
 class Tag(Resource):
     """Resource representing operations on single tag."""
     def __init__(self, *args, **kwargs):
-        """To be described."""
+        """Initialize resource instance."""
         super().__init__(*args, **kwargs)
         self.datastore = DefaultStore(model=TagModel, database=DATABASE)
 

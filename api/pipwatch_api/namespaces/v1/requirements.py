@@ -10,7 +10,8 @@ from pipwatch_api.datastore.models import Requirement as RequirementModel
 from pipwatch_api.datastore.stores import DefaultStore
 
 
-requirements_namespace = Namespace("requirements", description="")  # pylint: disable=invalid-name
+requirements_namespace = Namespace("requirements",  # pylint: disable=invalid-name
+                                   description="CRUD operations on requirements")
 requirement_repr_structure = {  # pylint: disable=invalid-name
     "id": fields.Integer(readOnly=True, description=""),
     "name": fields.String(required=True, description=""),
@@ -27,7 +28,7 @@ requirement_repr = requirements_namespace.model("Requirement",  # pylint: disabl
 class Requirements(Resource):
     """Resource representing requirements collection."""
     def __init__(self, *args, **kwargs):
-        """To be described."""
+        """Initialize resource instance."""
         super().__init__(*args, **kwargs)
         self.datastore = DefaultStore(model=RequirementModel, database=DATABASE)
 
@@ -53,7 +54,7 @@ class Requirements(Resource):
 class Requirement(Resource):
     """Resource representing operations on single requirement."""
     def __init__(self, *args, **kwargs):
-        """To be described."""
+        """Initialize resource instance."""
         super().__init__(*args, **kwargs)
         self.datastore = DefaultStore(model=RequirementModel, database=DATABASE)
 

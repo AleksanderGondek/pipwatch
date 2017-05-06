@@ -12,7 +12,8 @@ from pipwatch_api.datastore.stores import DefaultStore
 
 from pipwatch_api.namespaces.v1.projects import project_representation_structure
 
-namespaces_namespace = FlaskNamespace("namespaces", description="")  # pylint: disable=invalid-name
+namespaces_namespace = FlaskNamespace("namespaces",  # pylint: disable=invalid-name
+                                      description="CRUD operations on projects namespaces")
 
 project_repr = namespaces_namespace.model("Project", project_representation_structure)  # pylint: disable=invalid-name
 namespace_repr = namespaces_namespace.model("Namespace", {  # pylint: disable=invalid-name
@@ -29,7 +30,7 @@ namespace_repr_detailed = namespaces_namespace.inherit("Namespace with projects"
 class Namespaces(Resource):
     """Resource representing namespaces collection."""
     def __init__(self, *args, **kwargs):
-        """To be described."""
+        """Initialize resource instance."""
         super().__init__(*args, **kwargs)
         self.datastore = DefaultStore(model=NamespaceModel, database=DATABASE)
 
@@ -55,7 +56,7 @@ class Namespaces(Resource):
 class Namespace(Resource):
     """Resource representing operations on single namespace."""
     def __init__(self, *args, **kwargs):
-        """To be described."""
+        """Initialize resource instance."""
         super().__init__(*args, **kwargs)
         self.datastore = DefaultStore(model=NamespaceModel, database=DATABASE)
 

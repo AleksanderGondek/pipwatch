@@ -13,11 +13,13 @@ from pipwatch_api.namespaces.v1.requirements_files import requirements_file_simp
 from pipwatch_api.namespaces.v1.tags import tag_representation_structure
 
 
-TagNestedDocument = NestedDocument("tags", Tag ,"name")
-RequirementsFilesNestedDocument = NestedDocument("requirements_files", RequirementsFile, "id")
+TagNestedDocument = NestedDocument("tags", Tag, "name")  # pylint: disable=invalid-name
+RequirementsFilesNestedDocument = NestedDocument("requirements_files", RequirementsFile,  # pylint: disable=invalid-name
+                                                 "id")
 
 
-projects_namespace = Namespace("projects", description="")  # pylint: disable=invalid-name
+projects_namespace = Namespace("projects",  # pylint: disable=invalid-name
+                               description="CRUD operations on projects")
 tag_representation = projects_namespace.model("Tag", tag_representation_structure)  # pylint: disable=invalid-name
 project_representation_structure = {  # pylint: disable=invalid-name
     "id": fields.Integer(readOnly=True, description=""),
@@ -43,7 +45,7 @@ project_repr_req_files = projects_namespace.inherit("Project with requirements f
 class Projects(Resource):
     """Resource representing projects collection."""
     def __init__(self, *args, **kwargs):
-        """To be described."""
+        """Initialize resource instance."""
         super().__init__(*args, **kwargs)
         self.datastore = WithNestedDocumentsStore(model=ProjectModel, database=DATABASE,
                                                   nested_documents_specs=[TagNestedDocument,
@@ -71,7 +73,7 @@ class Projects(Resource):
 class Project(Resource):
     """Resource representing operations on single project."""
     def __init__(self, *args, **kwargs):
-        """To be described."""
+        """Initialize resource instance."""
         super().__init__(*args, **kwargs)
         self.datastore = WithNestedDocumentsStore(model=ProjectModel, database=DATABASE,
                                                   nested_documents_specs=[TagNestedDocument,

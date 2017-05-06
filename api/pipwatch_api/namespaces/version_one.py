@@ -17,7 +17,7 @@ def get_api_version_one() -> Blueprint:
     api_version_one = Api(version_one_blueprint,
                           title="Pipwatch API",
                           version=VERSION,
-                          description="API for interacting witch pipwatch")
+                          description="Restful interface for interacting with pipwatch")
 
     api_version_one.add_namespace(status_namespace)
     api_version_one.add_namespace(namespaces_namespace)
