@@ -14,7 +14,7 @@ from pipwatch_api.namespaces.v1.requirements import requirement_repr_structure
 
 requirements_files_namespace = Namespace("requirements-files", description="")  # pylint: disable=invalid-name
 requirements_file_simple_repr_structure = {  # pylint: disable=invalid-name
-    "id": fields.Integer(required=False, description=""),
+    "id": fields.Integer(readOnly=True, description=""),
     "full_path": fields.String(required=True, description=""),
     "status": fields.String(required=True, description=""),
     "project_id": fields.Integer(required=True, attribute="project.id"),
@@ -23,7 +23,7 @@ requirements_file_simple_repr = requirements_files_namespace.model("Requirements
                                                                    requirements_file_simple_repr_structure)
 requirement_repr = requirements_files_namespace.model("Requirement",  # pylint: disable=invalid-name
                                                       requirement_repr_structure)
-requirements_file_repr = requirements_files_namespace.inherit("Namespace with projects",  # pylint: disable=invalid-name
+requirements_file_repr = requirements_files_namespace.inherit("Requirements-file with requirements",  # pylint: disable=invalid-name
                                                               requirements_file_simple_repr,
                                                               {
                                                                   "requirements": fields.List(
@@ -40,7 +40,7 @@ class RequirementsFiles(Resource):
         super().__init__(*args, **kwargs)
         self.datastore = DefaultStore(model=RequirementsFileModel, database=DATABASE)
 
-    @requirements_files_namespace.marshal_list_with(requirements_file_repr)
+    @requirements_files_namespace.marshal_list_with(requirements_file_simple_repr)
     def get(self):
         """Return list of all requirements-files."""
         return self.datastore.read_all()

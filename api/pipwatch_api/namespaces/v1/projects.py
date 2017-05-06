@@ -14,7 +14,7 @@ from pipwatch_api.namespaces.v1.tags import tag_representation_structure
 
 
 TagNestedDocument = NestedDocument("tags", Tag ,"name")
-RequirementsFilesNestedDocument = NestedDocument("requirements", RequirementsFile, "id")
+RequirementsFilesNestedDocument = NestedDocument("requirements_files", RequirementsFile, "id")
 
 
 projects_namespace = Namespace("projects", description="")  # pylint: disable=invalid-name
