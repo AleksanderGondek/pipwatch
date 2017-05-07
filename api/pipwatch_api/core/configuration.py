@@ -3,7 +3,7 @@
 from configparser import ConfigParser
 from logging import config
 from os import path
-from typing import Optional
+from typing import Dict, Optional
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -44,7 +44,7 @@ def configure_sqlalchemy(application: Flask, sql_alchemy_instance: SQLAlchemy) -
             seed_database(database_instance=sql_alchemy_instance)
 
 
-def configure_flask_application(application: Flask) -> None:
+def configure_flask_application(application: Flask, settings_override: Dict = None) -> None:
     """Apply settings from configuration file to flask application instance."""
     # Disable line too long warnings - configuration looks better in one line.
     # pylint: disable=line-too-long
@@ -65,3 +65,10 @@ def configure_flask_application(application: Flask) -> None:
 
     application.config["PIPWATCH_API_RESET_DB_ON_START"] = configuration.getboolean(section="pipwatch-api", option="resest_db_on_start", fallback=True)  # noqa: E501
     application.config["PIPWATCH_API_SEED_DB"] = configuration.getboolean(section="pipwatch-api", option="seed_db", fallback=False)  # noqa: E501
+
+    if not settings_override:
+        return
+
+    # Override any settings which were passed in explicitly
+    for setting_key, setting_value in settings_override.items():
+        application.config[setting_key] = setting_value
