@@ -1,4 +1,7 @@
-# API virtualenv
+# Api sqllite database
+db.sqlite
+
+# virtualenva
 .virtualenv/
 
 # Byte-compiled / optimized / DLL files

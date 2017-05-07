@@ -8,6 +8,7 @@ from typing import Optional
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
+from pipwatch_api.datastore.seed import seed_database
 
 PATH_TO_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "config.ini")
 PATH_TO_LOG_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "logging.conf")
@@ -34,12 +35,13 @@ def configure_logger() -> None:
 def configure_sqlalchemy(application: Flask, sql_alchemy_instance: SQLAlchemy) -> None:
     """Initialize SQLAlchemy for flask application."""
     sql_alchemy_instance.init_app(app=application)
-    if not application.config.get("PIPWATCHAPI_RESET_DB_ON_START"):
-        return
 
     with application.app_context():
-        sql_alchemy_instance.drop_all()
-        sql_alchemy_instance.create_all()
+        if application.config.get("PIPWATCH_API_RESET_DB_ON_START"):
+            sql_alchemy_instance.drop_all()
+            sql_alchemy_instance.create_all()
+        if application.config.get("PIPWATCH_API_SEED_DB"):
+            seed_database(database_instance=sql_alchemy_instance)
 
 
 def configure_flask_application(application: Flask) -> None:
@@ -51,6 +53,7 @@ def configure_flask_application(application: Flask) -> None:
     application.config["SERVER_NAME"] = configuration.get(section="flask", option="server_name", fallback="127.0.0.1:8080")  # noqa: E501
     application.config["DEBUG"] = configuration.getboolean(section="flask", option="debug", fallback=False)
     application.config["JSON_AS_ASCII"] = configuration.getboolean(section="flask", option="json_as_ascii", fallback=False)  # noqa: E501
+    application.config["JSON_SORT_KEYS"] = configuration.getboolean(section="flask", option="json_sort_keys", fallback=True)  # noqa: E501
 
     application.config["RESTPLUS_ERROR_404_HELP "] = configuration.getboolean(section="flask-restplus", option="error_404_help", fallback=False)  # noqa: E501
     application.config["RESTPLUS_MASK_SWAGGER "] = configuration.getboolean(section="flask-restplus", option="mask_swagger", fallback=False)  # noqa: E501
@@ -60,4 +63,5 @@ def configure_flask_application(application: Flask) -> None:
     application.config["SQLALCHEMY_DATABASE_URI"] = configuration.get(section="sql-alchemy", option="database_uri", fallback="sqlite:////db.sqlite")  # noqa: E501
     application.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = configuration.getboolean(section="sql-alchemy", option="track_modifications", fallback=False)  # noqa: E501
 
-    application.config["PIPWATCHAPI_RESET_DB_ON_START"] = configuration.getboolean(section="pipwatch-api", option="resest_db_on_start", fallback=True)  # noqa: E501
+    application.config["PIPWATCH_API_RESET_DB_ON_START"] = configuration.getboolean(section="pipwatch-api", option="resest_db_on_start", fallback=True)  # noqa: E501
+    application.config["PIPWATCH_API_SEED_DB"] = configuration.getboolean(section="pipwatch-api", option="seed_db", fallback=False)  # noqa: E501
