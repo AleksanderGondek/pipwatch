@@ -6,7 +6,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from flask_sqlalchemy import SQLAlchemy, Model
 
 
-T = TypeVar("T")
+T = TypeVar("T", bound=Model)
 
 
 class DefaultStore(Generic[T]):
