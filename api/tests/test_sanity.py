@@ -1,3 +1,4 @@
 def test_sanity() -> None:
     """Check if pytest is working."""
-    assert 3 == 3
+    from pipwatch_api.main import main
+    assert main is not None
