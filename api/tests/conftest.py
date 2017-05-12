@@ -19,7 +19,7 @@ def app() -> Flask:
     """Session-wide test instance of `Flask` application."""
     settings_override = {
         "DEBUG": True,
-        "SQLALCHEMY_DATABASE_URI": get_test_database_path(),
+        "SQLALCHEMY_DATABASE_URI": "sqlite:///" + get_test_database_path(),
         "SQLALCHEMY_TRACK_MODIFICATIONS": False,
         "PIPWATCH_API_RESET_DB_ON_START": False,
         "PIPWATCH_API_SEED_DB": False
@@ -45,4 +45,6 @@ def database(app) -> SQLAlchemy:
     yield DATABASE
 
     DATABASE.drop_all()
+    DATABASE.session.close()
+
     os.unlink(get_test_database_path())
