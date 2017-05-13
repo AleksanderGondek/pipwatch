@@ -34,7 +34,7 @@ def app() -> Flask:
 
 
 @pytest.yield_fixture(scope="session")
-def database(app) -> SQLAlchemy:
+def database_session_wide(app) -> SQLAlchemy:
     """Session-wide test instance of database."""
     if os.path.exists(get_test_database_path()):
         os.unlink(get_test_database_path())
@@ -48,3 +48,12 @@ def database(app) -> SQLAlchemy:
     DATABASE.session.close()
 
     os.unlink(get_test_database_path())
+
+
+@pytest.yield_fixture()
+def database(database_session_wide, mocker) -> SQLAlchemy:
+    """Database instance which mocks commits and rollbacks all changes."""
+    mocker.patch.object(database_session_wide.session, "commit", autospec=True)
+    yield database_session_wide
+
+    database_session_wide.session.rollback()
