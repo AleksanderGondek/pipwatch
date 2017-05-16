@@ -10,8 +10,10 @@ class ModelMock():
     query = object()
     __table__ = object()
 
-    def __init__(self, name: str = "") -> None:
+    def __init__(self, name: str = "", id: int = 0) -> None:
         self.name = name
+        if id > 0:
+            self.id = id
 
 
 @pytest.fixture()
@@ -68,3 +70,43 @@ class TestDefaultStore():
         default_store_fixture.model.query.all.return_value = [mocked_response]
 
         assert default_store_fixture.read_all() == [mocked_response]
+
+    def test_update_document_not_found(self, default_store_fixture, mocker) -> None:
+        """Should return 'None' if document with given id is not found."""
+        mocker.patch.object(default_store_fixture, "read", return_value=None)
+        assert default_store_fixture.update(document_id=-32, document={}) is None
+
+    def test_update_document(self, default_store_fixture, mocker) -> None:
+        """Should load document with given id and update all fields passed in."""
+        existing_document = ModelMock(name="should_change", id=2)
+        mocker.patch.object(default_store_fixture, "read", return_value=existing_document)
+        mocker.spy(default_store_fixture, "_additional_document_handler")
+        mocker.patch.object(default_store_fixture.database.session, "add", autospec=True)
+        mocker.patch.object(default_store_fixture, "_naive_get_columns_names",
+                            autospec=True, return_value=["name"])
+        update_dictionary_repr = {
+            "id": "maliciously_injected_id",
+            "name": "changed",
+            "to_be_ignored": "to_be_ignored"
+        }
+
+        returned_document = default_store_fixture.update(document_id=-32, document=update_dictionary_repr)
+        assert returned_document.name == "changed"
+        assert returned_document.id == 2
+        default_store_fixture.database.session.add.assert_called_once()
+        default_store_fixture._additional_document_handler.assert_called_once()
+
+    def test_delete_document_not_found(self, default_store_fixture, mocker) -> None:
+        """Should not do anything if passed in document id is not found."""
+        mocker.patch.object(default_store_fixture, "read", return_value=None)
+        mocker.patch.object(default_store_fixture.database.session, "delete", autospec=True)
+        default_store_fixture.delete(document_id=-32)
+        assert default_store_fixture.database.session.delete.call_count == 0
+
+    def test_delete_document(self, default_store_fixture, mocker) -> None:
+        """Should remove document with id which was passed in."""
+        returned_object = object()
+        mocker.patch.object(default_store_fixture, "read", return_value=returned_object)
+        mocker.patch.object(default_store_fixture.database.session, "delete", autospec=True)
+        default_store_fixture.delete(document_id=-32)
+        default_store_fixture.database.session.delete.assert_called_with(returned_object)
