@@ -7,6 +7,8 @@ import pytest
 
 from pipwatch_api.application import get_flask_application
 
+from tests.utils import JSONResponse
+
 
 def get_test_database_path() -> str:
     """To be described."""
@@ -31,6 +33,14 @@ def app() -> Flask:
 
     yield application
     context.pop()
+
+
+@pytest.fixture(scope="session")
+def app_client(app) -> Flask:
+    """Session-wide test instance of flask for testing resources."""
+    app.testing = True
+    app.response_class = JSONResponse
+    return app.test_client()
 
 
 @pytest.yield_fixture(scope="session")
