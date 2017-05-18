@@ -1,4 +1,4 @@
-"""This module contains unit tests for resource status."""
+"""This module contains unit tests for status resource."""
 from tests.utils import JSONResponse
 
 

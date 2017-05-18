@@ -11,7 +11,7 @@ from tests.utils import JSONResponse
 
 
 def get_test_database_path() -> str:
-    """To be described."""
+    """Retrieve path to database file used during tests."""
     test_suite_dir = os.path.abspath(os.path.dirname(__file__))
     return os.path.join(test_suite_dir, "testDb.sqlite")
 
