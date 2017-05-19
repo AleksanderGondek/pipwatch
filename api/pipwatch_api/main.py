@@ -8,7 +8,7 @@ from pipwatch_api.application import get_flask_application
 
 
 def main() -> None:
-    """Function to start the whole application"""
+    """Function to start the whole application."""
     configure_logger()
     log: Logger = getLogger(__name__)
 

@@ -4,7 +4,7 @@ from pipwatch_api.datastore.seed import seed_database
 
 
 def test_seed_database(database) -> None:
-    """Seed method should initialize database with exemplary data"""
+    """Seed method should initialize database with exemplary data."""
     expected_namespace_name = "default"
     expected_tag_name = "example"
 
