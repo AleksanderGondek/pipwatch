@@ -1,17 +1,26 @@
 """This module contains unit tests for requirement resource."""
+from functools import partial
 import json
+
 import pytest
 
+from pipwatch_api.namespaces.v1.requirements import requirement_repr_structure
+
+from tests.namespaces.v1.conftest import get_model_repr
 from tests.utils import JSONResponse
+
+
+get_req_repr_empty = partial(get_model_repr, model=requirement_repr_structure, requirements_file_id=None)
+get_req_repr = partial(get_model_repr, model=requirement_repr_structure, id=1, name="test_requirement",
+                       current_version="0.1.2", desired_version="1.1.3", status="pending",
+                       requirements_file_id=None)
 
 
 def test_default_get_returns_all_requirements(app_client, default_store_fixture, mocker) -> None:
     """Endpoint should return list of all requirements."""
     expected_response = [
-        {"id": 1, "name": "test", "current_version": None, "desired_version": None,
-         "status": None, "requirements_file_id": None},
-        {"id": 2, "name": "another_test", "current_version": None, "desired_version": None,
-         "status": None, "requirements_file_id": None}
+        get_req_repr(),
+        get_req_repr(id=2)
     ]
     default_store_fixture.read_all.return_value = expected_response
     mocker.patch("pipwatch_api.namespaces.v1.requirements.DefaultStore", return_value = default_store_fixture)
@@ -24,14 +33,8 @@ def test_default_get_returns_all_requirements(app_client, default_store_fixture,
 
 
 post_create_test_data = [
-    ("{\"name\": \"example2\"}", "application/json",
-     (201, "application/json", {"id": 1, "name": "example2", "current_version": None,
-                                "desired_version": None, "status": None, "requirements_file_id": None})
-     ),
-    ("some random text", "text",
-     (400, "application/json", {"id": None, "name": None, "current_version": None,
-                                "desired_version": None, "status": None, "requirements_file_id": None})
-     )
+    (json.dumps(get_req_repr()), "application/json", (201, "application/json", get_req_repr())),
+    ("some random text", "text", (400, "application/json", get_req_repr_empty()))
 ]
 
 @pytest.mark.parametrize("payload, content_type, asserts", post_create_test_data)
@@ -49,14 +52,8 @@ def test_post_creates_a_new_requirement(payload, content_type, asserts, app_clie
 
 
 get_id_test_data = [
-    (1, {"id": 1, "name": "test"},
-     (200, "application/json", {"id": 1, "name": "test", "current_version": None,
-                                "desired_version": None, "status": None, "requirements_file_id": None})
-     ),
-    (2, None,
-     (404, "application/json", {"id": None, "name": None, "current_version": None,
-                                "desired_version": None, "status": None, "requirements_file_id": None})
-     )
+    (1, get_req_repr(), (200, "application/json", get_req_repr())),
+    (2, None, (404, "application/json", get_req_repr_empty()))
 ]
 
 
@@ -77,23 +74,9 @@ def test_get_id_returns_document(document_id, mock_response, asserts, app_client
 
 
 put_test_data = [
-    (1,  {"id": 1, "name": "testos", "current_version": None, "desired_version": None,
-          "status": None, "requirements_file_id": None},
-     ({"id": 1, "name": "testos", "current_version": None, "desired_version": None,
-       "status": None, "requirements_file_id": None}, "application/json"),
-     (200, "application/json", {"id": 1, "name": "testos", "current_version": None, "desired_version": None,
-                                "status": None, "requirements_file_id": None})
-     ),
-    (2,  -1,
-     ("test", "text"),
-     (400, "application/json", {"id": None, "name": None, "current_version": None, "desired_version": None,
-                                "status": None, "requirements_file_id": None})
-     ),
-    (32,  None,
-     ({"id": 32, "name": "not_existing"}, "application/json"),
-     (404, "application/json", {"id": None, "name": None, "current_version": None, "desired_version": None,
-                                "status": None, "requirements_file_id": None})
-     )
+    (1,  get_req_repr(), (get_req_repr(), "application/json"), (200, "application/json", get_req_repr())),
+    (2,  -1, ("test", "text"), (400, "application/json", get_req_repr_empty())),
+    (32,  None, (get_req_repr(id=-32), "application/json"), (404, "application/json", get_req_repr_empty()))
 ]
 
 

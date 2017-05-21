@@ -1,13 +1,22 @@
 """This module contains unit tests for namespace resource."""
+from functools import partial
 import json
+
 import pytest
 
+from pipwatch_api.namespaces.v1.namespaces import namespace_repr_structure
+
+from tests.namespaces.v1.conftest import get_model_repr
 from tests.utils import JSONResponse
+
+
+get_ns_repr = partial(get_model_repr, model=namespace_repr_structure, id=1, name="test_namespace")
+get_ns_repr_empty = partial(get_model_repr, model=namespace_repr_structure)
 
 
 def test_default_get_returns_all_namespaces(app_client, default_store_fixture, mocker) -> None:
     """Endpoint should return list of all namespaces."""
-    expected_response = [{"id": 1, "name": "test"}, {"id": 2, "name": "another_test"}]
+    expected_response = [get_ns_repr(), get_ns_repr(id=2)]
     default_store_fixture.read_all.return_value = expected_response
     mocker.patch("pipwatch_api.namespaces.v1.namespaces.DefaultStore", return_value = default_store_fixture)
 
@@ -19,8 +28,8 @@ def test_default_get_returns_all_namespaces(app_client, default_store_fixture, m
 
 
 post_create_test_data = [
-    ("{\"name\": \"example2\"}", "application/json", (201, "application/json", {"id": 1, "name": "example2"})),
-    ("some random text", "text", (400, "application/json", {"id": None, "name": None})),
+    (json.dumps(get_ns_repr(id=None)), "application/json", (201, "application/json", get_ns_repr())),
+    ("some random text", "text", (400, "application/json", get_ns_repr_empty())),
 ]
 
 @pytest.mark.parametrize("payload, content_type, asserts", post_create_test_data)
@@ -37,8 +46,8 @@ def test_post_creates_a_new_namespace(payload, content_type, asserts, app_client
 
 
 get_id_test_data = [
-    (1, {"id": 1, "name": "test"}, (200, "application/json", {"id": 1, "name": "test", "projects": None})),
-    (2, None, (404, "application/json", {"id": None, "name": None, "projects": None}))
+    (1, get_ns_repr(), (200, "application/json", get_ns_repr(projects=None))),
+    (2, None, (404, "application/json", get_ns_repr_empty(projects=None)))
 ]
 
 
@@ -59,15 +68,9 @@ def test_get_id_returns_document(document_id, mock_response, asserts, app_client
 
 
 put_test_data = [
-    (1,  {"id": 1, "name": "testos"},
-     ({"id": 1, "name": "testos"}, "application/json"),
-     (200, "application/json", {"id": 1, "name": "testos"})),
-    (2,  -1,
-     ("test", "text"),
-     (400, "application/json", {"id": None, "name": None})),
-    (32,  None,
-     ({"id": 32, "name": "not_existing"}, "application/json"),
-     (404, "application/json", {"id": None, "name": None}))
+    (1, get_ns_repr(), (get_ns_repr(), "application/json"), (200, "application/json", get_ns_repr())),
+    (2,  -1, ("test", "text"), (400, "application/json", get_ns_repr_empty())),
+    (32,  None, (get_ns_repr(id=-21), "application/json"), (404, "application/json", get_ns_repr_empty()))
 ]
 
 

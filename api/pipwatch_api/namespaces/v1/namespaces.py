@@ -16,10 +16,11 @@ namespaces_namespace = FlaskNamespace("namespaces",  # pylint: disable=invalid-n
                                       description="CRUD operations on projects namespaces")
 
 project_repr = namespaces_namespace.model("Project", project_representation_structure)  # pylint: disable=invalid-name
-namespace_repr = namespaces_namespace.model("Namespace", {  # pylint: disable=invalid-name
+namespace_repr_structure = {  # pylint: disable=invalid-name
     "id": fields.Integer(readOnly=True, description=""),
     "name": fields.String(required=True, description="")
-})
+}
+namespace_repr = namespaces_namespace.model("Namespace", namespace_repr_structure)  # pylint: disable=invalid-name
 namespace_repr_detailed = namespaces_namespace.inherit("Namespace with projects",  # pylint: disable=invalid-name
                                                        namespace_repr, {
                                                            "projects": fields.List(fields.Nested(project_repr))

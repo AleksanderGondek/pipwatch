@@ -1,15 +1,25 @@
 """This module contains unit tests for requirements_file resource."""
+from functools import partial
 import json
+
 import pytest
 
+from pipwatch_api.namespaces.v1.requirements_files import requirements_file_simple_repr
+
+from tests.namespaces.v1.conftest import get_model_repr
 from tests.utils import JSONResponse
+
+
+get_req_file_repr_empty = partial(get_model_repr, model=requirements_file_simple_repr, project_id=None)
+get_req_file_repr = partial(get_model_repr, model=requirements_file_simple_repr, id=1, full_path="test_tag",
+                            status="ok", project_id=None)
 
 
 def test_default_get_returns_all_requirements_files(app_client, default_store_fixture, mocker) -> None:
     """Endpoint should return list of all requirements_files."""
     expected_response = [
-        {"id": 1, "full_path": "test", "status": "ok", "project_id": None},
-        {"id": 2, "full_path": "another_test", "status": "bad", "project_id": None}
+        get_req_file_repr(),
+        get_req_file_repr(id=2)
     ]
     default_store_fixture.read_all.return_value = expected_response
     mocker.patch("pipwatch_api.namespaces.v1.requirements_files.DefaultStore", return_value = default_store_fixture)
@@ -22,12 +32,8 @@ def test_default_get_returns_all_requirements_files(app_client, default_store_fi
 
 
 post_create_test_data = [
-    ("{\"full_path\": \"example2\", \"status\": \"ok\"}", "application/json",
-     (201, "application/json", {"id": 1, "full_path": "example2", "status": "ok",
-                                "project_id": None, "requirements": None})),
-    ("some random text", "text",
-     (400, "application/json", {"id": None, "full_path": None, "status": None,
-                                "project_id": None, "requirements": None})),
+    (json.dumps(get_req_file_repr()), "application/json", (201, "application/json", get_req_file_repr(requirements=None))),
+    ("some random text", "text", (400, "application/json",  get_req_file_repr_empty(requirements=None))),
 ]
 
 @pytest.mark.parametrize("payload, content_type, asserts", post_create_test_data)
@@ -45,13 +51,8 @@ def test_post_creates_a_new_requirements_file(payload, content_type, asserts, ap
 
 
 get_id_test_data = [
-    (1, {"id": 1, "full_path": "test", "status": "ok",
-         "project_id": None, "requirements": None},
-     (200, "application/json", {"id": 1, "full_path": "test", "status": "ok",
-                                "project_id": None, "requirements": None})),
-    (2, None,
-     (404, "application/json", {"id": None, "full_path": None, "status": None,
-                                "project_id": None, "requirements": None}))
+    (1,  get_req_file_repr(requirements=None), (200, "application/json", get_req_file_repr(requirements=None))),
+    (2, None, (404, "application/json", get_req_file_repr_empty(requirements=None)))
 ]
 
 
@@ -72,18 +73,12 @@ def test_get_id_returns_document(document_id, mock_response, asserts, app_client
 
 
 put_test_data = [
-    (1,  {"id": 1, "full_path": "testos", "status": "ok"},
-     ({"id": 1, "full_path": "testos", "status": "ok"}, "application/json"),
-     (200, "application/json", {"id": 1, "full_path": "testos", "status": "ok",
-                                "project_id": None, "requirements": None})),
-    (2,  -1,
-     ("test", "text"),
-     (400, "application/json", {"id": None, "full_path": None, "status": None,
-                                "project_id": None, "requirements": None})),
-    (32,  None,
-     ({"id": 32, "full_path": "not_existing"}, "application/json"),
-     (404, "application/json", {"id": None, "full_path": None, "status": None,
-                                "project_id": None, "requirements": None}))
+    (1,   get_req_file_repr(requirements=None), (get_req_file_repr(requirements=None), "application/json"),
+     (200, "application/json", get_req_file_repr(requirements=None))),
+    (2,  -1, ("test", "text"),
+     (400, "application/json", get_req_file_repr_empty(requirements=None))),
+    (3, None, (get_req_file_repr(requirements=None), "application/json"),
+     (404, "application/json", get_req_file_repr_empty(requirements=None)))
 ]
 
 

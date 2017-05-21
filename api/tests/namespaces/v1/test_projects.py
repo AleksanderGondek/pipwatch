@@ -1,15 +1,29 @@
 """This module contains unit tests for project resource."""
+from functools import partial
 import json
+
 import pytest
 
+from pipwatch_api.namespaces.v1.projects import project_representation_structure
+
+from tests.namespaces.v1.conftest import get_model_repr
 from tests.utils import JSONResponse
+
+
+get_project_simple_repr_empty = partial(get_model_repr, model=project_representation_structure, id=None,
+                                        name=None, url=None, namespace=None, namespace_id=None, tags=None)
+get_project_simple_repr = partial(get_model_repr, model=project_representation_structure, id=1, name="test_project",
+                                  url="http://test.io", namespace=None,  namespace_id=None, tags=None)
+
+get_project_repr_empty = partial(get_project_simple_repr_empty, requirements_files=None)
+get_project_repr = partial(get_project_simple_repr, requirements_files=None)
 
 
 def test_default_get_returns_all_projects(app_client, default_store_fixture, mocker) -> None:
     """Endpoint should return list of all projects."""
     expected_response = [
-        {"id": 1, "name": "test", "url": None, "namespace_id": None, "namespace": None, "tags": None},
-        {"id": 2, "name": "another_test", "url": None, "namespace_id": None, "namespace": None, "tags": None}
+        get_project_simple_repr(),
+        get_project_simple_repr(id=2)
     ]
     default_store_fixture.read_all.return_value = expected_response
     mocker.patch("pipwatch_api.namespaces.v1.projects.WithNestedDocumentsStore", return_value = default_store_fixture)
@@ -22,16 +36,8 @@ def test_default_get_returns_all_projects(app_client, default_store_fixture, moc
 
 
 post_create_test_data = [
-    ("{\"name\": \"example2\"}", "application/json",
-     (201, "application/json", {"id": 1, "name": "example2", "url": None,
-                                "namespace_id": None, "namespace": None, "tags": None,
-                                "requirements_files": None})
-     ),
-    ("some random text", "text",
-     (400, "application/json", {"id": None, "name": None, "url": None,
-                                "namespace_id": None, "namespace": None, "tags": None,
-                                "requirements_files": None})
-     )
+    (json.dumps(get_project_repr()), "application/json", (201, "application/json", get_project_repr())),
+    ("some random text", "text", (400, "application/json", get_project_repr_empty()))
 ]
 
 @pytest.mark.parametrize("payload, content_type, asserts", post_create_test_data)
@@ -48,18 +54,8 @@ def test_post_creates_a_new_project(payload, content_type, asserts, app_client, 
 
 
 get_id_test_data = [
-    (1, {"id": 1, "name": "test", "url": None,
-         "namespace_id": None, "namespace": None, "tags": None,
-         "requirements_files": None},
-     (200, "application/json", {"id": 1, "name": "test", "url": None,
-                                "namespace_id": None, "namespace": None, "tags": None,
-                                "requirements_files": None})
-     ),
-    (2, None,
-     (404, "application/json", {"id": None, "name": None, "url": None,
-                                "namespace_id": None, "namespace": None, "tags": None,
-                                "requirements_files": None})
-     )
+    (1, get_project_repr(), (200, "application/json", get_project_repr())),
+    (2, None, (404, "application/json", get_project_repr_empty()))
 ]
 
 
@@ -80,23 +76,9 @@ def test_get_id_returns_document(document_id, mock_response, asserts, app_client
 
 
 put_test_data = [
-    (1,  {"id": 1, "name": "testos", "url": None, "namespace_id": None, "namespace": None, "tags": None},
-     ({"id": 1, "name": "testos", "url": None,
-       "namespace_id": None, "namespace": None, "tags": None,
-       "requirements_files": None}, "application/json"),
-     (200, "application/json", {"id": 1, "name": "testos", "url": None,
-                                "namespace_id": None, "namespace": None, "tags": None,
-                                "requirements_files": None})),
-    (2,  -1,
-     ("test", "text"),
-     (400, "application/json", {"id": None, "name": None, "url": None,
-                                "namespace_id": None, "namespace": None, "tags": None,
-                                "requirements_files": None})),
-    (32,  None,
-     ({"id": 32, "name": "not_existing"}, "application/json"),
-     (404, "application/json", {"id": None, "name": None, "url": None,
-                                "namespace_id": None, "namespace": None, "tags": None,
-                                "requirements_files": None}))
+    (1,  get_project_repr(), (get_project_repr(), "application/json"), (200, "application/json", get_project_repr())),
+    (2,  -1, ("test", "text"), (400, "application/json", get_project_repr_empty())),
+    (32,  None, (get_project_repr(), "application/json"), (404, "application/json", get_project_repr_empty()))
 ]
 
 
