@@ -1,24 +1,30 @@
 from sqlalchemy.orm.exc import NoResultFound
 import pytest
 
-from pipwatch_api.datastore.stores import DefaultStore
+from pipwatch_api.datastore.stores import DefaultStore, NestedDocument, WithNestedDocumentsStore
 
 
 class ModelMock():
     id = 0
     name = ""
+    nested_document = []
     query = object()
     __table__ = object()
 
     def __init__(self, name: str = "", id: int = 0) -> None:
         self.name = name
+        self.nested_document = []
         if id > 0:
             self.id = id
+
+    def get(self) -> None:
+        """Mock get method."""
+
 
 
 @pytest.fixture()
 def default_store_fixture(database) -> DefaultStore:
-    """To be described."""
+    """Return test instance to DefaultStore."""
     return DefaultStore(model=ModelMock, database=database)
 
 
@@ -110,3 +116,39 @@ class TestDefaultStore():
         mocker.patch.object(default_store_fixture.database.session, "delete", autospec=True)
         default_store_fixture.delete(document_id=-32)
         default_store_fixture.database.session.delete.assert_called_with(returned_object)
+
+
+@pytest.fixture()
+def with_nested_documents_store_fixture(database) -> WithNestedDocumentsStore:
+    """Return test instance of WithNestedDocumentsStore."""
+    nested_document_example = NestedDocument("nested_document", ModelMock, "name")
+    return WithNestedDocumentsStore(model=ModelMock, database=database, nested_documents_specs=[nested_document_example])
+
+
+class TestWithNestedDocumentsStore():
+    """Test behaviour of DefaultStore class."""
+    def test_persist_nested_document(self, with_nested_documents_store_fixture, mocker) -> None:
+        """Temporary test of logic, needs to be improved."""
+        mocker.patch.object(ModelMock, "query")
+        mocker.patch.object(ModelMock, "name")
+        mocker.patch.object(ModelMock, "get", return_value="nested_doc")
+
+        entity = ModelMock(name="test", id=1)
+        document = {
+            "name": "test_updated",
+            "nested_document": [
+                ModelMock(name="nested_doc", id=2)
+            ]
+        }
+        nested_doc_key = "nested_document"
+        nested_doc_model = ModelMock
+        differentiator_property = "name"
+
+        nested_doc_model.query.filter.return_value.all.return_value = document.get("nested_document")
+
+        with_nested_documents_store_fixture._persist_nested_document(
+            entity=entity, document=document, nested_doc_key=nested_doc_key,
+            nested_doc_model=nested_doc_model, differentiator_property=differentiator_property
+        )
+
+        assert entity.nested_document[0] == document.get("nested_document")[0]
