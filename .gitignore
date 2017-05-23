@@ -1,7 +1,10 @@
+# UI
+node_modules/
+
 # Api sqllite database
 db.sqlite
 
-# virtualenva
+# virtualenv
 .virtualenv/
 
 # Byte-compiled / optimized / DLL files

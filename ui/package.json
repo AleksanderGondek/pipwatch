@@ -1,0 +1,14 @@
+{
+  "name": "pipwatch-ui",
+  "version": "0.0.1",
+  "description": "Website for interacting with pipwatch",
+  "main": "gulpfile.js",
+  "repository": "https://github.com/AleksanderGondek/pipwatch",
+  "author": "Aleksander Gondek",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^3.1.6",
+    "typescript": "^2.3.3"
+  }
+}
