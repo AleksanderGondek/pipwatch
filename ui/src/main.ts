@@ -1,5 +1,11 @@
-function hello(compiler: string) {
-    console.log(`Hello from ${compiler}`);
+import { enableProdMode } from '@angular/core';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
+import { AppModule } from './app/app.module';
+import { environment } from './environments/environment';
+
+if (environment.production) {
+  enableProdMode();
 }
 
-hello("TypeScript");
+platformBrowserDynamic().bootstrapModule(AppModule);
