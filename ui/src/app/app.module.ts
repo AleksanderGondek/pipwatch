@@ -8,6 +8,7 @@ import { NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { AppComponent } from "./app.component";
 
 import { DataBrokersModule } from "./data-brokers/data-brokers.module";
+import { DataViewersModule } from "./data-viewers/data-viewers.module";
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { DataBrokersModule } from "./data-brokers/data-brokers.module";
   ],
   imports: [
     DataBrokersModule,
+    DataViewersModule,
     NgbModule.forRoot(),
     BrowserModule,
     FormsModule,
