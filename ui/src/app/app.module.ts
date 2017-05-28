@@ -4,6 +4,7 @@ import { FormsModule } from "@angular/forms";
 import { HttpModule } from "@angular/http";
 
 import { NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import { Ng2SmartTableModule } from "ng2-smart-table";
 
 import { AppComponent } from "./app.component";
 
@@ -15,6 +16,7 @@ import { DataViewersModule } from "./data-viewers/data-viewers.module";
     AppComponent
   ],
   imports: [
+    Ng2SmartTableModule,
     DataBrokersModule,
     DataViewersModule,
     NgbModule.forRoot(),

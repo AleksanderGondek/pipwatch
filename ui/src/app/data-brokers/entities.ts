@@ -1,15 +1,22 @@
-import { TableColumnSetting, TableColumnsSettings, Tabularizable } from "../data-viewers/tabularizable"
+import { TableColumnSetting, TableColumnsSettings, Tabularizable } from "../data-viewers/tabularizable";
 
-export interface Entity extends Tabularizable {
+export interface Entity {
     readonly id: number;
 }
 
-export class Tag implements Entity {
-    constructor(public id: number, public name: string) {
+export class Tag implements Entity, Tabularizable {
+    // Cannot declare as: public id: number, public name: string
+    // Due to necessary common constructor
+    public id: number;
+    public name: string;
+
+    constructor(jsonObject: any) {
+        this.id = jsonObject.id;
+        this.name = jsonObject.name;
     }
 
-    getColumnsSettings(): TableColumnsSettings {
-        let settings = new TableColumnsSettings();
+    public getColumnsSettings(): TableColumnsSettings {
+        const settings = new TableColumnsSettings();
         settings["id"] = new TableColumnSetting("Id", false);
         settings["name"] = new TableColumnSetting("Name", false);
         return settings;
