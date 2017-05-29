@@ -1,9 +1,4 @@
 <h1>
   {{title}}
 </h1>
-{{tagsBroker.settings.columns}}
-<!--<ul>
-  <li *ngFor="let tag of tagsCollection">
-    {{ tag.name }}
-  </li>
-</ul>-->
+<ng2-smart-table [settings]="tagsBroker.settings" [source]="tagsBroker.entityCollection"></ng2-smart-table>

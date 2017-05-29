@@ -6,7 +6,7 @@ export interface Entity {
 
 export class Tag implements Entity, Tabularizable {
     // Cannot declare as: public id: number, public name: string
-    // Due to necessary common constructor
+    // Due to necessary common constructor for Generics (Simplfies things)
     public id: number;
     public name: string;
 
