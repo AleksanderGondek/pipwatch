@@ -9,7 +9,6 @@ import { Ng2SmartTableModule } from "ng2-smart-table";
 import { AppComponent } from "./app.component";
 
 import { DataBrokersModule } from "./data-brokers/data-brokers.module";
-import { DataViewersModule } from "./data-viewers/data-viewers.module";
 
 @NgModule({
   declarations: [
@@ -18,7 +17,6 @@ import { DataViewersModule } from "./data-viewers/data-viewers.module";
   imports: [
     Ng2SmartTableModule,
     DataBrokersModule,
-    DataViewersModule,
     NgbModule.forRoot(),
     BrowserModule,
     FormsModule,

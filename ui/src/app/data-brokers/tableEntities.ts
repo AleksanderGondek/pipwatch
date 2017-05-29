@@ -10,6 +10,6 @@ export class TableSettings {
     constructor(public columns: TableColumnsSettings) { }
 }
 
-export interface Tabularizable {
+export interface ITabularizable {
     getColumnsSettings(): TableColumnsSettings;
 }

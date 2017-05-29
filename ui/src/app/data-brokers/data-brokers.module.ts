@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common";
 import { HttpModule } from "@angular/http";
 
 import { DataBroker } from "./data-broker";
+import { DataTableHandler } from "./data-table-handler";
 
 @NgModule({
   imports: [
@@ -10,6 +11,6 @@ import { DataBroker } from "./data-broker";
     HttpModule
   ],
   declarations: [],
-  providers: [DataBroker]
+  providers: [DataBroker, DataTableHandler]
 })
 export class DataBrokersModule { }

@@ -1,10 +1,10 @@
-import { TableColumnSetting, TableColumnsSettings, Tabularizable } from "../data-viewers/tabularizable";
+import { ITabularizable, TableColumnSetting, TableColumnsSettings } from "./tableEntities";
 
-export interface Entity {
+export interface IEntity {
     readonly id: number;
 }
 
-export class Tag implements Entity, Tabularizable {
+export class Tag implements IEntity, ITabularizable {
     // Cannot declare as: public id: number, public name: string
     // Due to necessary common constructor for Generics (Simplfies things)
     public id: number;

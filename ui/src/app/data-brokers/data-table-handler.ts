@@ -1,12 +1,11 @@
 import { Injectable } from "@angular/core";
 
-import { DataBroker } from "../data-brokers/data-broker"
-import { Entity } from "../data-brokers/entities"
-
-import { Tabularizable, TableSettings } from "./tabularizable"
+import { DataBroker } from "./data-broker";
+import { IEntity } from "./entities";
+import { ITabularizable, TableSettings } from "./tableEntities";
 
 @Injectable()
-export class DataTableHandler<T extends Entity & Tabularizable> {
+export class DataTableHandler<T extends IEntity & ITabularizable> {
     public baseApiUrl: string;
     public settings: TableSettings;
 
@@ -27,7 +26,7 @@ export class DataTableHandler<T extends Entity & Tabularizable> {
     }
 
     private getTableSettings(): void {
-        let columnsSettings = new this.cls({}).getColumnsSettings();
+        const columnsSettings = new this.cls({}).getColumnsSettings();
         this.settings = new TableSettings(columnsSettings);
     }
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 
 import { Tag } from "./data-brokers/entities";
-import { DataTableHandler } from "./data-viewers/data-table-handler";
+import { DataTableHandler } from "./data-brokers/data-table-handler";
 
 @Component({
   selector: "app-root",

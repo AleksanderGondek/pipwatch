@@ -3,13 +3,13 @@ import { Headers, Http } from "@angular/http";
 
 import "rxjs/add/operator/toPromise";
 
-import { Entity } from "./entities";
+import { IEntity } from "./entities";
+
 
 @Injectable()
-export class DataBroker<T extends Entity> {
+export class DataBroker<T extends IEntity> {
     private requestHeaders = new Headers({"Content-Type": "application/json"});
     private cls: {new(jsonObject: any): T};
-
 
     public baseUrl = "";
 
@@ -29,8 +29,8 @@ export class DataBroker<T extends Entity> {
 
     private handleResponse(response: any, cls: {new(jsonObject: any): T}): T[] {
         // Enforce response having full typing of T
-        let collection = response.json();
-        let entityCollection = collection.map(function(item: any) {
+        const collection = response.json();
+        const entityCollection = collection.map(function(item: any) {
             return new cls(item);
         });
         return entityCollection as T[];
