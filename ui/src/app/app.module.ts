@@ -9,10 +9,12 @@ import { Ng2SmartTableModule } from "ng2-smart-table";
 import { AppComponent } from "./app.component";
 
 import { DataBrokersModule } from "./data-brokers/data-brokers.module";
+import { TagsTableComponent } from "./entity-table/tags-table/tags-table.component";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TagsTableComponent
   ],
   imports: [
     Ng2SmartTableModule,
