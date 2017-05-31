@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 
-import {DataTableHandler} from "../../data-brokers/data-table-handler";
+import { DataTableHandler } from "../../data-brokers/data-table-handler";
 import { EntityTable } from "../entity-table";
 import { Tag } from "../../data-brokers/entities";
 
