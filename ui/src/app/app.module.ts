@@ -7,24 +7,27 @@ import { NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { Ng2SmartTableModule } from "ng2-smart-table";
 
 import { AppComponent } from "./app.component";
+import { AppRoutingModule } from "./app-routing.module";
 
 import { DataBrokersModule } from "./data-brokers/data-brokers.module";
-import { TagsTableComponent } from "./entity-table/tags-table/tags-table.component";
-import { NamespacesTableComponent } from "./entity-table/namespaces-table/namespaces-table.component";
-import { RequirementsTableComponent } from "./entity-table/requirements-table/requirements-table.component";
-import { RequirementsFilesTableComponent } from "./entity-table/requirements-files-table/requirements-files-table.component";
-import { ProjectsTableComponent } from "./entity-table/projects-table/projects-table.component";
+
+import { TagsTableComponent } from "./tags-table/tags-table.component";
+import { NamespacesTableComponent } from "./namespaces-table/namespaces-table.component";
+import { RequirementsTableComponent } from "./requirements-table/requirements-table.component";
+import { RequirementsFilesTableComponent } from "./requirements-files-table/requirements-files-table.component";
+import { ProjectsTableComponent } from "./projects-table/projects-table.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    TagsTableComponent,
     NamespacesTableComponent,
+    ProjectsTableComponent,
     RequirementsTableComponent,
     RequirementsFilesTableComponent,
-    ProjectsTableComponent
+    TagsTableComponent,
   ],
   imports: [
+    AppRoutingModule,
     Ng2SmartTableModule,
     DataBrokersModule,
     NgbModule.forRoot(),

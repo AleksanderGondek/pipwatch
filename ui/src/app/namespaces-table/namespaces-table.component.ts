@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 
-import { DataTableHandler } from "../../data-brokers/data-table-handler";
-import { EntityTable } from "../entity-table";
-import { Namespace } from "../../data-brokers/entities";
+import { DataTableHandler } from "../data-brokers/data-table-handler";
+import { EntityTable } from "../entity-table/entity-table";
+import { Namespace } from "../data-brokers/entities";
 
 @Component({
   selector: "app-namespaces-table",
