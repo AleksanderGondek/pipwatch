@@ -16,6 +16,7 @@ import { NamespacesTableComponent } from "./namespaces-table/namespaces-table.co
 import { RequirementsTableComponent } from "./requirements-table/requirements-table.component";
 import { RequirementsFilesTableComponent } from "./requirements-files-table/requirements-files-table.component";
 import { ProjectsTableComponent } from "./projects-table/projects-table.component";
+import { DashboardComponent } from "./dashboard/dashboard.component";
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { ProjectsTableComponent } from "./projects-table/projects-table.componen
     RequirementsTableComponent,
     RequirementsFilesTableComponent,
     TagsTableComponent,
+    DashboardComponent,
   ],
   imports: [
     AppRoutingModule,
