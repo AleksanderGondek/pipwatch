@@ -9,7 +9,7 @@ import { RequirementsTableComponent } from "./requirements-table/requirements-ta
 import { RequirementsFilesTableComponent } from "./requirements-files-table/requirements-files-table.component";
 import { ProjectsTableComponent } from "./projects-table/projects-table.component";
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: "", redirectTo: "/dashboard", pathMatch: "full" },
   { path: "dashboard",  component: DashboardComponent },
   { path: "tags",  component: TagsTableComponent },

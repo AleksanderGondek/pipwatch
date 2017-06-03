@@ -1,0 +1,14 @@
+<nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  <a class="navbar-brand" href="/">Pipwatch</a>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+      <li *ngFor="let menuItem of menuItems" class="nav-item" [ngClass]="{'active': menuItem.url===currentRoute}">
+          <a class="nav-link" href="{{menuItem.url}}">{{menuItem.name | titlecase }}</a>
+      </li>
+    </ul>
+  </div>
+</nav>

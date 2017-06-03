@@ -17,6 +17,7 @@ import { RequirementsTableComponent } from "./requirements-table/requirements-ta
 import { RequirementsFilesTableComponent } from "./requirements-files-table/requirements-files-table.component";
 import { ProjectsTableComponent } from "./projects-table/projects-table.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
+import { TopMenuComponent } from "./top-menu/top-menu.component";
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
     RequirementsFilesTableComponent,
     TagsTableComponent,
     DashboardComponent,
+    TopMenuComponent,
   ],
   imports: [
     AppRoutingModule,
