@@ -6,7 +6,11 @@ import { routes } from "../app-routing.module";
 
 
 class MenuItem {
-    constructor(public name: string, public url: string) { }
+    constructor(public name: string, public url: string, public nestedItems: Array<MenuItem>) { }
+
+    public isDropdown(): boolean {
+        return this.nestedItems && this.nestedItems != null && this.nestedItems.length > 0;
+    }
 }
 
 
@@ -16,23 +20,30 @@ class MenuItem {
   styleUrls: ["./top-menu.component.css"]
 })
 export class TopMenuComponent implements OnInit {
-    menuItems: Array<MenuItem> = [];
+    menuItems: Array<MenuItem>;
     currentRoute: string;
 
-    constructor(private _router: Router) {
-        _router.events.subscribe((navigationState: NavigationEnd) => this.currentRoute = navigationState.urlAfterRedirects);
+    constructor() {
         this.getMenuRoutes();
     }
 
-    private getMenuRoutes() {
-        // Remove default route from possible options
-        const cleanedRoutes: any = routes.slice(1);
-        for (const route of cleanedRoutes) {
-            const itemName = route.path;
-            const itemUrl = `/${itemName}`;
-
-            this.menuItems.push(new MenuItem(itemName, itemUrl));
-        }
+    private getMenuRoutes(): void {
+        this.menuItems = [
+            new MenuItem("Dashboard", "/dashboard", null),
+            new MenuItem("Projects", "/projects", [
+                new MenuItem("Show all", "/projects", null),
+                new MenuItem("Create new", "/projects/new", null)
+            ]),
+            new MenuItem("CRUD", "/crud", [
+                new MenuItem("Namespaces", "/crud/namespaces", null),
+                new MenuItem("Projects", "/crud/projects", null),
+                new MenuItem("Requirements Files", "/crud/requirements-files", null),
+                new MenuItem("Requirements", "/crud/requirements", null),
+                new MenuItem("Tags", "/crud/tags", null)
+            ]),
+            new MenuItem("Health", "/health", null),
+            new MenuItem("Credits", "/credits", null)
+        ];
     }
 
     ngOnInit() {

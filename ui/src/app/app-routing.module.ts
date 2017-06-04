@@ -12,11 +12,12 @@ import { ProjectsTableComponent } from "./projects-table/projects-table.componen
 export const routes: Routes = [
   { path: "", redirectTo: "/dashboard", pathMatch: "full" },
   { path: "dashboard",  component: DashboardComponent },
-  { path: "tags",  component: TagsTableComponent },
-  { path: "namespaces",  component: NamespacesTableComponent },
-  { path: "requirements",  component: RequirementsTableComponent },
-  { path: "requirements-files",  component: RequirementsFilesTableComponent },
-  { path: "projects",  component: ProjectsTableComponent }
+  { path: "crud",  component: DashboardComponent }, // TODO: Switch to separate component
+  { path: "crud/tags",  component: TagsTableComponent },
+  { path: "crud/namespaces",  component: NamespacesTableComponent },
+  { path: "crud/requirements",  component: RequirementsTableComponent },
+  { path: "crud/requirements-files",  component: RequirementsFilesTableComponent },
+  { path: "crud/projects",  component: ProjectsTableComponent }
 ];
 
 @NgModule({
