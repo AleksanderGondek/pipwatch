@@ -6,7 +6,7 @@ import { routes } from "../app-routing.module";
 
 
 class MenuItem {
-    constructor(public name:string, public url:string) { }
+    constructor(public name: string, public url: string) { }
 }
 
 
@@ -20,16 +20,16 @@ export class TopMenuComponent implements OnInit {
     currentRoute: string;
 
     constructor(private _router: Router) {
-        _router.events.subscribe((navigationState:NavigationEnd) => this.currentRoute = navigationState.urlAfterRedirects);
+        _router.events.subscribe((navigationState: NavigationEnd) => this.currentRoute = navigationState.urlAfterRedirects);
         this.getMenuRoutes();
     }
 
     private getMenuRoutes() {
         // Remove default route from possible options
-        let cleanedRoutes: any = routes.slice(1);
-        for (let route of cleanedRoutes) {
-            let itemName = route.path;
-            let itemUrl = `/${itemName}`;
+        const cleanedRoutes: any = routes.slice(1);
+        for (const route of cleanedRoutes) {
+            const itemName = route.path;
+            const itemUrl = `/${itemName}`;
 
             this.menuItems.push(new MenuItem(itemName, itemUrl));
         }
