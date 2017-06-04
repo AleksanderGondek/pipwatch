@@ -18,6 +18,8 @@ import { RequirementsFilesTableComponent } from "./requirements-files-table/requ
 import { ProjectsTableComponent } from "./projects-table/projects-table.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { TopMenuComponent } from "./top-menu/top-menu.component";
+import { HealthComponent } from "./health/health.component";
+import { CreditsComponent } from "./credits/credits.component";
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { TopMenuComponent } from "./top-menu/top-menu.component";
     TagsTableComponent,
     DashboardComponent,
     TopMenuComponent,
+    HealthComponent,
+    CreditsComponent,
   ],
   imports: [
     AppRoutingModule,
