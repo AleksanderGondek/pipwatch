@@ -5,6 +5,7 @@ import { CreditsComponent } from "./credits/credits.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { HealthComponent } from "./health/health.component";
 
+import { CrudComponent } from "./crud/crud.component";
 import { TagsTableComponent } from "./tags-table/tags-table.component";
 import { NamespacesTableComponent } from "./namespaces-table/namespaces-table.component";
 import { RequirementsTableComponent } from "./requirements-table/requirements-table.component";
@@ -16,7 +17,7 @@ export const routes: Routes = [
   { path: "credits", component: CreditsComponent },
   { path: "dashboard", component: DashboardComponent },
   { path: "health", component: HealthComponent },
-  { path: "crud", component: DashboardComponent }, // TODO: Switch to separate component
+  { path: "crud", component: CrudComponent },
   { path: "crud/tags", component: TagsTableComponent },
   { path: "crud/namespaces", component: NamespacesTableComponent },
   { path: "crud/requirements", component: RequirementsTableComponent },

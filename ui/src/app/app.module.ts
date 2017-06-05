@@ -20,6 +20,7 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { TopMenuComponent } from "./top-menu/top-menu.component";
 import { HealthComponent } from "./health/health.component";
 import { CreditsComponent } from "./credits/credits.component";
+import { CrudComponent } from "./crud/crud.component";
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { CreditsComponent } from "./credits/credits.component";
     TopMenuComponent,
     HealthComponent,
     CreditsComponent,
+    CrudComponent,
   ],
   imports: [
     AppRoutingModule,
