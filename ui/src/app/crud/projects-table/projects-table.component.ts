@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 
-import { DataTableHandler } from "../data-brokers/data-table-handler";
 import { EntityTable } from "../entity-table/entity-table";
-import { Project } from "../data-brokers/entities";
+import { DataTableHandler } from "../../data-brokers/data-table-handler";
+import { Project } from "../../data-brokers/entities";
 
 @Component({
   selector: "app-projects-table",

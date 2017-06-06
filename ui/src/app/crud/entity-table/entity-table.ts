@@ -1,6 +1,6 @@
-import { DataTableHandler } from "../data-brokers/data-table-handler";
-import { IEntity } from "../data-brokers/entities";
-import { ITabularizable } from "../data-brokers/tableEntities";
+import { DataTableHandler } from "../../data-brokers/data-table-handler";
+import { IEntity } from "../../data-brokers/entities";
+import { ITabularizable } from "../../data-brokers/tableEntities";
 
 export abstract class EntityTable<T extends IEntity & ITabularizable> {
     private apiBaseUrl: string;

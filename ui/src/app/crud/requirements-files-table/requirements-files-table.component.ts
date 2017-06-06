@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 
-import { DataTableHandler } from "..//data-brokers/data-table-handler";
+import { DataTableHandler } from "../../data-brokers/data-table-handler";
 import { EntityTable } from "../entity-table/entity-table";
-import { RequirementsFile } from "../data-brokers/entities";
+import { RequirementsFile } from "../../data-brokers/entities";
 
 @Component({
   selector: "app-requirements-files-table",
