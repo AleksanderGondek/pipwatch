@@ -11,11 +11,11 @@ import { AppRoutingModule } from "./app-routing.module";
 
 import { DataBrokersModule } from "./data-brokers/data-brokers.module";
 
-import { TagsTableComponent } from "./tags-table/tags-table.component";
-import { NamespacesTableComponent } from "./namespaces-table/namespaces-table.component";
-import { RequirementsTableComponent } from "./requirements-table/requirements-table.component";
-import { RequirementsFilesTableComponent } from "./requirements-files-table/requirements-files-table.component";
-import { ProjectsTableComponent } from "./projects-table/projects-table.component";
+import { TagsTableComponent } from "./crud/tags-table/tags-table.component";
+import { NamespacesTableComponent } from "./crud/namespaces-table/namespaces-table.component";
+import { RequirementsTableComponent } from "./crud/requirements-table/requirements-table.component";
+import { RequirementsFilesTableComponent } from "./crud/requirements-files-table/requirements-files-table.component";
+import { ProjectsTableComponent } from "./crud/projects-table/projects-table.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { TopMenuComponent } from "./top-menu/top-menu.component";
 import { HealthComponent } from "./health/health.component";
