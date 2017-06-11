@@ -22,9 +22,13 @@ import { HealthComponent } from "./health/health.component";
 import { CreditsComponent } from "./credits/credits.component";
 import { CrudComponent } from "./crud/crud.component";
 
+import { TagsRowCellRender } from "./data-brokers/tags-row-render.component";
+
 @NgModule({
+  entryComponents: [TagsRowCellRender],
   declarations: [
     AppComponent,
+    TagsRowCellRender,
     NamespacesTableComponent,
     ProjectsTableComponent,
     RequirementsTableComponent,

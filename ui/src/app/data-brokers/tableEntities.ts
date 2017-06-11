@@ -1,4 +1,7 @@
 export class TableColumnSetting {
+    public type: string;
+    public renderComponent: any;
+
     constructor(public title: string, public filter: boolean) { }
 }
 

@@ -1,4 +1,5 @@
 import { ITabularizable, TableColumnSetting, TableColumnsSettings } from "./tableEntities";
+import { TagsRowCellRender } from "./tags-row-render.component";
 
 export interface IEntity {
     readonly id: number;
@@ -87,6 +88,7 @@ export class RequirementsFile implements IEntity, ITabularizable {
 export class Project implements IEntity, ITabularizable {
     public id: number;
     public name: string;
+    public namespace: string;
     public url: string;
 
     public namespaceId: number;
@@ -96,6 +98,7 @@ export class Project implements IEntity, ITabularizable {
     constructor(jsonObject: any) {
         this.id = jsonObject.id;
         this.name = jsonObject.name;
+        this.namespace = jsonObject.namespace;
         this.url = jsonObject.url;
 
         this.namespaceId = jsonObject.namespace_id;
@@ -107,10 +110,13 @@ export class Project implements IEntity, ITabularizable {
         const settings = new TableColumnsSettings();
         settings["id"] = new TableColumnSetting("Id", false);
         settings["name"] = new TableColumnSetting("Name", false);
+        settings["namespace"] = new TableColumnSetting("Namespace", false);
         settings["url"] = new TableColumnSetting("Url", false);
 
-        settings["namespaceId"] = new TableColumnSetting("Namespace Id", false);
         settings["tags"] = new TableColumnSetting("Tags", false);
+        settings["tags"].type = "custom";
+        settings["tags"].renderComponent = TagsRowCellRender;
+
         settings["requirementsFiles"] = new TableColumnSetting("Requirements Files", false);
         return settings;
     }

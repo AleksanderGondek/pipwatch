@@ -17,7 +17,7 @@ export class DashboardComponent implements OnInit {
     }
 
     redraw(): void {
-        this.chart.redraw();
+        console.log("elo");
     }
 
     makeBasicChart(): void {
