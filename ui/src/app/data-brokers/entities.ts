@@ -108,7 +108,6 @@ export class Project implements IEntity, ITabularizable {
 
     public getColumnsSettings(): TableColumnsSettings {
         const settings = new TableColumnsSettings();
-        settings["id"] = new TableColumnSetting("Id", false);
         settings["name"] = new TableColumnSetting("Name", false);
         settings["namespace"] = new TableColumnSetting("Namespace", false);
         settings["url"] = new TableColumnSetting("Url", false);
@@ -117,7 +116,6 @@ export class Project implements IEntity, ITabularizable {
         settings["tags"].type = "custom";
         settings["tags"].renderComponent = TagsRowCellRender;
 
-        settings["requirementsFiles"] = new TableColumnSetting("Requirements Files", false);
         return settings;
     }
 }
