@@ -21,18 +21,18 @@ export class DashboardComponent implements OnInit {
     }
 
     makeBasicChart(): void {
-        let xScale = new Scales.Linear();
-        let yScale = new Scales.Linear();
+        const xScale = new Scales.Linear();
+        const yScale = new Scales.Linear();
 
-        let xAxis = new Axes.Numeric(xScale, "bottom");
-        let yAxis = new Axes.Numeric(yScale, "left");
+        const xAxis = new Axes.Numeric(xScale, "bottom");
+        const yAxis = new Axes.Numeric(yScale, "left");
 
-        let plot = new Plots.Line();
+        const plot = new Plots.Line();
 
         plot.x(function(d) { return d.x; }, xScale);
         plot.y(function(d) { return d.y; }, yScale);
 
-        let dataset = new Dataset([
+        const dataset = new Dataset([
           { "x": 0, "y": 1 },
           { "x": 1, "y": 2 },
           { "x": 2, "y": 4 },

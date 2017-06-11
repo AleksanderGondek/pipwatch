@@ -9,14 +9,14 @@ import { Tag } from "./entities";
     {{renderValue}}
   `,
 })
-export class TagsRowCellRender implements ViewCell, OnInit {
+export class TagsRowCellRenderComponent implements ViewCell, OnInit {
     renderValue: string;
 
     @Input() value: string | number;
     @Input() rowData: any;
 
     ngOnInit() {
-        let elo: Array<Tag> = this.rowData.tags as Array<Tag>;
+        const elo: Array<Tag> = this.rowData.tags as Array<Tag>;
         this.renderValue = elo.map(function(item: Tag) {
             return item.name;
         }).join(", ");

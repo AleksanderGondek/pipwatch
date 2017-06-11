@@ -11,6 +11,7 @@ import { NamespacesTableComponent } from "./crud/namespaces-table/namespaces-tab
 import { RequirementsTableComponent } from "./crud/requirements-table/requirements-table.component";
 import { RequirementsFilesTableComponent } from "./crud/requirements-files-table/requirements-files-table.component";
 import { ProjectsTableComponent } from "./crud/projects-table/projects-table.component";
+import { ProjectsTableDetailsComponent } from "./crud/projects-table-details/projects-table-details.component";
 
 export const routes: Routes = [
   { path: "", redirectTo: "/dashboard", pathMatch: "full" },
@@ -22,7 +23,8 @@ export const routes: Routes = [
   { path: "crud/namespaces", component: NamespacesTableComponent },
   { path: "crud/requirements", component: RequirementsTableComponent },
   { path: "crud/requirements-files", component: RequirementsFilesTableComponent },
-  { path: "crud/projects", component: ProjectsTableComponent }
+  { path: "crud/projects", component: ProjectsTableComponent },
+  { path: "crud/projects/:id", component: ProjectsTableDetailsComponent }
 ];
 
 @NgModule({

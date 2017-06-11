@@ -22,13 +22,14 @@ import { HealthComponent } from "./health/health.component";
 import { CreditsComponent } from "./credits/credits.component";
 import { CrudComponent } from "./crud/crud.component";
 
-import { TagsRowCellRender } from "./data-brokers/tags-row-render.component";
+import { TagsRowCellRenderComponent } from "./data-brokers/tags-row-render.component";
+import { ProjectsTableDetailsComponent } from "./crud/projects-table-details/projects-table-details.component";
 
 @NgModule({
-  entryComponents: [TagsRowCellRender],
+  entryComponents: [TagsRowCellRenderComponent],
   declarations: [
     AppComponent,
-    TagsRowCellRender,
+    TagsRowCellRenderComponent,
     NamespacesTableComponent,
     ProjectsTableComponent,
     RequirementsTableComponent,
@@ -39,6 +40,7 @@ import { TagsRowCellRender } from "./data-brokers/tags-row-render.component";
     HealthComponent,
     CreditsComponent,
     CrudComponent,
+    ProjectsTableDetailsComponent,
   ],
   imports: [
     AppRoutingModule,

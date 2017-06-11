@@ -1,5 +1,5 @@
 import { ITabularizable, TableColumnSetting, TableColumnsSettings } from "./tableEntities";
-import { TagsRowCellRender } from "./tags-row-render.component";
+import { TagsRowCellRenderComponent } from "./tags-row-render.component";
 
 export interface IEntity {
     readonly id: number;
@@ -114,7 +114,7 @@ export class Project implements IEntity, ITabularizable {
 
         settings["tags"] = new TableColumnSetting("Tags", false);
         settings["tags"].type = "custom";
-        settings["tags"].renderComponent = TagsRowCellRender;
+        settings["tags"].renderComponent = TagsRowCellRenderComponent;
 
         return settings;
     }
