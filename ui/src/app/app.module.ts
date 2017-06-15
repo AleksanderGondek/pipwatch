@@ -6,6 +6,9 @@ import { HttpModule } from "@angular/http";
 import { NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { Ng2SmartTableModule } from "ng2-smart-table";
 
+import { TagInputModule } from "ng2-tag-input";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations"; // this is needed!
+
 import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
 
@@ -44,6 +47,8 @@ import { ProjectsTableDetailsComponent } from "./crud/projects-table-details/pro
   ],
   imports: [
     AppRoutingModule,
+    TagInputModule,
+    BrowserAnimationsModule,
     Ng2SmartTableModule,
     DataBrokersModule,
     NgbModule.forRoot(),
