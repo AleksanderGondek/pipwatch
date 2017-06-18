@@ -12,6 +12,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations"; 
 import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
 
+import { ConstantsService } from "./constants.service";
+
 import { DataBrokersModule } from "./data-brokers/data-brokers.module";
 
 import { TagsTableComponent } from "./crud/tags-table/tags-table.component";
@@ -56,7 +58,7 @@ import { ProjectsTableDetailsComponent } from "./crud/projects-table-details/pro
     FormsModule,
     HttpModule
   ],
-  providers: [],
+  providers: [ConstantsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
