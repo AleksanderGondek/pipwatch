@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 
+import { ConstantsService } from "../../constants.service";
 import { DataTableHandler } from "../../data-brokers/data-table-handler";
 import { EntityTable } from "../entity-table/entity-table";
 import { Tag } from "../../data-brokers/entities";
@@ -10,11 +11,11 @@ import { Tag } from "../../data-brokers/entities";
   styleUrls: ["./tags-table.component.css"]
 })
 export class TagsTableComponent extends EntityTable<Tag> implements OnInit {
-  constructor(broker: DataTableHandler<Tag>) {
+  constructor(broker: DataTableHandler<Tag>, constants: ConstantsService) {
       super(broker);
   }
 
   ngOnInit() {
-      this.initialize("http://127.0.0.1:8080/api/v1/tags/", Tag);
+      this.initialize(ConstantsService.API_URL + "v1/tags/", Tag);
   }
 }
