@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 
+import { ConstantsService } from "../../constants.service";
 import { EntityTable } from "../entity-table/entity-table";
 import { DataTableHandler } from "../../data-brokers/data-table-handler";
 import { Project } from "../../data-brokers/entities";
@@ -10,11 +11,11 @@ import { Project } from "../../data-brokers/entities";
   styleUrls: ["./projects-table.component.css"]
 })
 export class ProjectsTableComponent extends EntityTable<Project> implements OnInit {
-    constructor(broker: DataTableHandler<Project>) {
+    constructor(broker: DataTableHandler<Project>, constants: ConstantsService) {
         super(broker);
     }
 
     ngOnInit() {
-        this.initialize("http://127.0.0.1:8080/api/v1/projects/", Project);
+        this.initialize(ConstantsService.API_URL + "v1/projects/", Project);
     }
 }
