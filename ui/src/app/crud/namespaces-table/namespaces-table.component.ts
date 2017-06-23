@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 
+import { ConstantsService } from "../../constants.service";
 import { DataTableHandler } from "../../data-brokers/data-table-handler";
 import { EntityTable } from "../entity-table/entity-table";
 import { Namespace } from "../../data-brokers/entities";
@@ -10,11 +11,11 @@ import { Namespace } from "../../data-brokers/entities";
   styleUrls: ["./namespaces-table.component.css"]
 })
 export class NamespacesTableComponent extends EntityTable<Namespace> implements OnInit {
-    constructor(broker: DataTableHandler<Namespace>) {
+    constructor(broker: DataTableHandler<Namespace>, constants: ConstantsService) {
         super(broker);
     }
 
     ngOnInit() {
-        this.initialize("http://127.0.0.1:8080/api/v1/namespaces/", Namespace);
+        this.initialize(ConstantsService.API_URL + "v1/namespaces/", Namespace);
     }
 }
