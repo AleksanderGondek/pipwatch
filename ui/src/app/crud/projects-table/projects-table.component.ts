@@ -11,11 +11,11 @@ import { Project } from "../../data-brokers/entities";
   styleUrls: ["./projects-table.component.css"]
 })
 export class ProjectsTableComponent extends EntityTable<Project> implements OnInit {
-    constructor(broker: DataTableHandler<Project>, constants: ConstantsService) {
+    constructor(broker: DataTableHandler<Project>, private constants: ConstantsService) {
         super(broker);
     }
 
     ngOnInit() {
-        this.initialize(ConstantsService.API_URL + "v1/projects/", Project);
+        this.initialize(this.constants.API_URL + "v1/projects/", Project);
     }
 }

@@ -11,11 +11,11 @@ import { Requirement } from "../../data-brokers/entities";
   styleUrls: ["./requirements-table.component.css"]
 })
 export class RequirementsTableComponent extends EntityTable<Requirement> implements OnInit {
-    constructor(broker: DataTableHandler<Requirement>, constants: ConstantsService) {
+    constructor(broker: DataTableHandler<Requirement>, private constants: ConstantsService) {
         super(broker);
     }
 
     ngOnInit() {
-        this.initialize(ConstantsService.API_URL + "v1/requirements/", Requirement);
+        this.initialize(this.constants.API_URL + "v1/requirements/", Requirement);
     }
   }

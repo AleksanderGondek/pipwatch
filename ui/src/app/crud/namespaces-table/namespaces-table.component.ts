@@ -11,11 +11,11 @@ import { Namespace } from "../../data-brokers/entities";
   styleUrls: ["./namespaces-table.component.css"]
 })
 export class NamespacesTableComponent extends EntityTable<Namespace> implements OnInit {
-    constructor(broker: DataTableHandler<Namespace>, constants: ConstantsService) {
+    constructor(broker: DataTableHandler<Namespace>, private constants: ConstantsService) {
         super(broker);
     }
 
     ngOnInit() {
-        this.initialize(ConstantsService.API_URL + "v1/namespaces/", Namespace);
+        this.initialize(this.constants.API_URL + "v1/namespaces/", Namespace);
     }
 }

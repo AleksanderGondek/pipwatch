@@ -11,11 +11,11 @@ import { Tag } from "../../data-brokers/entities";
   styleUrls: ["./tags-table.component.css"]
 })
 export class TagsTableComponent extends EntityTable<Tag> implements OnInit {
-  constructor(broker: DataTableHandler<Tag>, constants: ConstantsService) {
+  constructor(broker: DataTableHandler<Tag>, private constants: ConstantsService) {
       super(broker);
   }
 
   ngOnInit() {
-      this.initialize(ConstantsService.API_URL + "v1/tags/", Tag);
+      this.initialize(this.constants.API_URL + "v1/tags/", Tag);
   }
 }
