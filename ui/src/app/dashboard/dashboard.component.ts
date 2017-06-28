@@ -16,10 +16,6 @@ export class DashboardComponent implements OnInit {
       this.makeBasicChart();
     }
 
-    redraw(): void {
-        console.log("elo");
-    }
-
     makeBasicChart(): void {
         const xScale = new Scales.Linear();
         const yScale = new Scales.Linear();
