@@ -14,7 +14,10 @@ def main() -> None:
 
     log.info("Attempting to start application")
     app = get_flask_application()
-    app.run()
+    app.run(
+        host=app.config["PIPWATCH_API_HOST"],
+        port=app.config["PIPWATCH_API_PORT"]
+    )
     log.info("Application started")
 
     sys.exit(0)
