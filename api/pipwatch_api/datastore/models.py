@@ -1,10 +1,12 @@
 """This module contains data representation definitions."""
 
 # pylint: disable=no-member,too-few-public-methods
+from typing import Any
+
 from flask_sqlalchemy import SQLAlchemy
 
 
-DATABASE = SQLAlchemy()
+DATABASE: Any = SQLAlchemy()
 
 
 class Tag(DATABASE.Model):
