@@ -1,0 +1,10 @@
+version: '3'
+services:
+    pipwatch_api:
+        build: ./api
+        ports:
+            - "4000:8080"
+    redis:
+        image: "redis:latest"
+        ports:
+            - "4001:6379"
