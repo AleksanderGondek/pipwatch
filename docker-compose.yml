@@ -4,6 +4,9 @@ services:
         build: ./api
         ports:
             - "4000:8080"
+    pipwatch_worker:
+        build: ./worker
+        ports: []
     redis:
         image: "redis:latest"
         ports:
