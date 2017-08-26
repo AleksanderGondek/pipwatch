@@ -1,0 +1,14 @@
+FROM python:latest
+
+LABEL Description="Pipwatch-api tests container" Maintainer="Aleksander Gondek" Version="alpha"
+
+ENV PYTHONPATH /pipwatch-api
+ENV MYPYPATH /pipwatch-api
+
+WORKDIR /pipwatch-api
+ADD . /pipwatch-api
+
+RUN pip install -r requirements.txt
+RUN pip install -r requirements-development.txt
+
+CMD ["tox"]
