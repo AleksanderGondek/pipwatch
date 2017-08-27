@@ -3,12 +3,13 @@
 from configparser import ConfigParser
 from logging import config
 from os import path
-from typing import Dict, Optional
+from typing import Optional
 
 
 PATH_TO_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "config.ini")
 PATH_TO_LOG_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "logging.conf")
 PATH_TO_LOG_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "./pipwatch-worker.log")
+PATH_CELERY_CONFIG_FILE: str = path.join(path.dirname(path.abspath(__file__)), "..", "celeryconfig.py")
 
 CONFIGURATION_FILE: Optional[ConfigParser] = None
 
