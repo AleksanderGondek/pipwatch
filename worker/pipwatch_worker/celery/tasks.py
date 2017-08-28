@@ -1,11 +1,6 @@
 """This module contains celery tasks available for the worker."""
 
-from celery import Celery
-
-from pipwatch_worker.worker import get_celery_worker
-
-
-worker: Celery = get_celery_worker()
+from pipwatch_worker.celery.worker import worker
 
 
 @worker.task

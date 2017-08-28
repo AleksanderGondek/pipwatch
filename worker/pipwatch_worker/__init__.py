@@ -1,1 +1,1 @@
-"""This package contains pipwatch_api code."""
+"""This package contains pipwatch_worker code."""

@@ -6,8 +6,7 @@ services:
             - "4000:8080"
     pipwatch_worker:
         build: ./worker
-        ports: []
     redis:
         image: "redis:latest"
         ports:
-            - "4001:6379"
+            - "6379:6379"
