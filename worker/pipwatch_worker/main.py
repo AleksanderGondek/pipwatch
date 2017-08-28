@@ -3,8 +3,6 @@
 import sys
 from logging import getLogger, Logger  # noqa: F401 Imported for type definition
 
-from celery import Celery  # noqa: F401 Imported for type definition
-
 from pipwatch_worker.celery.worker import worker
 from pipwatch_worker.core.configuration import configure_logger
 
