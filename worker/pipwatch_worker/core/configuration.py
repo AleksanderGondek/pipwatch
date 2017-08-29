@@ -31,10 +31,12 @@ def configure_logger() -> None:
 
 def configure_celery_app(celery_app: Celery) -> None:
     """Apply configuration settings to celery application instance."""
-    config: ConfigParser = load_config_file()
+    # Disable line too long warnings - configuration looks better in one line.
+    # pylint: disable=line-too-long
+    configuration: ConfigParser = load_config_file()
     celery_app.conf.update(
-        broker_url=config.get(section="celery", option="broker_url", fallback="redis://localhost:6379/0"),
-        enable_utc=config.getboolean(section="celery", option="enable_utc", fallback=False),
-        imports=config.get(section="celery", option="imports", fallback="pipwatch_worker.celery.tasks").split(","),
-        result_backend =config.get(section="celery", option="result_backend", fallback="redis://localhost:6379/0")
+        broker_url=configuration.get(section="celery", option="broker_url", fallback="redis://localhost:6379/0"),  # noqa: E501
+        enable_utc=configuration.getboolean(section="celery", option="enable_utc", fallback=False),  # noqa: E501
+        imports=configuration.get(section="celery", option="imports", fallback="pipwatch_worker.celery.tasks").split(","),  # noqa: E501
+        result_backend=configuration.get(section="celery", option="result_backend", fallback="redis://localhost:6379/0")  # noqa: E501
     )
