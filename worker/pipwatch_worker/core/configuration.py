@@ -5,6 +5,8 @@ from logging import config
 from os import path
 from typing import Optional
 
+from celery import Celery  # noqa: F401 Imported for type definition
+
 
 PATH_TO_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "config.ini")
 PATH_TO_LOG_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "logging.conf")
@@ -25,3 +27,14 @@ def load_config_file() -> ConfigParser:
 def configure_logger() -> None:
     """Apply settings from configuration file to loggers."""
     config.fileConfig(PATH_TO_LOG_CONFIGURATION_FILE)
+
+
+def configure_celery_app(celery_app: Celery) -> None:
+    """Apply configuration settings to celery application instance."""
+    config: ConfigParser = load_config_file()
+    celery_app.conf.update(
+        broker_url=config.get(section="celery", option="broker_url", fallback="redis://localhost:6379/0"),
+        enable_utc=config.getboolean(section="celery", option="enable_utc", fallback=False),
+        imports=config.get(section="celery", option="imports", fallback="pipwatch_worker.celery.tasks").split(","),
+        result_backend =config.get(section="celery", option="result_backend", fallback="redis://localhost:6379/0")
+    )
