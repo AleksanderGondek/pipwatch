@@ -1,5 +1,18 @@
 version: 2
 jobs:
+    build_api:
+        working_directory: ~/pipwatch-api
+        docker:
+            - image: python:latest
+        steps:
+            - checkout
+            - run:
+                name: Update setuptools
+                command: pip install -U setuptools
+            - run:
+                name: Build setup.py package
+                working_directory: ~/pipwatch-api/api
+                command: python setup.py sdist --formats=gztar
     test_api:
         working_directory: ~/pipwatch-api
         docker:
@@ -13,6 +26,19 @@ jobs:
                 name: Run tox tests
                 working_directory: ~/pipwatch-api/api
                 command: tox
+    build_worker:
+        working_directory: ~/pipwatch-worker
+        docker:
+            - image: python:latest
+        steps:
+            - checkout
+            - run:
+                name: Update setuptools
+                command: pip install -U setuptools
+            - run:
+                name: Build setup.py package
+                working_directory: ~/pipwatch-worker/worker
+                command: python setup.py sdist --formats=gztar
     test_worker:
         working_directory: ~/pipwatch-worker
         docker:
@@ -30,5 +56,11 @@ workflows:
     version: 2
     tests:
         jobs:
-            - test_api
-            - test_worker
+            - build_api
+            - build_worker
+            - test_api:
+                requires:
+                    - build_api
+            - test_worker:
+                requires:
+                    - build_worker
