@@ -1,0 +1,16 @@
+version: 2
+jobs:
+  test_api:
+    working_directory: ~/pipwatch-api
+    docker:
+      - image: python:latest
+    steps:
+      - checkout
+      - run:
+          name: Install tox package for running tests
+          command: tox
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test

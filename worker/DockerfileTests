@@ -8,7 +8,6 @@ ENV MYPYPATH /pipwatch-worker
 WORKDIR /pipwatch-worker
 ADD . /pipwatch-worker
 
-RUN pip install -r requirements.txt
-RUN pip install -r requirements-development.txt
+RUN pip install tox
 
 CMD ["tox"]
