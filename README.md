@@ -1,5 +1,6 @@
 Pipwatch
 =======
+[![CircleCI](https://circleci.com/gh/AleksanderGondek/pipwatch.svg?style=svg&circle-token=658a169be1fb9e68c7ef8e5ccce9ca0b2f629af9)](https://circleci.com/gh/AleksanderGondek/pipwatch)
 ![License](https://img.shields.io/badge/License-Apache%20License%202.0-blue.svg?style=flat-square)
 ![License](https://img.shields.io/badge/Python-3.6-blue.svg?style=flat-square)
 
