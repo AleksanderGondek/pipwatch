@@ -26,6 +26,8 @@ jobs:
                 name: Run tox tests
                 working_directory: ~/pipwatch-api/api
                 command: tox
+            - store_test_results:
+                path: ~/pipwatch-api/api/api-tests.xml
     build_worker:
         working_directory: ~/pipwatch-worker
         docker:
@@ -52,6 +54,8 @@ jobs:
                 name: Run tox tests
                 working_directory: ~/pipwatch-worker/worker
                 command: tox
+            - store_test_results:
+                path: ~/pipwatch-worker/worker/worker-tests.xml
 workflows:
     version: 2
     tests:
