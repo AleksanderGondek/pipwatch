@@ -7,10 +7,12 @@ from typing import Optional
 
 from celery import Celery  # noqa: F401 Imported for type definition
 
+# Disable line too long warnings - configuration looks better in one line.
+# pylint: disable=line-too-long
 
-PATH_TO_DEFAULT_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "config.ini")
-PATH_TO_OVERRIDE_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "config-override.ini")
-PATH_TO_LOG_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "logging.conf")
+PATH_TO_DEFAULT_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "config.ini")  # noqa: E501
+PATH_TO_OVERRIDE_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "config-override.ini")  # noqa: E501
+PATH_TO_LOG_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "logging.conf")  # noqa: E501
 
 CONFIGURATION_FILE: Optional[ConfigParser] = None
 
@@ -35,8 +37,6 @@ def configure_logger() -> None:
 
 def configure_celery_app(celery_app: Celery) -> None:
     """Apply configuration settings to celery application instance."""
-    # Disable line too long warnings - configuration looks better in one line.
-    # pylint: disable=line-too-long
     configuration: ConfigParser = load_config_file()
     celery_app.conf.update(
         broker_url=configuration.get(section="celery", option="broker_url", fallback="redis://localhost:6379/0"),  # noqa: E501

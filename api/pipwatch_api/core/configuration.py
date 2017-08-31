@@ -10,8 +10,11 @@ from flask_sqlalchemy import SQLAlchemy
 
 from pipwatch_api.datastore.seed import seed_database
 
+# Disable line too long warnings - configuration looks better in one line.
+# pylint: disable=line-too-long
+
 PATH_TO_DEFAULT_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "config.ini")
-PATH_TO_OVERRIDE_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "config-override.ini")
+PATH_TO_OVERRIDE_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "config-override.ini")  # noqa: E501
 PATH_TO_LOG_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "logging.conf")
 
 CONFIGURATION_FILE: Optional[ConfigParser] = None
@@ -49,8 +52,6 @@ def configure_sqlalchemy(application: Flask, sql_alchemy_instance: SQLAlchemy) -
 
 def configure_flask_application(application: Flask, settings_override: Dict = None) -> None:
     """Apply settings from configuration file to flask application instance."""
-    # Disable line too long warnings - configuration looks better in one line.
-    # pylint: disable=line-too-long
     configuration: ConfigParser = load_config_file()
 
     server_name = configuration.get(section="flask", option="server_name", fallback="")  # noqa: E501
