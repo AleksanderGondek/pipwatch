@@ -10,7 +10,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 from pipwatch_api.datastore.seed import seed_database
 
-PATH_TO_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "config.ini")
+PATH_TO_DEFAULT_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "config.ini")
+PATH_TO_OVERRIDE_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "config-override.ini")
 PATH_TO_LOG_CONFIGURATION_FILE: str = path.join(path.dirname(path.abspath(__file__)), "../..", "logging.conf")
 
 CONFIGURATION_FILE: Optional[ConfigParser] = None
@@ -21,7 +22,10 @@ def load_config_file() -> ConfigParser:
     global CONFIGURATION_FILE  # pylint: disable=global-statement
     if not CONFIGURATION_FILE:
         CONFIGURATION_FILE = ConfigParser()
-        CONFIGURATION_FILE.read(PATH_TO_CONFIGURATION_FILE, "utf-8")
+        CONFIGURATION_FILE.read([
+            PATH_TO_DEFAULT_CONFIGURATION_FILE,
+            PATH_TO_OVERRIDE_CONFIGURATION_FILE
+        ], "utf-8")
 
     return CONFIGURATION_FILE
 

@@ -6,6 +6,7 @@ ENV PYTHONPATH /pipwatch-worker
 
 WORKDIR /pipwatch-worker
 ADD . /pipwatch-worker
+ADD ./config-for-docker.ini /pipwatch-worker/config-override.ini
 
 RUN pip install -r requirements.txt
 

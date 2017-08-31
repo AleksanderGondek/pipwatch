@@ -6,6 +6,7 @@ ENV PYTHONPATH /pipwatch-api
 
 WORKDIR /pipwatch-api
 ADD . /pipwatch-api
+ADD ./config-for-docker.ini /pipwatch-api/config-override.ini
 
 EXPOSE 8080
 
