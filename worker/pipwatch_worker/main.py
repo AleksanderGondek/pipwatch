@@ -1,4 +1,4 @@
-"""This module contains logic responsible starting the pipwatch worker."""
+"""This module contains logic responsible for starting the pipwatch worker."""
 
 import sys
 from logging import getLogger, Logger  # noqa: F401 Imported for type definition
