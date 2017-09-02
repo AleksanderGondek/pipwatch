@@ -10,7 +10,7 @@ class WorkerStates(Enum):
     CLONING_REPOSITORY: str = "Cloning_Repository"
     COMMITTING_CHANGES: str = "Committing_Changes"
     FAILURE: str = "Failure"
-    INITIALIZING: str =  "Initializing"
+    INITIALIZING: str = "Initializing"
     PARSING_REQUIREMENTS: str = "Parsing_Requirements"
     SUCCESS: str = "Success"
     UPDATING_METADATA: str = "Updating_Metadata"
