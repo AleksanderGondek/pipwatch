@@ -37,6 +37,7 @@ class Worker:
             if self.should_attempt_update:
                 self.attempt_update()
                 self.commit_changes()
+                self.update_metadata()
 
             self.success()
         except Exception:
