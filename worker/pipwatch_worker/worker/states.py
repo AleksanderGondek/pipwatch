@@ -1,4 +1,4 @@
-"""This module contains worker logic."""
+"""This module contains states which represent worker current action being undertaken."""
 
 from enum import Enum
 
