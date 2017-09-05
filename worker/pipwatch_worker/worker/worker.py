@@ -5,6 +5,7 @@ from typing import Callable
 
 from transitions import Machine
 
+from pipwatch_worker.core.data_models import Project
 from pipwatch_worker.worker.states import States, WORKER_STATE_TRANSITIONS, Triggers
 
 
@@ -25,10 +26,10 @@ class Worker:
         self.update_celery_state = update_celery_state_method
         self.should_attempt_update = False
 
-    def run(self) -> None:
+    def run(self, project_to_process: Project) -> None:
         """Start worker processing of project requirements update request."""
         try:
-            self.initialize()
+            self.initialize(project_to_process=project_to_process)
             self.clone()
             self.parse_requirements()
             self.check_updates()
@@ -49,7 +50,7 @@ class Worker:
         self.trigger(Triggers.TO_FAIL.value)
         self.update_celery_state(States.FAILURE.value)
 
-    def initialize(self) -> None:
+    def initialize(self, project_to_process: Project) -> None:
         """Initialize variables needed for further request processing."""
         self.update_celery_state(States.INITIALIZING.value)
 

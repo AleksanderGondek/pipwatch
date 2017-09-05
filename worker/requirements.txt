@@ -1,3 +1,4 @@
 celery[redis]
-transitions
+marshmallow
 setuptools
+transitions
