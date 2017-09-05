@@ -5,7 +5,6 @@ from typing import Callable
 
 from transitions import Machine
 
-from pipwatch_worker.core.configuration import load_config_file
 from pipwatch_worker.worker.states import States, WORKER_STATE_TRANSITIONS, Triggers
 
 
@@ -15,7 +14,7 @@ class Worker:
     def __init__(self, update_celery_state_method: Callable[[str], None],
                  logger: Logger = None) -> None:
         """Initialize worker instance."""
-        self.log: Logger = logger or load_config_file()
+        self.log: Logger = logger or getLogger(__name__)
         self.state_machine = Machine(
             model=self,
             states=[state.value for state in States],
