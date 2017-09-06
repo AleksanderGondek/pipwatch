@@ -143,7 +143,7 @@ class Project:
 
     SCHEMA = ProjectSchema()
 
-    def __init__(self,
+    def __init__(self,  # pylint: disable=too-many-arguments
                  id: int,  # pylint: disable=redefined-builtin
                  namespace: str,
                  name: str,
