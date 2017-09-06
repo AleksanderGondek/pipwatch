@@ -5,6 +5,7 @@ LABEL Description="Pipwatch-worker container" Maintainer="Aleksander Gondek" Ver
 ENV PYTHONPATH /pipwatch-worker
 
 WORKDIR /pipwatch-worker
+
 ADD . /pipwatch-worker
 ADD ./config-for-docker.ini /pipwatch-worker/config-override.ini
 
