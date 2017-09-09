@@ -1,4 +1,4 @@
-"""This module contains operations related to cloning project operations."""
+"""This module contains operations related to cloning project."""
 import os
 import subprocess
 

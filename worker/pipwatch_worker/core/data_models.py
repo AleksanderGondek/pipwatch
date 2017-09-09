@@ -25,17 +25,17 @@ class Requirement:
     SCHEMA = RequirementSchema()
 
     def __init__(self,  # pylint: disable=too-many-arguments
-                 id: int,  # pylint: disable=redefined-builtin
-                 name: str,
-                 current_version: str,
-                 desired_version: str,
-                 status: str) -> None:
+                 id: int = None,  # pylint: disable=redefined-builtin
+                 name: str = None,
+                 current_version: str = None,
+                 desired_version: str = None,
+                 status: str = None) -> None:
         """Initialize class instance."""
-        self.id: int = id  # pylint: disable=invalid-name
-        self.name: str = name
-        self.current_version: str = current_version
-        self.desired_version: str = desired_version
-        self.status: str = status
+        self.id = id  # pylint: disable=invalid-name
+        self.name = name
+        self.current_version = current_version
+        self.desired_version = desired_version
+        self.status = status
 
     def to_dict(self) -> Dict[str, Any]:
         """Return class instance representation as dictionary."""
