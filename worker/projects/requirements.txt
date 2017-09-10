@@ -1,5 +1,0 @@
-celery[redis]==6.6.6
-marshmallow
-requirements-parser
-setuptools
-transitions

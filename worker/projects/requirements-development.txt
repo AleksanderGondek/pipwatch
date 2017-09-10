@@ -1,8 +1,0 @@
-flake8
-ipython
-mypy
-pep8
-pylint
-pytest
-pytest-mock
-tox
