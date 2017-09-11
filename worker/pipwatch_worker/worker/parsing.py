@@ -1,53 +1,43 @@
 """This module contains operations related to parsing requirements of project."""
 import os
-from typing import List, Dict, Set
+from typing import Any
 
 import requirements
 
-from pipwatch_worker.core.data_models import Requirement
+from pipwatch_worker.core.data_models import Project, RequirementsFile, Requirement
 
 
-class Parser:  # pylint: disable=too-few-public-methods
-    """Encapsulates logic of retrieving difference between requirements in project and pipwatch db."""
+class Parse:  # pylint: disable=too-few-public-methods
+    """Encapsulates logic of parsing requirements of given project (and keeping them up to date)."""
 
-    def __init__(self,
-                 directory_name: str,
-                 requirements_files_paths: List[str],
-                 requirements_from_db: Dict[str, Requirement]) -> None:
-        """Initialize class instance."""
-        self.directory_name: str = directory_name
-        self.requirements_files_paths: List[str] = requirements_files_paths
-        self.requirements_from_db: Dict[str, Requirement] = requirements_from_db
+    def __init__(self, repository_directory: str, project_details: Project) -> None:
+        """Create method instance."""
+        self.repository_directory_name = repository_directory
+        self.project_details = project_details
 
-    def get_requirements_diff(self) -> Set[Requirement]:
-        """Retrieve list of requirements that need to be updated in db."""
-        difference = set()
-        for requirement in self._get_requirements_from_project_files():
-            if requirement.name not in self.requirements_from_db:
-                difference.add(requirement)
-                continue
+    def __call__(self) -> None:
+        """Parse requirements of given project."""
+        for requirements_file in self.project_details.requirements_files:
+            self._parse_requirements_file(requirements_file=requirements_file)
 
-            requirement_from_db = self.requirements_from_db[requirement.name]
-            if requirement.current_version != requirement_from_db.current_version:
-                difference.add(requirement)
-                continue
-
-        return difference
-
-    def _get_requirements_from_project_files(self) -> Set[Requirement]:
-        """Retrieve list of all requirements specified in all requirements files."""
-        all_requirements: Set = set()
-        for requirements_file in self.requirements_files_paths:
-            full_path = os.path.join(os.getcwd(), self.directory_name, requirements_file)
-            all_requirements = all_requirements.union(self._get_requirements_for_file(full_path))
-
-        return all_requirements
+    def _parse_requirements_file(self, requirements_file: RequirementsFile) -> None:
+        """Parse all packages required by given file."""
+        full_path = os.path.join(os.getcwd(), self.repository_directory_name, str(requirements_file.id))
+        with open(full_path, "r", encoding="utf-8") as file:
+            for requirement_raw in requirements.parse(file):
+                self._parse_requirement(file=requirements_file, requirement=requirement_raw)
 
     @staticmethod
-    def _get_requirements_for_file(full_path) -> Set[Requirement]:
-        """Retrieve list of requirements from single file provided."""
-        with open(full_path, "r", encoding="utf-8") as file:
-            return set(
-                Requirement(name=requirement.name, current_version=str(requirement.specs))
-                for requirement in requirements.parse(file)
-            )
+    def _parse_requirement(file: RequirementsFile, requirement: Any) -> None:
+        """Parse single requirement of given file."""
+        previous_entry = next((x for x in file.requirements if x.name == requirement.name), None)
+        if not previous_entry:
+            file.requirements.append(Requirement(
+                name=requirement.name,
+                current_version=str(requirement.specs),
+                desired_version=str(requirement.specs)
+            ))
+
+        package_version_from_project = str(requirement.specs)
+        if previous_entry.current_version != package_version_from_project:
+            previous_entry.desired_version = package_version_from_project

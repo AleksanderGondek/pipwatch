@@ -7,11 +7,14 @@ from transitions import Machine
 
 from pipwatch_worker.core.data_models import Project
 from pipwatch_worker.worker.cloning import Clone
+from pipwatch_worker.worker.parsing import Parse
 from pipwatch_worker.worker.states import States, WORKER_STATE_TRANSITIONS, Triggers
 
 
 class Worker:
     """Responsible for checking and updating python packages in given project."""
+
+    PROJECT_REPOSITORY_NAME = "project"
 
     def __init__(self, update_celery_state_method: Callable[[str], None],
                  logger: Logger = None) -> None:
@@ -60,7 +63,12 @@ class Worker:
         self.update_celery_state(States.INITIALIZING.value)
         self.project_details = project_to_process
 
-        self._clone = Clone(repository_directory="", project_details=self.project_details)  # type: ignore
+        self._clone = Clone(  # type: ignore
+            repository_directory=self.PROJECT_REPOSITORY_NAME, project_details=self.project_details
+        )
+        self._parse = Parse(  # type: ignore
+            repository_directory=self.PROJECT_REPOSITORY_NAME, project_details=self.project_details
+        )
 
     def clone(self) -> None:
         """Clone repository containing given project."""
