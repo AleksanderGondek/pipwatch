@@ -6,7 +6,7 @@ from typing import Callable
 from transitions import Machine
 
 from pipwatch_worker.core.data_models import Project
-from pipwatch_worker.worker.cloning import Cloner
+from pipwatch_worker.worker.cloning import Clone
 from pipwatch_worker.worker.states import States, WORKER_STATE_TRANSITIONS, Triggers
 
 
@@ -25,8 +25,11 @@ class Worker:
         )
 
         self.update_celery_state = update_celery_state_method
-        self.project_details: Project = None
         self.should_attempt_update = False
+
+        self.project_details: Project = None
+        self._clone = None
+        self._parse = None
 
     def run(self, project_to_process: Project) -> None:
         """Start worker processing of project requirements update request."""
@@ -57,14 +60,13 @@ class Worker:
         self.update_celery_state(States.INITIALIZING.value)
         self.project_details = project_to_process
 
+        self._clone = Clone(repository_directory="", project_details=self.project_details)
+
     def clone(self) -> None:
         """Clone repository containing given project."""
         self.trigger(Triggers.TO_CLONE.value)
         self.update_celery_state(States.CLONING_REPOSITORY.value)
-        Cloner(
-            clone_into_dir_name=str(self.project_details.id),
-            project_url=self.project_details.url
-        ).clone_and_pull_latest()
+        self._clone()
 
     def parse_requirements(self) -> None:
         """Parse and load requirements that are needed by given project."""

@@ -2,20 +2,21 @@
 import os
 import subprocess
 
+from pipwatch_worker.core.data_models import Project
 
-class Cloner:  # pylint: disable=too-few-public-methods
-    """Encapsulates logic of cloning and keeping up to date given git repository."""
-    REPOSITORY_DIRECTORY: str = "projects"
 
-    def __init__(self, clone_into_dir_name: str, project_url: str) -> None:
-        """Initialize class instance."""
-        self.directory_name = clone_into_dir_name
-        self.project_url = project_url
+class Clone:
+    """Encapsulates logic of cloning given project (and keeping it up to date)."""
 
-    def clone_and_pull_latest(self) -> None:
-        """Clone given git repository (if it already exists, it will be cleaned and pulled)."""
+    def __init__(self, repository_directory: str, project_details: Project) -> None:
+        """Create method instance."""
+        self.repository_directory_name = repository_directory
+        self.project_details = project_details
+
+    def __call__(self) -> None:
+        """Clone given repository (or - if it already exists - pull latest changes)."""
         os.makedirs(self.repository_path, exist_ok=True)
-        if os.path.exists(self.path_to_cloned_project):
+        if os.path.exists(self.cloned_project_path):
             self._clean_and_pull()
             return
 
@@ -23,24 +24,24 @@ class Cloner:  # pylint: disable=too-few-public-methods
 
     @property
     def repository_path(self) -> str:
-        """Return full path to directory containing projects."""
-        return os.path.join(os.getcwd(), self.REPOSITORY_DIRECTORY)
+        """Return full path to directory that should be root of all cloned projects."""
+        return os.path.join(os.getcwd(), self.repository_directory_name)
 
     @property
-    def path_to_cloned_project(self) -> str:
-        """Return full path to directory containing project."""
-        return os.path.join(self.repository_path, self.directory_name)
+    def cloned_project_path(self) -> str:
+        """Return full path to directory that should contain cloned project."""
+        return os.path.join(self.repository_path,  self.project_details.id)
 
     def _clean_and_pull(self) -> None:
-        """Reset any changes made to repository and pull latest changes."""
+        """Perform hard reset of repository and pull latest changes."""
         subprocess.run(args="git rest --hard && git clean -fd && git pull",
-                       cwd=self.path_to_cloned_project,
+                       cwd=self.cloned_project_path,
                        shell=False,
                        check=True)
 
     def _clone(self) -> None:
-        """Clone git project."""
-        subprocess.run(args="git clone {} {}".format(self.project_url, self.directory_name),
+        """Clone given project."""
+        subprocess.run(args="git clone {} {}".format(self.project_details.url, self.project_details.id),
                        cwd=self.repository_path,
                        shell=False,
                        check=True)
