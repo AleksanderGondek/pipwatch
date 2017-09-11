@@ -28,8 +28,8 @@ class Worker:
         self.should_attempt_update = False
 
         self.project_details: Project = None
-        self._clone = None
-        self._parse = None
+        self._clone: Callable[[], None]
+        self._parse: Callable[[], None]
 
     def run(self, project_to_process: Project) -> None:
         """Start worker processing of project requirements update request."""
@@ -60,7 +60,7 @@ class Worker:
         self.update_celery_state(States.INITIALIZING.value)
         self.project_details = project_to_process
 
-        self._clone = Clone(repository_directory="", project_details=self.project_details)
+        self._clone = Clone(repository_directory="", project_details=self.project_details)  # type: ignore
 
     def clone(self) -> None:
         """Clone repository containing given project."""

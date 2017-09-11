@@ -30,7 +30,7 @@ class Clone:
     @property
     def cloned_project_path(self) -> str:
         """Return full path to directory that should contain cloned project."""
-        return os.path.join(self.repository_path,  self.project_details.id)
+        return os.path.join(self.repository_path, str(self.project_details.id))
 
     def _clean_and_pull(self) -> None:
         """Perform hard reset of repository and pull latest changes."""
