@@ -40,4 +40,4 @@ class Parse:  # pylint: disable=too-few-public-methods
 
         package_version_from_project = str(requirement.specs)
         if previous_entry.current_version != package_version_from_project:
-            previous_entry.desired_version = package_version_from_project
+            previous_entry.current_version = package_version_from_project

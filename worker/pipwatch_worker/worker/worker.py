@@ -80,6 +80,7 @@ class Worker:
         """Parse and load requirements that are needed by given project."""
         self.trigger(Triggers.TO_PARSE_REQ.value)
         self.update_celery_state(States.PARSING_REQUIREMENTS.value)
+        self._parse()
 
     def check_updates(self) -> None:
         """Check if any of given required packages may be updated."""
