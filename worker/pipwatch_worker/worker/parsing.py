@@ -34,8 +34,7 @@ class Parse:  # pylint: disable=too-few-public-methods
         if not previous_entry:
             file.requirements.append(Requirement(
                 name=requirement.name,
-                current_version=str(requirement.specs),
-                desired_version=str(requirement.specs)
+                current_version=str(requirement.specs)
             ))
 
         package_version_from_project = str(requirement.specs)

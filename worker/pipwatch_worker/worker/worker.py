@@ -8,6 +8,7 @@ from transitions import Machine
 from pipwatch_worker.core.data_models import Project
 from pipwatch_worker.worker.cloning import Clone
 from pipwatch_worker.worker.parsing import Parse
+from pipwatch_worker.worker.updating import Update
 from pipwatch_worker.worker.states import States, WORKER_STATE_TRANSITIONS, Triggers
 
 
@@ -33,6 +34,7 @@ class Worker:
         self.project_details: Project = None
         self._clone: Callable[[], None]
         self._parse: Callable[[], None]
+        self._update: Callable[[], None]
 
     def run(self, project_to_process: Project) -> None:
         """Start worker processing of project requirements update request."""
@@ -69,6 +71,9 @@ class Worker:
         self._parse = Parse(  # type: ignore
             repository_directory=self.PROJECT_REPOSITORY_NAME, project_details=self.project_details
         )
+        self._update = Update(  # type: ignore
+            project_details=self.project_details
+        )
 
     def clone(self) -> None:
         """Clone repository containing given project."""
@@ -91,6 +96,7 @@ class Worker:
         """Send update of given project information (with possible new requirements versions)."""
         self.trigger(Triggers.TO_UPDATE_META.value)
         self.update_celery_state(States.UPDATING_METADATA.value)
+        self._update()
 
     def attempt_update(self) -> None:
         """Check if update of given packages will break project."""
