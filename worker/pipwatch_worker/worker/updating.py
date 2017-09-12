@@ -1,5 +1,5 @@
 """This module contains operations related to updating requirements status of project in db."""
-from configparser import ConfigParser
+from configparser import ConfigParser  # noqa: F401 Imported for type definition
 
 import requests
 
