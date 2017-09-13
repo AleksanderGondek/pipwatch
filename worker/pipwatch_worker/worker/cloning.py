@@ -36,6 +36,8 @@ class Clone:
         """Perform hard reset of repository and pull latest changes."""
         subprocess.run(args="git rest --hard && git clean -fd && git pull",
                        cwd=self.cloned_project_path,
+                       stdout=subprocess.PIPE,
+                       stderr=subprocess.PIPE,
                        shell=False,
                        check=True)
 
@@ -43,5 +45,7 @@ class Clone:
         """Clone given project."""
         subprocess.run(args="git clone {} {}".format(self.project_details.url, self.project_details.id),
                        cwd=self.repository_path,
+                       stdout=subprocess.PIPE,
+                       stderr=subprocess.PIPE,
                        shell=False,
                        check=True)
