@@ -8,6 +8,7 @@ from transitions import Machine
 from pipwatch_worker.core.data_models import Project
 from pipwatch_worker.worker.cloning import Clone
 from pipwatch_worker.worker.parsing import Parse
+from pipwatch_worker.worker.checking_updates import CheckUpdates
 from pipwatch_worker.worker.updating import Update
 from pipwatch_worker.worker.states import States, WORKER_STATE_TRANSITIONS, Triggers
 
@@ -71,6 +72,9 @@ class Worker:
         self._parse = Parse(  # type: ignore
             repository_directory=self.PROJECT_REPOSITORY_NAME, project_details=self.project_details
         )
+        self._check_update = CheckUpdates(  # type: ignore
+            self.log, repository_directory=self.PROJECT_REPOSITORY_NAME, project_details=self.project_details
+        )
         self._update = Update(  # type: ignore
             project_details=self.project_details
         )
@@ -91,6 +95,7 @@ class Worker:
         """Check if any of given required packages may be updated."""
         self.trigger(Triggers.TO_CHECK_UPDATES.value)
         self.update_celery_state(States.CHECKING_FOR_UPDATES.value)
+        self._check_update()
 
     def update_metadata(self) -> None:
         """Send update of given project information (with possible new requirements versions)."""
