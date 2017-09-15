@@ -26,13 +26,16 @@ class CheckUpdates:  # pylint: disable=too-few-public-methods
         self.project_details = project_details
         self.log: Logger = logger or getLogger(__name__)
 
+        self._outdated_packages: List[PackageUpdateSuggestion] = None
+
     def __call__(self) -> List[PackageUpdateSuggestion]:
         """Check for packages updates."""
         outdated: List[PackageUpdateSuggestion] = []
         try:
             self._create_virtualenv()
             self._install_packages()
-            outdated = self._get_outdated_packages()
+            self._get_outdated_packages()
+            self._update_project_details()
         except Exception:  # pylint: disable=broad-except
             self.log.exception("Unable to check for outdated packages")
         finally:
@@ -84,7 +87,7 @@ class CheckUpdates:  # pylint: disable=too-few-public-methods
         """Remove virtualenv for given project."""
         shutil.rmtree(path=os.path.join(self.cloned_project_path, self.VIRTUALENV_DIRECTORY))
 
-    def _get_outdated_packages(self) -> List[PackageUpdateSuggestion]:
+    def _get_outdated_packages(self) -> None:
         """Return list of packages which can be updated."""
         outcome = subprocess.run(
             args="{pip} list --outdated --format=columns".format(
@@ -98,12 +101,23 @@ class CheckUpdates:  # pylint: disable=too-few-public-methods
         )
 
         if not outcome.stdout:
-            return []
+            return
 
         outcome_as_string = outcome.stdout.decode()
         requirements_lines = outcome_as_string.split(os.linesep)
         requirements_detailed = [line.split() for line in requirements_lines if line]
-        return [
+        self._outdated_packages = [
             PackageUpdateSuggestion(requirement[0], requirement[2])
             for requirement in requirements_detailed
         ]
+
+    def _update_project_details(self) -> None:
+        """Update desired version of requirement to latest."""
+        for changed_package in self._outdated_packages:
+            for requirements_file in self.project_details.requirements_files:
+                matching_package = next((
+                    package for package in requirements_file.requirements
+                    if package.name == changed_package.name
+                ), None)
+
+                matching_package.desired_version = changed_package.new_version
