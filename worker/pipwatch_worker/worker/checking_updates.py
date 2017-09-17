@@ -70,7 +70,7 @@ class CheckUpdates:  # pylint: disable=too-few-public-methods
 
     def _install_packages(self) -> None:
         """Install packages of given project to project virtualenv."""
-        args = "{pip} install -U".format(pip=self.VIRTUALENV_COMMAND)
+        args = "{pip} install -U".format(pip=self.pip_command_path)
         for requirement_file in self.project_details.requirements_files:
             args += " -r {}".format(requirement_file.path)
 
