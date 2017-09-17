@@ -17,7 +17,7 @@ class Command:  # pylint: disable=too-few-public-methods
         self.projects_dir_name = projects_dir_name if projects_dir_name \
             else self.DEFAULT_PROJECT_DIR_NAME
 
-    def __call__(self, command: str, cwd: str = None) -> str:
+    def __call__(self, command: str, cwd: str = None) -> bytes:
         """Run given command within project directory and return standard output."""
         os.makedirs(self._project_dir_path, exist_ok=True)
         return self._execute(command=command, cwd=cwd)
@@ -32,7 +32,7 @@ class Command:  # pylint: disable=too-few-public-methods
         """Return full path to directory that should contain cloned project."""
         return os.path.join(self._projects_dir_path, str(self.project_id))
 
-    def _execute(self, command: str, cwd: str = None) -> str:
+    def _execute(self, command: str, cwd: str = None) -> bytes:
         """Execute given command in directory of selected project."""
         outcome = subprocess.run(args=command,
                                  cwd=self._project_dir_path if not cwd else cwd,
@@ -55,7 +55,7 @@ class Git(Command):  # pylint: disable=too-few-public-methods
         super().__init__(project_id=project_id, projects_dir_name=projects_dir_name)
         self.project_url = project_url
 
-    def __call__(self, command: str, cwd: str = None) -> str:
+    def __call__(self, command: str, cwd: str = None) -> bytes:
         """Execute git command in given project repository."""
         os.makedirs(self._projects_dir_path, exist_ok=True)
         if not os.path.exists(self._project_dir_path):
@@ -95,7 +95,7 @@ class FromVirtualenv(Command):  # pylint: disable=too-few-public-methods
         bin_directory = "bin" if os.name != "nt" else "Scripts"
         return os.path.join(self.venv_dir, bin_directory)
 
-    def __call__(self, command: str, cwd: str = None) -> str:
+    def __call__(self, command: str, cwd: str = None) -> bytes:
         """Run executable from virtualenv bin directory.
 
         Important: cwd parameter is ignored. Command is always run at the top of the project dir.
