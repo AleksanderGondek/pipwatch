@@ -6,17 +6,16 @@ from typing import Callable
 from transitions import Machine
 
 from pipwatch_worker.core.data_models import Project
-from pipwatch_worker.worker.cloning import Clone
-from pipwatch_worker.worker.parsing import Parse
 from pipwatch_worker.worker.checking_updates import CheckUpdates
-from pipwatch_worker.worker.updating import Update
+from pipwatch_worker.worker.cloning import Clone
+from pipwatch_worker.worker.commands import Git
+from pipwatch_worker.worker.parsing import Parse
 from pipwatch_worker.worker.states import States, WORKER_STATE_TRANSITIONS, Triggers
+from pipwatch_worker.worker.updating import Update
 
 
 class Worker:
     """Responsible for checking and updating python packages in given project."""
-
-    PROJECT_REPOSITORY_NAME = "project"
 
     def __init__(self, update_celery_state_method: Callable[[str], None],
                  logger: Logger = None) -> None:
@@ -67,13 +66,13 @@ class Worker:
         self.project_details = project_to_process
 
         self._clone = Clone(  # type: ignore
-            repository_directory=self.PROJECT_REPOSITORY_NAME, project_details=self.project_details
+            project_details=self.project_details
         )
         self._parse = Parse(  # type: ignore
-            repository_directory=self.PROJECT_REPOSITORY_NAME, project_details=self.project_details
+            repository_directory=Git.DEFAULT_PROJECT_DIR_NAME, project_details=self.project_details
         )
         self._check_update = CheckUpdates(  # type: ignore
-            self.log, repository_directory=self.PROJECT_REPOSITORY_NAME, project_details=self.project_details
+            self.log, project_details=self.project_details
         )
         self._update = Update(  # type: ignore
             project_details=self.project_details
