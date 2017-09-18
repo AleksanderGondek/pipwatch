@@ -94,7 +94,7 @@ class Worker:
         """Check if any of given required packages may be updated."""
         self.trigger(Triggers.TO_CHECK_UPDATES.value)
         self.update_celery_state(States.CHECKING_FOR_UPDATES.value)
-        self._check_update()
+        self.should_attempt_update = self._check_update()
 
     def update_metadata(self) -> None:
         """Send update of given project information (with possible new requirements versions)."""

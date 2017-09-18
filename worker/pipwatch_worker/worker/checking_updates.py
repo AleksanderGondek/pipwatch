@@ -24,9 +24,8 @@ class CheckUpdates:  # pylint: disable=too-few-public-methods
         self._outdated_packages: List[PackageUpdateSuggestion] = None
         self.from_venv = FromVirtualenv(project_id=self.project_details.id)
 
-    def __call__(self) -> List[PackageUpdateSuggestion]:
+    def __call__(self) -> bool:
         """Check for packages updates."""
-        outdated: List[PackageUpdateSuggestion] = []
         try:
             self._install_packages()
             self._get_outdated_packages()
@@ -34,7 +33,7 @@ class CheckUpdates:  # pylint: disable=too-few-public-methods
         except Exception:  # pylint: disable=broad-except
             self.log.exception("Unable to check for outdated packages")
 
-        return outdated
+        return bool(self._outdated_packages)
 
     def _install_packages(self) -> None:
         """Install packages of given project to project virtualenv."""
