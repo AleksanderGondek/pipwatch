@@ -22,7 +22,11 @@ class Parse:  # pylint: disable=too-few-public-methods
 
     def _parse_requirements_file(self, requirements_file: RequirementsFile) -> None:
         """Parse all packages required by given file."""
-        full_path = os.path.join(os.getcwd(), self.repository_directory_name, str(requirements_file.id))
+        full_path = os.path.join(
+            os.getcwd(), self.repository_directory_name,
+            str(self.project_details.id), requirements_file.path
+        )
+
         with open(full_path, "r", encoding="utf-8") as file:
             for requirement_raw in requirements.parse(file):
                 self._parse_requirement(file=requirements_file, requirement=requirement_raw)
