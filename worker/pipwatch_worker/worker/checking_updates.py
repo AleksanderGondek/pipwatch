@@ -1,7 +1,7 @@
 """This module contains operations related to checking packages updates."""
 from logging import Logger, getLogger
 import os
-from typing import List, NamedTuple
+from typing import List, NamedTuple  # noqa: F401 Imported for type definition
 
 from pipwatch_worker.core.data_models import Project
 from pipwatch_worker.worker.commands import FromVirtualenv
