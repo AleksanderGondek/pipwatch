@@ -7,6 +7,7 @@ from transitions import Machine
 
 from pipwatch_worker.core.data_models import Project
 from pipwatch_worker.worker.checking_updates import CheckUpdates
+from pipwatch_worker.worker.attempting_updates import AttemptUpdate
 from pipwatch_worker.worker.cloning import Clone
 from pipwatch_worker.worker.parsing import Parse
 from pipwatch_worker.worker.states import States, WORKER_STATE_TRANSITIONS, Triggers
@@ -27,10 +28,13 @@ class Worker:
             transitions=WORKER_STATE_TRANSITIONS
         )
 
-        self.update_celery_state = update_celery_state_method
-        self.should_attempt_update = False
-
         self.project_details: Project = None
+        self.update_celery_state = update_celery_state_method
+
+        self.should_attempt_update = False
+        self.update_successful = False
+
+        self._attempt_update: Callable[[], None]
         self._clone: Callable[[], None]
         self._parse: Callable[[], None]
         self._update: Callable[[], None]
@@ -64,6 +68,9 @@ class Worker:
         self.update_celery_state(States.INITIALIZING.value)
         self.project_details = project_to_process
 
+        self._attempt_update = AttemptUpdate(  # type: ignore
+            project_details=self.project_details
+        )
         self._clone = Clone(  # type: ignore
             project_details=self.project_details
         )
@@ -106,10 +113,19 @@ class Worker:
         self.trigger(Triggers.TO_UPDATE_PGS.value)
         self.update_celery_state(States.ATTEMPTING_UPDATE.value)
 
+        try:
+            self._attempt_update()
+        except:
+            self.update_successful = False
+        else:
+            self.update_successful = True
+
     def commit_changes(self) -> None:
         """Commit changes to given project."""
         self.trigger(Triggers.TO_COMMIT.value)
         self.update_celery_state(States.COMMITTING_CHANGES.value)
+        if not self.update_successful:
+            return
 
     def success(self) -> None:
         """Signify that processing of given request has succeeded."""

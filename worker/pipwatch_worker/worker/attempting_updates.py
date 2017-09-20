@@ -31,11 +31,7 @@ class AttemptUpdate:  # pylint: disable=too-few-public-methods
 
     def _check(self) -> bool:
         """Validate if new packages did not break the project."""
-        try:
-            self.command(command=self.project_details.check_command)
-        except Exception:  # pylint: disable=broad-except
-            return False
-
+        self.command(command=self.project_details.check_command)
         return True
 
     def _update_requirement_file(self, requirements_file: RequirementsFile) -> None:
