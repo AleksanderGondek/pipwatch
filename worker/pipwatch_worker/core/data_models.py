@@ -148,12 +148,14 @@ class Project:
                  namespace: str,
                  name: str,
                  url: str,
+                 check_command: str,
                  requirements_files: List[RequirementsFile]) -> None:
         """Initialize class instance."""
         self.id: int = id  # pylint: disable=invalid-name
         self.namespace: str = namespace
         self.name: str = name
         self.url: str = url
+        self.check_command: str = check_command
 
         self.requirements_files: List[RequirementsFile] = requirements_files
 
@@ -172,7 +174,6 @@ class Project:
 
     def __repr__(self) -> str:
         """Return class instance representation."""
-        return "<{class_name}({self.id!r},{self.namespace!r},{self.url!r},{self.name!r})>".format(
-            class_name=self.__class__.__module__ + "." + self.__class__.__name__,
-            self=self
-        )
+        return "<{class_name}({self.id!r},{self.namespace!r}," \
+               "{self.url!r},{self.name!r},{self.url!r},{self.check_command!r})>".format(
+                   class_name=self.__class__.__module__ + "." + self.__class__.__name__, self=self)

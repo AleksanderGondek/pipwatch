@@ -5,14 +5,14 @@ from typing import Any
 import requirements
 
 from pipwatch_worker.core.data_models import Project, RequirementsFile, Requirement
+from pipwatch_worker.worker.commands import Command
 
 
 class Parse:  # pylint: disable=too-few-public-methods
     """Encapsulates logic of parsing requirements of given project (and keeping them up to date)."""
 
-    def __init__(self, repository_directory: str, project_details: Project) -> None:
+    def __init__(self, project_details: Project) -> None:
         """Create method instance."""
-        self.repository_directory_name = repository_directory
         self.project_details = project_details
 
     def __call__(self) -> None:
@@ -23,7 +23,7 @@ class Parse:  # pylint: disable=too-few-public-methods
     def _parse_requirements_file(self, requirements_file: RequirementsFile) -> None:
         """Parse all packages required by given file."""
         full_path = os.path.join(
-            os.getcwd(), self.repository_directory_name,
+            os.getcwd(), Command.DEFAULT_PROJECT_DIR_NAME,
             str(self.project_details.id), requirements_file.path
         )
 

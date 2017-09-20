@@ -2,7 +2,7 @@
 import os
 
 from pipwatch_worker.core.data_models import Project, RequirementsFile
-from pipwatch_worker.worker.commands import FromVirtualenv, Git
+from pipwatch_worker.worker.commands import Command, FromVirtualenv, Git
 
 
 class AttemptUpdate:  # pylint: disable=too-few-public-methods
@@ -10,17 +10,15 @@ class AttemptUpdate:  # pylint: disable=too-few-public-methods
 
     def __init__(
             self,
-            repository_directory: str,
             project_details: Project
     ) -> None:
         """Create method instance."""
-        self.repository_directory_name = repository_directory
         self.project_details = project_details
+        self.command = Command(project_id=self.project_details.id)
         self.from_venv = FromVirtualenv(project_id=self.project_details.id)
         self.git = Git(
             project_id=self.project_details.id,
-            project_url=self.project_details.url,
-            projects_dir_name=self.repository_directory_name
+            project_url=self.project_details.url
         )
 
     def __call__(self) -> None:
@@ -31,14 +29,19 @@ class AttemptUpdate:  # pylint: disable=too-few-public-methods
 
         self._check()
 
-    def _check(self) -> bool:  # pylint: disable=no-self-use
+    def _check(self) -> bool:
         """Validate if new packages did not break the project."""
+        try:
+            self.command(command=self.project_details.check_command)
+        except Exception:  # pylint: disable=broad-except
+            return False
+
         return True
 
     def _update_requirement_file(self, requirements_file: RequirementsFile) -> None:
         """Save new requirements."""
         full_path = os.path.join(
-            os.getcwd(), self.repository_directory_name,
+            os.getcwd(), Command.DEFAULT_PROJECT_DIR_NAME,
             str(self.project_details.id), requirements_file.path
         )
 
