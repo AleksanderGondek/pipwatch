@@ -115,7 +115,7 @@ class Worker:
 
         try:
             self._attempt_update()
-        except:
+        except Exception:
             self.update_successful = False
         else:
             self.update_successful = True
