@@ -130,6 +130,7 @@ class ProjectSchema(marshmallow.Schema):
     id = marshmallow.fields.Int()  # pylint: disable=invalid-name
     namespace = marshmallow.fields.Str()
     name = marshmallow.fields.Str()
+    check_command = marshmallow.fields.Str()
     requirements_files = marshmallow.fields.Nested(RequirementsFileSchema(), many=True)
 
     @marshmallow.post_load

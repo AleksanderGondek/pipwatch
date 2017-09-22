@@ -134,3 +134,4 @@ class Worker:
 
     def trigger(self, transition_trigger: str) -> None:
         """This will be overridden by transitions.Machine"""
+
