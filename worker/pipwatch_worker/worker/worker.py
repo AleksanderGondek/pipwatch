@@ -10,6 +10,7 @@ from pipwatch_worker.core.data_models import Project
 from pipwatch_worker.worker.checking_updates import CheckUpdates
 from pipwatch_worker.worker.attempting_updates import AttemptUpdate
 from pipwatch_worker.worker.cloning import Clone
+from pipwatch_worker.worker.commiting_changes import CommitChanges
 from pipwatch_worker.worker.parsing import Parse
 from pipwatch_worker.worker.states import States, WORKER_STATE_TRANSITIONS, Triggers
 from pipwatch_worker.worker.updating import Update
@@ -38,6 +39,7 @@ class Worker:
         self._locked_packages_ids: FrozenSet[int] = frozenset()
 
         self._attempt_update: Callable[[], None]
+        self._commit_changes: Callable[[], None]
         self._clone: Callable[[], None]
         self._parse: Callable[[], None]
         self._update: Callable[[], None]
@@ -76,14 +78,17 @@ class Worker:
         self._attempt_update = AttemptUpdate(  # type: ignore
             project_details=self.project_details
         )
+        self._check_update = CheckUpdates(  # type: ignore
+            self.log, project_details=self.project_details
+        )
         self._clone = Clone(  # type: ignore
             project_details=self.project_details
         )
+        self._commit_changes = CommitChanges(  # type: ignore
+            self.log, project_details=self.project_details
+        )
         self._parse = Parse(  # type: ignore
             project_details=self.project_details
-        )
-        self._check_update = CheckUpdates(  # type: ignore
-            self.log, project_details=self.project_details
         )
         self._update = Update(  # type: ignore
             project_details=self.project_details
@@ -132,6 +137,8 @@ class Worker:
         self.update_celery_state(States.COMMITTING_CHANGES.value)
         if not self.update_successful:
             return
+
+        self._commit_changes()
 
     def success(self) -> None:
         """Signify that processing of given request has succeeded."""
