@@ -63,4 +63,8 @@ class CheckUpdates:  # pylint: disable=too-few-public-methods
                     if package.name == changed_package.name
                 ), None)
 
-                matching_package.desired_version = changed_package.new_version
+                if not matching_package:
+                    continue
+
+                if not matching_package.desired_version:
+                    matching_package.desired_version = changed_package.new_version

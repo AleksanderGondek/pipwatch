@@ -22,7 +22,7 @@ class RequirementSchema(marshmallow.Schema):
 class Requirement:
     """Represents a single package that should be installed via pip install."""
 
-    SCHEMA = RequirementSchema()
+    SCHEMA = RequirementSchema(strict=True)
 
     def __init__(self,  # pylint: disable=too-many-arguments
                  id: int = None,  # pylint: disable=redefined-builtin
@@ -83,7 +83,7 @@ class RequirementsFileSchema(marshmallow.Schema):
 class RequirementsFile:
     """Represents a single file  containing a list of items to be installed using pip install."""
 
-    SCHEMA = RequirementsFileSchema()
+    SCHEMA = RequirementsFileSchema(strict=True)
 
     def __init__(self,
                  id: int,  # pylint: disable=redefined-builtin
@@ -142,7 +142,7 @@ class ProjectSchema(marshmallow.Schema):
 class Project:
     """Represents a single project entry."""
 
-    SCHEMA = ProjectSchema()
+    SCHEMA = ProjectSchema(strict=True)
 
     def __init__(self,  # pylint: disable=too-many-arguments
                  id: int,  # pylint: disable=redefined-builtin
