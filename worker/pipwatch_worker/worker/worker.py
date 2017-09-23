@@ -1,7 +1,8 @@
 """This module contains pipwatch worker definition."""
 
+from itertools import chain
 from logging import getLogger, Logger  # noqa: F401 Imported for type definition
-from typing import Callable
+from typing import Callable, FrozenSet  # noqa: F401 Imported for type definition
 
 from transitions import Machine
 
@@ -33,6 +34,8 @@ class Worker:
 
         self.should_attempt_update = False
         self.update_successful = False
+
+        self._locked_packages_ids: FrozenSet[int] = frozenset()
 
         self._attempt_update: Callable[[], None]
         self._clone: Callable[[], None]
@@ -67,6 +70,8 @@ class Worker:
         """Initialize variables needed for further request processing."""
         self.update_celery_state(States.INITIALIZING.value)
         self.project_details = project_to_process
+
+        self._save_packages_with_locked_versions()
 
         self._attempt_update = AttemptUpdate(  # type: ignore
             project_details=self.project_details
@@ -117,6 +122,7 @@ class Worker:
             self._attempt_update()
         except Exception:
             self.update_successful = False
+            self._rollback_requirements_desired_versions()
         else:
             self.update_successful = True
 
@@ -134,3 +140,25 @@ class Worker:
 
     def trigger(self, transition_trigger: str) -> None:
         """This will be overridden by transitions.Machine"""
+
+    def _save_packages_with_locked_versions(self) -> None:
+        """Save ids of requirements which had pinned versions before processing.
+
+        This is needed due to 'rollback' logic if update does not succeed.
+        """
+        # There is something weird with mypy here - need to investigate later
+        self._locked_packages_ids = frozenset(
+            requirement.id for requirement in chain(*(  # type: ignore
+                requirement_file for requirement_file in self.project_details.requirements_files
+            ))
+            if requirement.desired_version  # type: ignore
+        )
+
+    def _rollback_requirements_desired_versions(self):
+        """Reset requirements 'desired_versions' if they were not set before this update run."""
+        for requirements_file in self.project_details.requirements_files:
+            for requirement in requirements_file.requirements:
+                if requirement.id in self._locked_packages_ids:
+                    continue
+
+                requirement.desired_version = ""
