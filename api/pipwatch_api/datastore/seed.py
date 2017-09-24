@@ -8,7 +8,11 @@ def seed_database(database_instance: SQLAlchemy = None) -> None:
     """Seed the passed-in database instance with default data."""
     default_namespace = Namespace(name="default")
     example_tag = Tag(name="example")
-    default_project = Project(name="pipwatch_api", url="https://github.com/AleksanderGondek/pipwatch/api")
+    default_project = Project(
+        name="pipwatch_api",
+        url="https://github.com/AleksanderGondek/pipwatch/api",
+        check_command="tox"
+    )
     example_requirements_file = RequirementsFile(full_path="api/requirements.txt", status="")
     example_dev_requirements_file = RequirementsFile(full_path="api/requirements-development.txt", status="")
 

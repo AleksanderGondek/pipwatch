@@ -62,16 +62,18 @@ class Project(DATABASE.Model):
     id = DATABASE.Column(DATABASE.Integer, primary_key=True)  # pylint: disable=invalid-name
     name = DATABASE.Column(DATABASE.String(length=200, convert_unicode=True), unique=False, nullable=False)
     url = DATABASE.Column(DATABASE.String(length=400, convert_unicode=True), unique=True, nullable=False)
+    check_command = DATABASE.Column(DATABASE.String(length=400, convert_unicode=True), unique=False, nullable=False)
 
     namespace_id = DATABASE.Column(DATABASE.Integer, DATABASE.ForeignKey("namespace.id"))
 
     tags = DATABASE.relationship("Tag", secondary=TAGS, backref=DATABASE.backref("projects", lazy="dynamic"))
     requirements_files = DATABASE.relationship("RequirementsFile", backref="project", lazy="dynamic")
 
-    def __init__(self, name: str = "", url: str = "", namespace_id: int = -1) -> None:
+    def __init__(self, name: str = "", url: str = "", check_command="", namespace_id: int = -1) -> None:
         """Initialize class instance."""
         self.name = name
         self.url = url
+        self.check_command = check_command
 
         if namespace_id >= 0:
             self.namespace_id = namespace_id
@@ -82,10 +84,14 @@ class Project(DATABASE.Model):
 
     def __repr__(self) -> str:
         """Return class instance representation."""
-        return "<{class_name}({self.name!r},{self.namespace_id!r})>".format(
-            class_name=self.__class__.__module__ + "." + self.__class__.__name__,
-            self=self
-        )
+        return "<{class_name}(" \
+               "{self.name!r}," \
+               "{self.url!r}," \
+               "{self.check_command!r}," \
+               "{self.namespace_id!r})>".format(
+                   class_name=self.__class__.__module__ + "." + self.__class__.__name__,
+                   self=self
+               )
 
 
 class RequirementsFile(DATABASE.Model):
@@ -125,7 +131,7 @@ class RequirementsFile(DATABASE.Model):
 
 
 class Requirement(DATABASE.Model):
-    """Represents a single package that should be installed via pip install."""
+    """Represents a single requirement of given project."""
     id = DATABASE.Column(DATABASE.Integer, primary_key=True)  # pylint: disable=invalid-name
     name = DATABASE.Column(DATABASE.String(length=256, convert_unicode=True), unique=False, nullable=False)
 

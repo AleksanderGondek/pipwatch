@@ -10,6 +10,7 @@ def test_seed_database(database) -> None:
 
     expected_project_name = "pipwatch_api"
     expected_project_url = "https://github.com/AleksanderGondek/pipwatch/api"
+    expected_project_check_command = "tox"
 
     expected_requirements_files_paths = ["api/requirements.txt", "api/requirements-development.txt"]
     expected_requirements_names = ["requests", "pytest"]
@@ -25,8 +26,8 @@ def test_seed_database(database) -> None:
     project_found = Project.query.first()
     assert (project_found is not None
             and project_found.name == expected_project_name
-            and project_found.url == expected_project_url)
-
+            and project_found.url == expected_project_url
+            and project_found.check_command == expected_project_check_command)
 
     requirements_files_found = RequirementsFile.query.limit(2).all()
     assert requirements_files_found is not None and len(requirements_files_found) == 2

@@ -25,6 +25,7 @@ project_representation_structure = {  # pylint: disable=invalid-name
     "id": fields.Integer(readOnly=True, description=""),
     "name": fields.String(required=True, description=""),
     "url": fields.String(required=True, description=""),
+    "check_command": fields.String(description=""),
     "namespace_id": fields.Integer(attribute="namespace.id"),
     "namespace": fields.String(attribute="namespace.name"),
     "tags": fields.List(fields.Nested(tag_representation))
