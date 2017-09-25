@@ -10,14 +10,14 @@ def seed_database(database_instance: SQLAlchemy = None) -> None:
     example_tag = Tag(name="example")
     default_project = Project(
         name="pipwatch_api",
-        url="https://github.com/AleksanderGondek/pipwatch/api",
+        url="https://github.com/AleksanderGondek/pipwatch.git",
         check_command="tox"
     )
     example_requirements_file = RequirementsFile(full_path="api/requirements.txt", status="")
     example_dev_requirements_file = RequirementsFile(full_path="api/requirements-development.txt", status="")
 
-    example_requirement = Requirement(name="requests", current_version="2.12.0", desired_version="2.13.0", status="")
-    example_dev_requirement = Requirement(name="pytest", current_version="3.0.7", desired_version="3.0.7", status="")
+    example_requirement = Requirement(name="SQLAlchemy", current_version="1.1.14", desired_version="", status="")
+    example_dev_requirement = Requirement(name="pytest", current_version="3.2.2", desired_version="", status="")
 
     database_instance.session.add(default_namespace)
     database_instance.session.add(example_tag)
