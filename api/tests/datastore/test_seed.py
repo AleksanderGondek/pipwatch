@@ -9,11 +9,11 @@ def test_seed_database(database) -> None:
     expected_tag_name = "example"
 
     expected_project_name = "pipwatch_api"
-    expected_project_url = "https://github.com/AleksanderGondek/pipwatch/api"
+    expected_project_url = "https://github.com/AleksanderGondek/pipwatch.git"
     expected_project_check_command = "tox"
 
     expected_requirements_files_paths = ["api/requirements.txt", "api/requirements-development.txt"]
-    expected_requirements_names = ["requests", "pytest"]
+    expected_requirements_names = ["SQLAlchemy", "pytest"]
 
     seed_database(database_instance=database)
 
