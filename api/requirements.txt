@@ -1,3 +1,4 @@
+celery[redis]
 flask-restplus
 Flask-SQLAlchemy
 setuptools

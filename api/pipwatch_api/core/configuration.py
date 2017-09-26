@@ -5,6 +5,7 @@ from logging import config
 from os import path
 from typing import Dict, Optional
 
+from celery import Celery  # noqa: F401 Imported for type definition
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
@@ -36,6 +37,17 @@ def load_config_file() -> ConfigParser:
 def configure_logger() -> None:
     """Apply settings from configuration file to loggers."""
     config.fileConfig(PATH_TO_LOG_CONFIGURATION_FILE)
+
+
+def configure_celery_app(celery_app: Celery) -> None:
+    """Apply configuration settings to celery application instance."""
+    configuration: ConfigParser = load_config_file()
+    celery_app.conf.update(
+        broker_url=configuration.get(section="celery", option="broker_url", fallback="redis://localhost:6379/0"),  # noqa: E501
+        enable_utc=configuration.getboolean(section="celery", option="enable_utc", fallback=True),  # noqa: E501
+        imports=configuration.get(section="celery", option="imports", fallback="pipwatch_worker.celery.tasks").split(","),  # noqa: E501
+        result_backend=configuration.get(section="celery", option="result_backend", fallback="redis://localhost:6379/0")  # noqa: E501
+    )
 
 
 def configure_sqlalchemy(application: Flask, sql_alchemy_instance: SQLAlchemy) -> None:
