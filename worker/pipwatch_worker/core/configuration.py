@@ -40,7 +40,7 @@ def configure_celery_app(celery_app: Celery) -> None:
     configuration: ConfigParser = load_config_file()
     celery_app.conf.update(
         broker_url=configuration.get(section="celery", option="broker_url", fallback="redis://localhost:6379/0"),  # noqa: E501
-        enable_utc=configuration.getboolean(section="celery", option="enable_utc", fallback=False),  # noqa: E501
+        enable_utc=configuration.getboolean(section="celery", option="enable_utc", fallback=True),  # noqa: E501
         imports=configuration.get(section="celery", option="imports", fallback="pipwatch_worker.celery.tasks").split(","),  # noqa: E501
         result_backend=configuration.get(section="celery", option="result_backend", fallback="redis://localhost:6379/0")  # noqa: E501
     )
