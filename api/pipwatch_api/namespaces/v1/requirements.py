@@ -5,13 +5,14 @@ from typing import Dict  # noqa: F401 Imported for type definition
 from flask import request
 from flask_restplus import Namespace, Resource, fields
 
-from pipwatch_api.datastore.models import DATABASE
-from pipwatch_api.datastore.models import Requirement as RequirementModel
+from pipwatch_api.datastore.models import DATABASE, Requirement as RequirementModel
 from pipwatch_api.datastore.stores import DefaultStore
 
 
-requirements_namespace = Namespace("requirements",  # pylint: disable=invalid-name
-                                   description="CRUD operations on requirements")
+requirements_namespace = Namespace(  # pylint: disable=invalid-name
+    "requirements",
+    description="CRUD operations on requirements"
+)
 requirement_repr_structure = {  # pylint: disable=invalid-name
     "id": fields.Integer(readOnly=True, description=""),
     "name": fields.String(required=True, description=""),
@@ -20,8 +21,10 @@ requirement_repr_structure = {  # pylint: disable=invalid-name
     "status": fields.String(required=True, description=""),
     "requirements_file_id": fields.Integer(required=True, attribute="requirements_file.id")
 }
-requirement_repr = requirements_namespace.model("Requirement",  # pylint: disable=invalid-name
-                                                requirement_repr_structure)
+requirement_repr = requirements_namespace.model(  # pylint: disable=invalid-name
+    "Requirement",
+    requirement_repr_structure
+)
 
 
 @requirements_namespace.route("/")

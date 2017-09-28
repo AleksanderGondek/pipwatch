@@ -3,28 +3,31 @@
 from typing import Dict  # noqa: F401 Imported for type definition
 
 from flask import request
-from flask_restplus import Namespace as FlaskNamespace
-from flask_restplus import Resource, fields
+from flask_restplus import fields, Namespace as FlaskNamespace, Resource
 
-from pipwatch_api.datastore.models import DATABASE
-from pipwatch_api.datastore.models import Namespace as NamespaceModel
+from pipwatch_api.datastore.models import DATABASE, Namespace as NamespaceModel
 from pipwatch_api.datastore.stores import DefaultStore
 
 from pipwatch_api.namespaces.v1.projects import project_representation_structure
 
-namespaces_namespace = FlaskNamespace("namespaces",  # pylint: disable=invalid-name
-                                      description="CRUD operations on projects namespaces")
 
-project_repr = namespaces_namespace.model("Project", project_representation_structure)  # pylint: disable=invalid-name
+namespaces_namespace = FlaskNamespace(  # pylint: disable=invalid-name
+    "namespaces",
+    description="CRUD operations on projects namespaces"
+)
+project_repr = namespaces_namespace.model(  # pylint: disable=invalid-name
+    "Project",
+    project_representation_structure
+)
 namespace_repr_structure = {  # pylint: disable=invalid-name
     "id": fields.Integer(readOnly=True, description=""),
     "name": fields.String(required=True, description="")
 }
 namespace_repr = namespaces_namespace.model("Namespace", namespace_repr_structure)  # pylint: disable=invalid-name
-namespace_repr_detailed = namespaces_namespace.inherit("Namespace with projects",  # pylint: disable=invalid-name
-                                                       namespace_repr, {
-                                                           "projects": fields.List(fields.Nested(project_repr))
-                                                       })
+namespace_repr_detailed = namespaces_namespace.inherit(  # pylint: disable=invalid-name
+    "Namespace with projects",
+    namespace_repr, {"projects": fields.List(fields.Nested(project_repr))}
+)
 
 
 @namespaces_namespace.route("/")

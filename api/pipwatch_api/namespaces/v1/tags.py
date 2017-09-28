@@ -5,12 +5,13 @@ from typing import Dict  # noqa: F401 Imported for type definition
 from flask import request
 from flask_restplus import Namespace, Resource, fields
 
-from pipwatch_api.datastore.models import DATABASE
-from pipwatch_api.datastore.models import Tag as TagModel
+from pipwatch_api.datastore.models import DATABASE, Tag as TagModel
 from pipwatch_api.datastore.stores import DefaultStore
 
-tags_namespace = Namespace("tags",  # pylint: disable=invalid-name
-                           description="CRUD operations on tags")
+tags_namespace = Namespace(  # pylint: disable=invalid-name
+    "tags",
+    description="CRUD operations on tags"
+)
 tag_representation_structure = {  # pylint: disable=invalid-name
     "id": fields.Integer(readOnly=True, description=""),
     "name": fields.String(required=True, description="")

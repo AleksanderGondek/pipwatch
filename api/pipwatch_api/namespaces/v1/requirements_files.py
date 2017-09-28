@@ -5,32 +5,34 @@ from typing import Dict  # noqa: F401 Imported for type definition
 from flask import request
 from flask_restplus import Namespace, Resource, fields
 
-from pipwatch_api.datastore.models import DATABASE
-from pipwatch_api.datastore.models import RequirementsFile as RequirementsFileModel
+from pipwatch_api.datastore.models import DATABASE, RequirementsFile as RequirementsFileModel
 from pipwatch_api.datastore.stores import DefaultStore
 
 from pipwatch_api.namespaces.v1.requirements import requirement_repr_structure
 
 
-requirements_files_namespace = Namespace("requirements-files",  # pylint: disable=invalid-name
-                                         description="CRUD operations on requirements-files")
+requirements_files_namespace = Namespace(  # pylint: disable=invalid-name
+    "requirements-files",
+    description="CRUD operations on requirements-files"
+)
 requirements_file_simple_repr_structure = {  # pylint: disable=invalid-name
     "id": fields.Integer(readOnly=True, description=""),
     "full_path": fields.String(required=True, description=""),
     "status": fields.String(required=True, description=""),
     "project_id": fields.Integer(required=True, attribute="project.id"),
 }
-requirements_file_simple_repr = requirements_files_namespace.model("RequirementsFile",  # pylint: disable=invalid-name
-                                                                   requirements_file_simple_repr_structure)
-requirement_repr = requirements_files_namespace.model("Requirement",  # pylint: disable=invalid-name
-                                                      requirement_repr_structure)
-requirements_file_repr = requirements_files_namespace.inherit("Reqs-file detailed",  # pylint: disable=invalid-name
-                                                              requirements_file_simple_repr,
-                                                              {
-                                                                  "requirements": fields.List(
-                                                                      fields.Nested(requirement_repr)
-                                                                  )
-                                                              })
+requirements_file_simple_repr = requirements_files_namespace.model(  # pylint: disable=invalid-name
+    "RequirementsFile",
+    requirements_file_simple_repr_structure)
+requirement_repr = requirements_files_namespace.model(  # pylint: disable=invalid-name
+    "Requirement",
+    requirement_repr_structure
+)
+requirements_file_repr = requirements_files_namespace.inherit(  # pylint: disable=invalid-name
+    "Reqs-file detailed",
+    requirements_file_simple_repr,
+    {"requirements": fields.List(fields.Nested(requirement_repr))}
+)
 
 
 @requirements_files_namespace.route("/")

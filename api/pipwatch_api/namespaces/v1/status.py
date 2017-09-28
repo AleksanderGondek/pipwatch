@@ -2,9 +2,10 @@
 from flask_restplus import Namespace, Resource, fields
 
 status_namespace = Namespace("status", description="retrieve the api instance status.")  # pylint: disable=invalid-name
-status_representation = status_namespace.model("Status", {  # pylint: disable=invalid-name
-    "status": fields.String(required=True, description="Current API status (i.e. 'OK)'")
-})
+status_representation = status_namespace.model(  # pylint: disable=invalid-name
+    "Status",
+    {"status": fields.String(required=True, description="Current API status (i.e. 'OK)'")}
+)
 
 
 @status_namespace.route("/")

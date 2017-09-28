@@ -5,8 +5,7 @@ from typing import Dict  # noqa: F401 Imported for type definition
 from flask import request
 from flask_restplus import Namespace, Resource, fields
 
-from pipwatch_api.datastore.models import DATABASE, RequirementsFile, Tag
-from pipwatch_api.datastore.models import Project as ProjectModel
+from pipwatch_api.datastore.models import DATABASE, Project as ProjectModel, RequirementsFile, Tag
 from pipwatch_api.datastore.stores import NestedDocument, WithNestedDocumentsStore
 
 from pipwatch_api.namespaces.v1.requirements_files import requirements_file_simple_repr_structure
@@ -14,13 +13,19 @@ from pipwatch_api.namespaces.v1.tags import tag_representation_structure
 
 
 TagNestedDocument = NestedDocument("tags", Tag, "name")  # pylint: disable=invalid-name
-RequirementsFilesNestedDocument = NestedDocument("requirements_files", RequirementsFile,  # pylint: disable=invalid-name
-                                                 "id")
+RequirementsFilesNestedDocument = NestedDocument(  # pylint: disable=invalid-name
+    "requirements_files",
+    RequirementsFile,
+    "id")
 
-
-projects_namespace = Namespace("projects",  # pylint: disable=invalid-name
-                               description="CRUD operations on projects")
-tag_representation = projects_namespace.model("Tag", tag_representation_structure)  # pylint: disable=invalid-name
+projects_namespace = Namespace(  # pylint: disable=invalid-name
+    "projects",
+    description="CRUD operations on projects"
+)
+tag_representation = projects_namespace.model(  # pylint: disable=invalid-name
+    "Tag",
+    tag_representation_structure
+)
 project_representation_structure = {  # pylint: disable=invalid-name
     "id": fields.Integer(readOnly=True, description=""),
     "name": fields.String(required=True, description=""),
@@ -30,16 +35,19 @@ project_representation_structure = {  # pylint: disable=invalid-name
     "namespace": fields.String(attribute="namespace.name"),
     "tags": fields.List(fields.Nested(tag_representation))
 }
-project_representation = projects_namespace.model("Project",  # pylint: disable=invalid-name
-                                                  project_representation_structure)
-requirements_file_simple_repr = projects_namespace.model("RequirementsFile",  # pylint: disable=invalid-name
-                                                         requirements_file_simple_repr_structure)
-project_repr_req_files = projects_namespace.inherit("Project with requirements files",  # pylint: disable=invalid-name
-                                                    project_representation, {
-                                                        "requirements_files": fields.List(
-                                                            fields.Nested(requirements_file_simple_repr)
-                                                        )
-                                                    })
+project_representation = projects_namespace.model(  # pylint: disable=invalid-name
+    "Project",
+    project_representation_structure
+)
+requirements_file_simple_repr = projects_namespace.model(  # pylint: disable=invalid-name
+    "RequirementsFile",
+    requirements_file_simple_repr_structure
+)
+project_repr_req_files = projects_namespace.inherit(  # pylint: disable=invalid-name
+    "Project with requirements files",
+    project_representation,
+    {"requirements_files": fields.List(fields.Nested(requirements_file_simple_repr))}
+)
 
 
 @projects_namespace.route("/")
@@ -48,9 +56,11 @@ class Projects(Resource):
     def __init__(self, *args, **kwargs):
         """Initialize resource instance."""
         super().__init__(*args, **kwargs)
-        self.datastore = WithNestedDocumentsStore(model=ProjectModel, database=DATABASE,
-                                                  nested_documents_specs=[TagNestedDocument,
-                                                                          RequirementsFilesNestedDocument])
+        self.datastore = WithNestedDocumentsStore(
+            model=ProjectModel,
+            database=DATABASE,
+            nested_documents_specs=[TagNestedDocument, RequirementsFilesNestedDocument]
+        )
 
     @projects_namespace.marshal_list_with(project_representation)
     def get(self):
@@ -76,9 +86,11 @@ class Project(Resource):
     def __init__(self, *args, **kwargs):
         """Initialize resource instance."""
         super().__init__(*args, **kwargs)
-        self.datastore = WithNestedDocumentsStore(model=ProjectModel, database=DATABASE,
-                                                  nested_documents_specs=[TagNestedDocument,
-                                                                          RequirementsFilesNestedDocument])
+        self.datastore = WithNestedDocumentsStore(
+            model=ProjectModel,
+            database=DATABASE,
+            nested_documents_specs=[TagNestedDocument, RequirementsFilesNestedDocument]
+        )
 
     @projects_namespace.marshal_with(project_repr_req_files)
     @projects_namespace.response(200, "Namespace found.")
