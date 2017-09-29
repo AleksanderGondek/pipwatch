@@ -17,7 +17,7 @@ requirements_files_namespace = Namespace(  # pylint: disable=invalid-name
 )
 requirements_file_simple_repr_structure = {  # pylint: disable=invalid-name
     "id": fields.Integer(readOnly=True, description=""),
-    "full_path": fields.String(required=True, description=""),
+    "path": fields.String(required=True, description=""),
     "status": fields.String(required=True, description=""),
     "project_id": fields.Integer(required=True, attribute="project.id"),
 }

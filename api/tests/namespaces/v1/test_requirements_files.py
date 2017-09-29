@@ -11,7 +11,7 @@ from tests.utils import JSONResponse
 
 
 get_req_file_repr_empty = partial(get_model_repr, model=requirements_file_simple_repr, project_id=None)
-get_req_file_repr = partial(get_model_repr, model=requirements_file_simple_repr, id=1, full_path="test_tag",
+get_req_file_repr = partial(get_model_repr, model=requirements_file_simple_repr, id=1, path="test_tag",
                             status="ok", project_id=None)
 
 

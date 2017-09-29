@@ -97,16 +97,16 @@ class Project(DATABASE.Model):
 class RequirementsFile(DATABASE.Model):
     """Represents a single file  containing a list of items to be installed using pip install."""
     id = DATABASE.Column(DATABASE.Integer, primary_key=True)  # pylint: disable=invalid-name
-    full_path = DATABASE.Column(DATABASE.String(length=512, convert_unicode=True), unique=False, nullable=False)
+    path = DATABASE.Column(DATABASE.String(length=512, convert_unicode=True), unique=False, nullable=False)
 
     status = DATABASE.Column(DATABASE.String(length=30, convert_unicode=True), unique=False, nullable=False)
 
     project_id = DATABASE.Column(DATABASE.Integer, DATABASE.ForeignKey("project.id"))
     requirements = DATABASE.relationship("Requirement", backref="requirements_file", lazy="dynamic")
 
-    def __init__(self, full_path: str = "", status: str = "", project_id: int = -1) -> None:
+    def __init__(self, path: str = "", status: str = "", project_id: int = -1) -> None:
         """Initialize class instance."""
-        self.full_path = full_path
+        self.path = path
         self.status = status
 
         if project_id >= 0:
@@ -114,13 +114,13 @@ class RequirementsFile(DATABASE.Model):
 
     def __str__(self) -> str:
         """Return class representation."""
-        return "<RequirementsFile {self.full_path!r}>".format(self=self)
+        return "<RequirementsFile {self.path!r}>".format(self=self)
 
     def __repr__(self) -> str:
         """Return class instance representation."""
         return (
             "<{class_name}("
-            "{self.full_path!r},"
+            "{self.path!r},"
             "{self.status!r},"
             "{self.project_id!r})"
             ">".format(

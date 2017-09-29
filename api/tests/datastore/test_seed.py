@@ -32,7 +32,7 @@ def test_seed_database(database) -> None:
     requirements_files_found = RequirementsFile.query.limit(2).all()
     assert requirements_files_found is not None and len(requirements_files_found) == 2
     for requirements_file in requirements_files_found:
-        assert requirements_file.full_path in expected_requirements_files_paths
+        assert requirements_file.path in expected_requirements_files_paths
 
     requirements_found = Requirement.query.limit(2).all()
     assert requirements_found is not None and len(requirements_found) == 2
