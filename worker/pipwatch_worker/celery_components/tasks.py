@@ -1,7 +1,7 @@
 """This module contains celery tasks available for the worker."""
 from typing import Any, Dict
 
-from pipwatch_worker.celery.application import app
+from pipwatch_worker.celery_components.application import app
 from pipwatch_worker.core.data_models import Project
 from pipwatch_worker.worker.worker import Worker
 

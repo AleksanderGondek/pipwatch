@@ -3,7 +3,7 @@
 import sys
 from logging import getLogger, Logger  # noqa: F401 Imported for type definition
 
-from pipwatch_worker.celery.application import app
+from pipwatch_worker.celery_components.application import app
 from pipwatch_worker.core.configuration import configure_logger
 
 
