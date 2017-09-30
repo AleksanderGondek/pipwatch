@@ -49,14 +49,14 @@ class ProjectUpdateBroker(Broker):
             database=DATABASE
         )
 
-    def send_update_request(self, project_id: int) -> None:
+    def send_update_request(self, project_id: int) -> str:
         """Send task for attempting update of packages for given project."""
         project: Project = self.datastore.read(document_id=project_id)  # type: ignore
         if not project:
             self.log.warning("Unable to find project with id {}, skipping sending update.".format(project_id))
-            return None
+            return ""
 
-        self.send_task(
+        return self.send_task(
             task_name=self.PROJECT_UPDATE_TASK_NAME,
             args=[self._get_update_request_payload(project)],
             kwargs=None
