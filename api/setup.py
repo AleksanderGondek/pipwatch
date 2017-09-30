@@ -7,8 +7,8 @@ setup(
     version=VERSION,
     packages=find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     install_requires=[
-        "celery[redis]"
-        "flask-restplus"
+        "celery[redis]",
+        "flask-restplus",
         "Flask-SQLAlchemy"
     ],
     include_package_data=False,
