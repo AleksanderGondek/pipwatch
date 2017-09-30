@@ -11,9 +11,9 @@ from pipwatch_api.datastore.stores import DefaultStore
 
 
 class Broker:
-    """Broker class for interacting with celery application.
+    """Broker class for interacting with celery_components application.
 
-    Allows for easy sending celery tasks and retrieving their results.
+    Allows for easy sending celery_components tasks and retrieving their results.
     """
 
     def __init__(self, logger: Logger = None) -> None:
@@ -23,8 +23,8 @@ class Broker:
         configure_celery_app(celery_app=self.app)
 
     def send_task(self, task_name: str, args: Any, kwargs: Any) -> str:
-        """Send celery task and receive its id."""
-        self.log.info("Sending celery task {name} with args: {args}, kwargs: {kwargs}".format(
+        """Send celery_components task and receive its id."""
+        self.log.info("Sending celery_components task {name} with args: {args}, kwargs: {kwargs}".format(
             name=task_name,
             args=repr(args),
             kwargs=repr(kwargs)
@@ -32,7 +32,7 @@ class Broker:
         return self.app.send_task(task_name, args=args, kwargs=kwargs).id
 
     def check_task(self, task_id: str) -> AsyncResult:
-        """Check status of given celery task."""
+        """Check status of given celery_components task."""
         return self.app.AsyncResult(task_id)
 
 

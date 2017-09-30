@@ -2,7 +2,7 @@
 
 from flask_restplus import Namespace, Resource
 
-from pipwatch_api.celery.broker import ProjectUpdateBroker
+from pipwatch_api.celery_components.broker import ProjectUpdateBroker
 
 
 projects_updates_namespace = Namespace(  # pylint: disable=invalid-name
