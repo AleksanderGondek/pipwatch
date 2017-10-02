@@ -17,6 +17,16 @@ def default_store_fixture(mocker) -> DefaultStore:
     return instance
 
 
+class AsyncResultMock:
+    """Mocked celery.result.AsyncResult class."""
+
+    def __init__(self, info, state, task_id):
+        """Initialize mock instance."""
+        self.info = info
+        self.state = state
+        self.task_id = task_id
+
+
 def get_model_repr(**kwargs) -> Optional[Dict[str, Any]]:
     """Return dictionary-like representation of given model."""
     model: Dict[str, Any] = kwargs.get("model")
