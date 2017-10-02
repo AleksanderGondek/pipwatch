@@ -1,5 +1,7 @@
 """This module contains logic for sending update-of-requirements task requests."""
+from typing import Dict
 
+from celery.result import AsyncResult
 from flask_restplus import Namespace, Resource
 
 from pipwatch_api.celery_components.broker import ProjectUpdateBroker
@@ -34,4 +36,14 @@ class ProjectsUpdateStatus(Resource):
 
     def get(self, task_id: str):
         """Return status of given update task."""
-        return self.updates_broker.check_task(task_id=task_id), 200
+        task_result: AsyncResult = self.updates_broker.check_task(task_id=task_id)
+        return self._async_result_to_dict(task_result=task_result), 200
+
+    @staticmethod
+    def _async_result_to_dict(task_result: AsyncResult) -> Dict[str, str]:
+        """Pare celery AsyncResult into human-readable representation."""
+        return {
+            "info": repr(task_result.info),
+            "state": task_result.state,
+            "taskId": task_result.task_id
+        }
