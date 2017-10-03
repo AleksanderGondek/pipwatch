@@ -39,7 +39,7 @@ class Broker:
 class ProjectUpdateBroker(Broker):
     """Encompasses logic for sending tasks for attempting project requirement update."""
 
-    PROJECT_UPDATE_TASK_NAME = "process_project"
+    PROJECT_UPDATE_TASK_NAME = "pipwatch_worker.celery_components.tasks.process_project"
 
     def __init__(self, logger: Logger = None) -> None:
         """Initialize class instance."""
