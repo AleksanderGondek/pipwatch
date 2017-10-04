@@ -156,7 +156,7 @@ class Worker:
         # There is something weird with mypy here - need to investigate later
         self._locked_packages_ids = frozenset(
             requirement.id for requirement in chain(*(  # type: ignore
-                requirement_file for requirement_file in self.project_details.requirements_files
+                requirement_file.requirements for requirement_file in self.project_details.requirements_files
             ))
             if requirement.desired_version  # type: ignore
         )
