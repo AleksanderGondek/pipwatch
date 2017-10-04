@@ -128,8 +128,9 @@ class ProjectSchema(marshmallow.Schema):
     """Marshmellow schema of Project class - allows for easy serialization/deserialization."""
 
     id = marshmallow.fields.Int()  # pylint: disable=invalid-name
-    namespace = marshmallow.fields.Str()
+    namespace_id = marshmallow.fields.Int()
     name = marshmallow.fields.Str()
+    url = marshmallow.fields.Str()
     check_command = marshmallow.fields.Str()
     requirements_files = marshmallow.fields.Nested(RequirementsFileSchema(many=True))
 
