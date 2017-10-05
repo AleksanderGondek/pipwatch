@@ -25,7 +25,7 @@ class Command:  # pylint: disable=too-few-public-methods
     @property
     def _projects_dir_path(self) -> str:
         """Return full path to directory that should be root of all cloned projects."""
-        return os.path.join(os.getcwd(), self.projects_dir_name)
+        return os.path.join(os.getcwd(), "..", self.projects_dir_name)
 
     @property
     def _project_dir_path(self) -> str:

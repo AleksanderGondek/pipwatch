@@ -23,7 +23,7 @@ class Parse:  # pylint: disable=too-few-public-methods
     def _parse_requirements_file(self, requirements_file: RequirementsFile) -> None:
         """Parse all packages required by given file."""
         full_path = os.path.join(
-            os.getcwd(), Command.DEFAULT_PROJECT_DIR_NAME,
+            os.getcwd(), ".." ,Command.DEFAULT_PROJECT_DIR_NAME,
             str(self.project_details.id), requirements_file.path
         )
 
@@ -41,6 +41,6 @@ class Parse:  # pylint: disable=too-few-public-methods
                 current_version=str(requirement.specs)
             ))
 
-        package_version_from_project = str(requirement.specs)
+        package_version_from_project = str(requirement.specs) if requirement.specs else ""
         if previous_entry.current_version != package_version_from_project:
             previous_entry.current_version = package_version_from_project
