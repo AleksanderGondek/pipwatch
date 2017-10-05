@@ -13,6 +13,6 @@ class Clone:  # pylint: disable=too-few-public-methods
 
     def __call__(self) -> None:
         """Clone given repository (or - if it already exists - pull latest changes)."""
-        self.git(command="rest --hard ")
+        self.git(command="reset --hard")
         self.git(command="clean -fd")
-        self.git(command="git pull")
+        self.git(command="pull")
