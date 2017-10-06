@@ -95,6 +95,19 @@ class FromVirtualenv(Command):  # pylint: disable=too-few-public-methods
         bin_directory = "bin" if os.name != "nt" else "Scripts"
         return os.path.join(self.venv_dir, bin_directory)
 
+    @property
+    def _venv_creation_command(self) -> str:
+        """Return shell command for creation of virtualenv."""
+        command = "{virtualenv} {dir}".format(
+            virtualenv=self.venv_command_name,
+            dir=self.venv_dir
+        )
+
+        if os.name != "nt":
+            command += " --python=python3"
+
+        return command
+
     def __call__(self, command: str, cwd: str = None) -> bytes:
         """Run executable from virtualenv bin directory.
 
@@ -104,9 +117,7 @@ class FromVirtualenv(Command):  # pylint: disable=too-few-public-methods
         venv_full_path = os.path.join(self._project_dir_path, self.venv_dir)
         if not os.path.exists(venv_full_path):
             self._execute(
-                command="{virtualenv} {dir} --python=python3".format(
-                    virtualenv=self.venv_command_name, dir=self.venv_dir
-                ),
+                command=self._venv_creation_command,
                 cwd=self._project_dir_path
             )
 
