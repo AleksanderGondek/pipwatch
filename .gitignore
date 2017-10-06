@@ -103,3 +103,6 @@ ENV/
 
 # MyPY
 .mypy_cache
+
+# Worker manual tests
+worker/projects/
