@@ -35,12 +35,13 @@ class Parse:  # pylint: disable=too-few-public-methods
     def _parse_requirement(file: RequirementsFile, requirement: Any) -> None:
         """Parse single requirement of given file."""
         previous_entry = next((x for x in file.requirements if x.name == requirement.name), None)
+        package_version_from_project = str(requirement.specs) if requirement.specs else ""
+
         if not previous_entry:
             file.requirements.append(Requirement(
                 name=requirement.name,
-                current_version=str(requirement.specs)
+                current_version=package_version_from_project
             ))
 
-        package_version_from_project = str(requirement.specs) if requirement.specs else ""
-        if previous_entry.current_version != package_version_from_project:
+        if previous_entry and (previous_entry.current_version != package_version_from_project):
             previous_entry.current_version = package_version_from_project
