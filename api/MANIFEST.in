@@ -1,0 +1,1 @@
+include logging.conf config.ini config-for-docker.ini requirements.txt
