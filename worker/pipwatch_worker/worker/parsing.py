@@ -23,7 +23,7 @@ class Parse:  # pylint: disable=too-few-public-methods
     def _parse_requirements_file(self, requirements_file: RequirementsFile) -> None:
         """Parse all packages required by given file."""
         full_path = os.path.join(
-            os.getcwd(), "..", Command.DEFAULT_PROJECT_DIR_NAME,
+            os.getcwd(), Command.DEFAULT_PROJECT_DIR_NAME,
             str(self.project_details.id), requirements_file.path
         )
 
