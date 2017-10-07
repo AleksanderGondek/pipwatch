@@ -105,4 +105,4 @@ ENV/
 .mypy_cache
 
 # Worker manual tests
-worker/projects/
+pipwatch-cache/

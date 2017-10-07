@@ -1,21 +1,45 @@
 """This module contains logic of running common commands within cloned project directory."""
+from configparser import ConfigParser  # noqa: F401 Imported for type definition
 import os
 import subprocess
 
+from pipwatch_worker.core.configuration import load_config_file
 
-class Command:  # pylint: disable=too-few-public-methods
+
+class RepositoriesCacheMixin:  # pylint: disable=too-few-public-methods
+    """Encompasses logic of retrieving path and directory name of Worker cache."""
+
+    def __init__(self):
+        """Create method instance."""
+        self.repositories_cache_dir_name = ""
+        self.repositories_cache_path = ""
+        self._load_repositories_cache_config()
+
+    def _load_repositories_cache_config(self) -> None:
+        """Load appropriate entries from configuration file."""
+        config_file: ConfigParser = load_config_file()
+        self.repositories_cache_dir_name = config_file.get(
+            section="repos_cache",
+            option="directory_name",
+            fallback="pipwatch-cache"
+        )
+        self.repositories_cache_path = config_file.get(
+            section="repos_cache",
+            option="directory_path",
+            fallback="~" if os.name != "nt" else "%USERPROFILE%"
+        )
+
+
+class Command(RepositoriesCacheMixin):  # pylint: disable=too-few-public-methods
     """Encompasses logic of running any command within project cloned directory.
 
     Command will ensure that project directory exists.
     """
 
-    DEFAULT_PROJECT_DIR_NAME = "projects"
-
-    def __init__(self, project_id: int, projects_dir_name: str = None) -> None:
+    def __init__(self, project_id: int) -> None:
         """Create method instance."""
+        super().__init__()
         self.project_id = project_id
-        self.projects_dir_name = projects_dir_name if projects_dir_name \
-            else self.DEFAULT_PROJECT_DIR_NAME
 
     def __call__(self, command: str, cwd: str = None) -> bytes:
         """Run given command within project directory and return standard output."""
@@ -25,7 +49,7 @@ class Command:  # pylint: disable=too-few-public-methods
     @property
     def _projects_dir_path(self) -> str:
         """Return full path to directory that should be root of all cloned projects."""
-        return os.path.join(os.getcwd(), self.projects_dir_name)
+        return os.path.join(self.repositories_cache_path, self.repositories_cache_dir_name)
 
     @property
     def _project_dir_path(self) -> str:
@@ -50,9 +74,9 @@ class Git(Command):  # pylint: disable=too-few-public-methods
     Command will ensure that the project is cloned.
     """
 
-    def __init__(self, project_id: int, project_url: str, projects_dir_name: str = None) -> None:
+    def __init__(self, project_id: int, project_url: str) -> None:
         """Create method instance."""
-        super().__init__(project_id=project_id, projects_dir_name=projects_dir_name)
+        super().__init__(project_id=project_id)
         self.project_url = project_url
 
     def __call__(self, command: str, cwd: str = None) -> bytes:
@@ -80,11 +104,10 @@ class FromVirtualenv(Command):  # pylint: disable=too-few-public-methods
     DEFAULT_VENV_DIR = "virtualenv"
 
     def __init__(self, project_id: int,
-                 projects_dir_name: str = None,
                  venv_command_name: str = None,
                  venv_dir: str = None) -> None:
         """Create method instance."""
-        super().__init__(project_id=project_id, projects_dir_name=projects_dir_name)
+        super().__init__(project_id=project_id)
         self.venv_dir = venv_dir if venv_dir else self.DEFAULT_VENV_DIR
         self.venv_command_name = venv_command_name if venv_command_name \
             else self.DEFAULT_VENV_COMMAND_NAME

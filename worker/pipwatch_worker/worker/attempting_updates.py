@@ -2,10 +2,10 @@
 import os
 
 from pipwatch_worker.core.data_models import Project, RequirementsFile
-from pipwatch_worker.worker.commands import Command, FromVirtualenv, Git
+from pipwatch_worker.worker.commands import Command, FromVirtualenv, Git, RepositoriesCacheMixin
 
 
-class AttemptUpdate:  # pylint: disable=too-few-public-methods
+class AttemptUpdate(RepositoriesCacheMixin):  # pylint: disable=too-few-public-methods
     """Encapsulates logic of attempt of updating requirements of given project."""
 
     def __init__(
@@ -13,6 +13,7 @@ class AttemptUpdate:  # pylint: disable=too-few-public-methods
             project_details: Project
     ) -> None:
         """Create method instance."""
+        super().__init__()
         self.project_details = project_details
         self.command = Command(project_id=self.project_details.id)
         self.from_venv = FromVirtualenv(project_id=self.project_details.id)
@@ -37,7 +38,7 @@ class AttemptUpdate:  # pylint: disable=too-few-public-methods
     def _update_requirement_file(self, requirements_file: RequirementsFile) -> None:
         """Save new requirements."""
         full_path = os.path.join(
-            os.getcwd(), Command.DEFAULT_PROJECT_DIR_NAME,
+            self.repositories_cache_path, self.repositories_cache_dir_name,
             str(self.project_details.id), requirements_file.path
         )
 

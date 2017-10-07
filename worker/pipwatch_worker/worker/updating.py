@@ -7,7 +7,7 @@ from pipwatch_worker.core.configuration import load_config_file
 from pipwatch_worker.core.data_models import Project, RequirementsFile
 
 
-class Update():  # pylint: disable=too-few-public-methods
+class Update:  # pylint: disable=too-few-public-methods
     """Encapsulates logic of sending update of project requirements."""
 
     def __init__(self, project_details: Project) -> None:
