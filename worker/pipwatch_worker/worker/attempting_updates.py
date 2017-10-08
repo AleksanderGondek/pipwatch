@@ -26,8 +26,12 @@ class AttemptUpdate(RepositoriesCacheMixin):  # pylint: disable=too-few-public-m
         """Update requirements of given project."""
         for requirements_file in self.project_details.requirements_files:
             self._update_requirement_file(requirements_file=requirements_file)
-            self.from_venv(command="pip install -U -r {}".format(requirements_file.path))
-
+            self.from_venv(
+                command="{pip} install -U -r {file}".format(
+                    pip=self._pip_script_name,
+                    file=requirements_file.path
+                )
+            )
         self._check()
 
     def _check(self) -> bool:
@@ -49,3 +53,12 @@ class AttemptUpdate(RepositoriesCacheMixin):  # pylint: disable=too-few-public-m
                     name=requirement.name,
                     version=requirement.desired_version
                 ))
+
+    @property
+    def _pip_script_name(self) -> str:
+        """Return expected pip script name for os pipwatch is currently running on."""
+        script_name = "pip"
+        if os.name == "nt":
+            script_name += ".exe"
+
+        return script_name

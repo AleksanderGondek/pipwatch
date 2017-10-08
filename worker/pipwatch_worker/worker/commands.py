@@ -62,7 +62,7 @@ class Command(RepositoriesCacheMixin):  # pylint: disable=too-few-public-methods
                                  cwd=self._project_dir_path if not cwd else cwd,
                                  stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE,
-                                 shell=False,
+                                 shell=True,
                                  check=True)
 
         return outcome.stdout
@@ -145,5 +145,6 @@ class FromVirtualenv(Command):  # pylint: disable=too-few-public-methods
             )
 
         return self._execute(
-            command="{cmd}".format(cmd=os.path.join(self._venv_bin_directory_path, command))
+            command="{cmd}".format(cmd=os.path.join(self._venv_bin_directory_path, command)),
+            cwd=self._project_dir_path
         )

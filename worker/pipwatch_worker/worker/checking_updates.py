@@ -38,11 +38,18 @@ class CheckUpdates:  # pylint: disable=too-few-public-methods
     def _install_packages(self) -> None:
         """Install packages of given project to project virtualenv."""
         for requirement_file in self.project_details.requirements_files:
-            self.from_venv(command="pip install -U -r {}".format(requirement_file.path))
+            self.from_venv(
+                command="{pip} install -U -r {file}".format(
+                    pip=self._pip_script_name,
+                    file=requirement_file.path
+                )
+            )
 
     def _get_outdated_packages(self) -> None:
         """Return list of packages which can be updated."""
-        outcome = self.from_venv(command="pip list --outdated --format=columns")
+        outcome = self.from_venv(
+            command="{pip} list --outdated --format=columns".format(pip=self._pip_script_name)
+        )
         if not outcome:
             return
 
@@ -68,3 +75,12 @@ class CheckUpdates:  # pylint: disable=too-few-public-methods
 
                 if not matching_package.desired_version:
                     matching_package.desired_version = changed_package.new_version
+
+    @property
+    def _pip_script_name(self) -> str:
+        """Return expected pip script name for os pipwatch is currently running on."""
+        script_name = "pip"
+        if os.name == "nt":
+            script_name += ".exe"
+
+        return script_name
