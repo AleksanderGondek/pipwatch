@@ -23,11 +23,11 @@ class RepositoriesCacheMixin:  # pylint: disable=too-few-public-methods
             option="directory_name",
             fallback="pipwatch-cache"
         )
-        self.repositories_cache_path = config_file.get(
+        self.repositories_cache_path = os.path.expandvars(config_file.get(
             section="repos_cache",
             option="directory_path",
-            fallback="~" if os.name != "nt" else "%USERPROFILE%"
-        )
+            fallback=os.path.expanduser(os.sep.join(["~", "Documents", "pipwatch"]))
+        ))
 
 
 class Command(RepositoriesCacheMixin):  # pylint: disable=too-few-public-methods
