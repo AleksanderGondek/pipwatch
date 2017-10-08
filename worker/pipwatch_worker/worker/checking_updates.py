@@ -55,7 +55,7 @@ class CheckUpdates:  # pylint: disable=too-few-public-methods
 
         outcome_as_string = outcome.decode()
         requirements_lines = outcome_as_string.split(os.linesep)
-        requirements_detailed = [line.split() for line in requirements_lines if line]
+        requirements_detailed = [line.split() for line in requirements_lines[2:] if line]
         self._outdated_packages = [
             PackageUpdateSuggestion(requirement[0], requirement[2])
             for requirement in requirements_detailed
