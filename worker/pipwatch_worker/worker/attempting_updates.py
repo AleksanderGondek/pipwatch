@@ -2,6 +2,7 @@
 import os
 
 from pipwatch_worker.core.data_models import Project, RequirementsFile
+from pipwatch_worker.core.utils import get_pip_script_name
 from pipwatch_worker.worker.commands import Command, FromVirtualenv, Git, RepositoriesCacheMixin
 
 
@@ -28,7 +29,7 @@ class AttemptUpdate(RepositoriesCacheMixin):  # pylint: disable=too-few-public-m
             self._update_requirement_file(requirements_file=requirements_file)
             self.from_venv(
                 command="{pip} install -U -r {file}".format(
-                    pip=self._pip_script_name,
+                    pip=get_pip_script_name(),
                     file=requirements_file.path
                 )
             )
@@ -53,12 +54,3 @@ class AttemptUpdate(RepositoriesCacheMixin):  # pylint: disable=too-few-public-m
                     name=requirement.name,
                     version=requirement.desired_version
                 ))
-
-    @property
-    def _pip_script_name(self) -> str:
-        """Return expected pip script name for os pipwatch is currently running on."""
-        script_name = "pip"
-        if os.name == "nt":
-            script_name += ".exe"
-
-        return script_name
