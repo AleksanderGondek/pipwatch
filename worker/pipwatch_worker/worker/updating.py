@@ -26,5 +26,5 @@ class Update:  # pylint: disable=too-few-public-methods
             api_address=self.config.get(section="pipwatch-api", option="address", fallback="pipwatch_api:80880"),
             file_id=str(file.id)
         )
-        response = requests.put(url=url, data=file.to_dict())
+        response = requests.put(url=url, json=file.to_dict())
         response.raise_for_status()
