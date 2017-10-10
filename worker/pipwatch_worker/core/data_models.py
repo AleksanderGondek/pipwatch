@@ -72,7 +72,7 @@ class RequirementsFileSchema(marshmallow.Schema):
     id = marshmallow.fields.Int()  # pylint: disable=invalid-name
     path = marshmallow.fields.Str()
     status = marshmallow.fields.Str()
-    requirements = marshmallow.fields.Nested(RequirementSchema(many=True))
+    requirements = marshmallow.fields.Nested(RequirementSchema, many=True)
 
     @marshmallow.post_load
     def to_requirements_file(self, data: Dict[Any, Any]) -> "RequirementsFile":  # pylint: disable=no-self-use
@@ -132,7 +132,7 @@ class ProjectSchema(marshmallow.Schema):
     name = marshmallow.fields.Str()
     url = marshmallow.fields.Str()
     check_command = marshmallow.fields.Str()
-    requirements_files = marshmallow.fields.Nested(RequirementsFileSchema(many=True))
+    requirements_files = marshmallow.fields.Nested(RequirementsFileSchema, many=True)
 
     @marshmallow.post_load
     def to_project(self, data: Dict[Any, Any]) -> "Project":  # pylint: disable=no-self-use
