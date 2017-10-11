@@ -65,11 +65,13 @@ class Worker:
 
     def fail(self) -> None:
         """Signify that processing of given request has failed."""
+        self.log.debug("Changing state to {state}.".format(state=States.FAILURE.value))
         self.trigger(Triggers.TO_FAIL.value)
         self.update_celery_state(States.FAILURE.value)
 
     def initialize(self, project_to_process: Project) -> None:
         """Initialize variables needed for further request processing."""
+        self.log.debug("Changing state to {state}.".format(state=States.INITIALIZING.value))
         self.update_celery_state(States.INITIALIZING.value)
         self.project_details = project_to_process
 
@@ -96,30 +98,35 @@ class Worker:
 
     def clone(self) -> None:
         """Clone repository containing given project."""
+        self.log.debug("Changing state to {state}.".format(state=States.CLONING_REPOSITORY.value))
         self.trigger(Triggers.TO_CLONE.value)
         self.update_celery_state(States.CLONING_REPOSITORY.value)
         self._clone()
 
     def parse_requirements(self) -> None:
         """Parse and load requirements that are needed by given project."""
+        self.log.debug("Changing state to {state}.".format(state=States.TO_PARSE_REQ.value))
         self.trigger(Triggers.TO_PARSE_REQ.value)
         self.update_celery_state(States.PARSING_REQUIREMENTS.value)
         self._parse()
 
     def check_updates(self) -> None:
         """Check if any of given required packages may be updated."""
+        self.log.debug("Changing state to {state}.".format(state=States.TO_CHECK_UPDATES.value))
         self.trigger(Triggers.TO_CHECK_UPDATES.value)
         self.update_celery_state(States.CHECKING_FOR_UPDATES.value)
         self.should_attempt_update = self._check_update()
 
     def update_metadata(self) -> None:
         """Send update of given project information (with possible new requirements versions)."""
+        self.log.debug("Changing state to {state}.".format(state=States.TO_UPDATE_META.value))
         self.trigger(Triggers.TO_UPDATE_META.value)
         self.update_celery_state(States.UPDATING_METADATA.value)
         self._update()
 
     def attempt_update(self) -> None:
         """Check if update of given packages will break project."""
+        self.log.debug("Changing state to {state}.".format(state=States.ATTEMPTING_UPDATE.value))
         self.trigger(Triggers.TO_UPDATE_PGS.value)
         self.update_celery_state(States.ATTEMPTING_UPDATE.value)
 
@@ -133,6 +140,7 @@ class Worker:
 
     def commit_changes(self) -> None:
         """Commit changes to given project."""
+        self.log.debug("Changing state to {state}.".format(state=States.COMMITTING_CHANGES.value))
         self.trigger(Triggers.TO_COMMIT.value)
         self.update_celery_state(States.COMMITTING_CHANGES.value)
         if not self.update_successful:
@@ -142,6 +150,7 @@ class Worker:
 
     def success(self) -> None:
         """Signify that processing of given request has succeeded."""
+        self.log.debug("Changing state to {state}.".format(state=States.SUCCESS.value))
         self.trigger(Triggers.TO_SUCCESS.value)
         self.update_celery_state(States.SUCCESS.value)
 
