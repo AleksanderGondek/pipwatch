@@ -105,21 +105,21 @@ class Worker:
 
     def parse_requirements(self) -> None:
         """Parse and load requirements that are needed by given project."""
-        self.log.debug("Changing state to {state}.".format(state=States.TO_PARSE_REQ.value))
+        self.log.debug("Changing state to {state}.".format(state=States.PARSING_REQUIREMENTS.value))
         self.trigger(Triggers.TO_PARSE_REQ.value)
         self.update_celery_state(States.PARSING_REQUIREMENTS.value)
         self._parse()
 
     def check_updates(self) -> None:
         """Check if any of given required packages may be updated."""
-        self.log.debug("Changing state to {state}.".format(state=States.TO_CHECK_UPDATES.value))
+        self.log.debug("Changing state to {state}.".format(state=States.CHECKING_FOR_UPDATES.value))
         self.trigger(Triggers.TO_CHECK_UPDATES.value)
         self.update_celery_state(States.CHECKING_FOR_UPDATES.value)
         self.should_attempt_update = self._check_update()
 
     def update_metadata(self) -> None:
         """Send update of given project information (with possible new requirements versions)."""
-        self.log.debug("Changing state to {state}.".format(state=States.TO_UPDATE_META.value))
+        self.log.debug("Changing state to {state}.".format(state=States.UPDATING_METADATA.value))
         self.trigger(Triggers.TO_UPDATE_META.value)
         self.update_celery_state(States.UPDATING_METADATA.value)
         self._update()
