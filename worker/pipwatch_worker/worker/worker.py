@@ -93,7 +93,7 @@ class Worker:
             logger=self.log, project_details=self.project_details
         )
         self._update = Update(  # type: ignore
-            project_details=self.project_details
+            logger=self.log, project_details=self.project_details
         )
 
     def clone(self) -> None:
