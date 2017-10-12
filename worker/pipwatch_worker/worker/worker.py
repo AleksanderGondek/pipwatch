@@ -78,10 +78,10 @@ class Worker:
         self._save_packages_with_locked_versions()
 
         self._attempt_update = AttemptUpdate(  # type: ignore
-            project_details=self.project_details
+            logger=self.log, project_details=self.project_details
         )
         self._check_update = CheckUpdates(  # type: ignore
-            self.log, project_details=self.project_details
+            logger=self.log, project_details=self.project_details
         )
         self._clone = Clone(  # type: ignore
             project_details=self.project_details
