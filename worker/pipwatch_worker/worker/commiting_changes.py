@@ -22,8 +22,13 @@ class CommitChanges:  # pylint: disable=too-few-public-methods
     def __call__(self, commit_msg: str = None) -> None:
         """Commit changes and push them to master branch."""
         for requirements_file in self.project_details.requirements_files:
+            self.log.debug("Attempting to 'git add {file}'".format(file=requirements_file.path))
             self.git("add {file}".format(file=requirements_file.path))
 
         commit_msg = commit_msg if commit_msg else self.DEFAULT_COMMIT_MSG
+        self.log.debug("Attempting to commit changes with following message: '{message}'".format(
+            message=commit_msg
+        ))
         self.git("commit -m {}".format(commit_msg))
+        self.log.debug("Attempting to push changes")
         self.git("push origin/master")

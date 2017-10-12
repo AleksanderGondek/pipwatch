@@ -87,7 +87,7 @@ class Worker:
             logger=self.log, project_details=self.project_details
         )
         self._commit_changes = CommitChanges(  # type: ignore
-            self.log, project_details=self.project_details
+            logger=self.log, project_details=self.project_details
         )
         self._parse = Parse(  # type: ignore
             project_details=self.project_details
