@@ -1,4 +1,5 @@
 """This module contains operations related to parsing requirements of project."""
+from logging import getLogger, Logger
 import os
 from typing import Any
 
@@ -11,14 +12,18 @@ from pipwatch_worker.worker.commands import RepositoriesCacheMixin
 class Parse(RepositoriesCacheMixin):  # pylint: disable=too-few-public-methods
     """Encapsulates logic of parsing requirements of given project (and keeping them up to date)."""
 
-    def __init__(self, project_details: Project) -> None:
+    def __init__(self, logger: Logger, project_details: Project) -> None:
         """Create method instance."""
         super().__init__()
+        self.log = logger or getLogger(__name__)
         self.project_details = project_details
 
     def __call__(self) -> None:
         """Parse requirements of given project."""
         for requirements_file in self.project_details.requirements_files:
+            self.log.debug("Attempting to parse requirements file '{file}'".format(
+                file=requirements_file.path
+            ))
             self._parse_requirements_file(requirements_file=requirements_file)
 
     def _parse_requirements_file(self, requirements_file: RequirementsFile) -> None:
