@@ -31,12 +31,12 @@ class AttemptUpdate(RepositoriesCacheMixin):  # pylint: disable=too-few-public-m
         """Update requirements of given project."""
         for requirements_file in self.project_details.requirements_files:
             self.log.debug("Attempting to update '{file}' contents.".format(
-                file=requirements_file.path)
-            )
+                file=requirements_file.path
+            ))
             self._update_requirement_file(requirements_file=requirements_file)
             self.log.debug("Attempting to install requirements from '{file}'.".format(
-                file=requirements_file.path)
-            )
+                file=requirements_file.path
+            ))
             self.from_venv(
                 command="{pip} install -U -r {file}".format(
                     pip=get_pip_script_name(),
