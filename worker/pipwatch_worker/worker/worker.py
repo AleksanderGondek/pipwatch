@@ -134,6 +134,7 @@ class Worker:
             self._attempt_update()
         except Exception:
             self.update_successful = False
+            self.log.exception("Attempt to update requirements has failed.")
             self._rollback_requirements_desired_versions()
         else:
             self.update_successful = True
@@ -144,6 +145,7 @@ class Worker:
         self.trigger(Triggers.TO_COMMIT.value)
         self.update_celery_state(States.COMMITTING_CHANGES.value)
         if not self.update_successful:
+            self.log.debug("Requirements update was not successful, will not commit changes.")
             return
 
         self._commit_changes()
@@ -163,6 +165,7 @@ class Worker:
         This is needed due to 'rollback' logic if update does not succeed.
         """
         # There is something weird with mypy here - need to investigate later
+        self.log.debug("Attempting to save requirements which are pinned.")
         self._locked_packages_ids = frozenset(
             requirement.id for requirement in chain(*(  # type: ignore
                 requirement_file.requirements for requirement_file in self.project_details.requirements_files
@@ -173,6 +176,9 @@ class Worker:
     def _rollback_requirements_desired_versions(self):
         """Reset requirements 'desired_versions' if they were not set before this update run."""
         for requirements_file in self.project_details.requirements_files:
+            self.log.debug("Rolling back requirements of '{file}'".format(
+                file=requirements_file.path
+            ))
             for requirement in requirements_file.requirements:
                 if requirement.id in self._locked_packages_ids:
                     continue
