@@ -31,5 +31,10 @@ class Update:  # pylint: disable=too-few-public-methods
             api_address=self.config.get(section="pipwatch-api", option="address", fallback="pipwatch_api:80880"),
             file_id=str(file.id)
         )
-        response = requests.put(url=url, json=file.to_dict())
+        payload = file.to_dict()
+        self.log.debug("About to perform PUT request to address '{url}' with payload {payload}".format(
+            url=url,
+            payload=payload
+        ))
+        response = requests.put(url=url, json=payload)
         response.raise_for_status()
