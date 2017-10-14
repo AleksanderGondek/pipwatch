@@ -39,6 +39,9 @@ class CheckUpdates:  # pylint: disable=too-few-public-methods
     def _install_packages(self) -> None:
         """Install packages of given project to project virtualenv."""
         for requirement_file in self.project_details.requirements_files:
+            self.log.debug("Attempting to install requirements from '{file}' to venv.".format(
+                file=requirement_file.path
+            ))
             self.from_venv(
                 command="{pip} install -U -r {file}".format(
                     pip=get_pip_script_name(),
@@ -48,15 +51,18 @@ class CheckUpdates:  # pylint: disable=too-few-public-methods
 
     def _get_outdated_packages(self) -> None:
         """Return list of packages which can be updated."""
+        self.log.debug("Attempting to list outdated packages.")
         outcome = self.from_venv(
             command="{pip} list --outdated --format=columns".format(pip=get_pip_script_name())
         )
         if not outcome:
+            self.log.debug("No outdated packages found.")
             return
 
         outcome_as_string = outcome.decode()
         requirements_lines = outcome_as_string.split(os.linesep)
         requirements_detailed = [line.split() for line in requirements_lines[2:] if line]
+        self.log.debug("{count} outdated packages found.".format(count=len(requirements_detailed)))
         self._outdated_packages = [
             PackageUpdateSuggestion(requirement[0], requirement[2])
             for requirement in requirements_detailed
