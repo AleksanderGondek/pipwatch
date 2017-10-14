@@ -33,21 +33,30 @@ class Parse(RepositoriesCacheMixin):  # pylint: disable=too-few-public-methods
             str(self.project_details.id), requirements_file.path
         )
 
+        self.log.debug("Attempting to open file '{file}'".format(file=full_path))
         with open(full_path, "r", encoding="utf-8") as file:
             for requirement_raw in requirements.parse(file):
+                self.log.debug("Parsing read requirement of {package}".format(
+                    package=repr(requirement_raw)
+                ))
                 self._parse_requirement(file=requirements_file, requirement=requirement_raw)
 
-    @staticmethod
-    def _parse_requirement(file: RequirementsFile, requirement: Any) -> None:
+    def _parse_requirement(self, file: RequirementsFile, requirement: Any) -> None:
         """Parse single requirement of given file."""
         previous_entry = next((x for x in file.requirements if x.name == requirement.name), None)
         package_version_from_project = str(requirement.specs) if requirement.specs else ""
 
         if not previous_entry:
+            self.log.debug("Previous requirement entry not found. Adding it.")
             file.requirements.append(Requirement(
                 name=requirement.name,
                 current_version=package_version_from_project
             ))
 
         if previous_entry and (previous_entry.current_version != package_version_from_project):
+            self.log.debug("Overriding {package} version of {prev_version} with {version}".format(
+                package=previous_entry.name,
+                prev_version=previous_entry.current_version,
+                version=package_version_from_project
+            ))
             previous_entry.current_version = package_version_from_project
