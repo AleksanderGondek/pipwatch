@@ -1,5 +1,6 @@
 """This module should contain datastores used to work on database."""
 
+from logging import getLogger, Logger
 from typing import Dict, Generic, List, NamedTuple, Optional, TypeVar
 
 from sqlalchemy.orm.exc import NoResultFound
@@ -12,14 +13,16 @@ T = TypeVar("T", bound=Model)
 class DefaultStore(Generic[T]):
     """Generic datastore which can be used to work on any entity in database."""
 
-    def __init__(self, model: T = None, database: SQLAlchemy = None) -> None:
+    def __init__(self, model: T = None, database: SQLAlchemy = None, logger: Logger = None) -> None:
         """
         Initialize datastore instance.
 
         :param model: SQLAlchemy entity model which datastore will work upon (table).
         :param database: SQLAlchemy instance which should be used to connect to database.
+        :param logger: Logger instance which should be used to log. Optional.
         """
         self.columns_to_ignore: List[str] = ["id"]
+        self.log = logger or getLogger(__name__)
         self.model: T = model
         self.database: SQLAlchemy = database
 
@@ -38,6 +41,9 @@ class DefaultStore(Generic[T]):
 
     def create(self, document: Dict = None) -> T:
         """Create new document and save it to database."""
+        self.log.debug("Attempting to create new entity of '%s' from document of '%s'.",
+                       type=type(self.model).__qualname__,
+                       document=repr(document))
         new_instance: T = self.model()
         for column_name in self._naive_get_columns_names():
             passed_in_value: str = document.get(column_name, "")
@@ -50,21 +56,29 @@ class DefaultStore(Generic[T]):
 
         self.database.session.add(new_instance)
         self.database.session.commit()
+        self.log.debug("New entity created and committed.")
         return new_instance
 
     def read(self, document_id: int = -1) -> Optional[T]:
         """Attempt to retrieve document with given id from database."""
+        self.log.debug("Attempting to find entity with id of '%s'.", str(document_id))
         try:
             return self.model.query.filter(self.model.id == document_id).one()
         except NoResultFound:
+            self.log.debug("Entity with id of '%s' not found. Returning 'None'.", str(document_id))
             return None
 
     def read_all(self) -> List[T]:
         """Retrieve all instances of model from database.."""
+        self.log.debug("Attempting to return all entities of type '%s'.", type(self.model).__qualname__)
         return self.model.query.all()
 
     def update(self, document_id: int = -1, document: Dict = None) -> Optional[T]:
         """Attempt to update document with given id in database."""
+        self.log.debug("Attempting to update entity of '%s' with id of '%s' from document of '%s'.",
+                       type(self.model).__qualname__,
+                       str(document_id),
+                       repr(document))
         document_from_db: T = self.read(document_id=document_id)
         if not document_from_db:
             return None
@@ -80,16 +94,19 @@ class DefaultStore(Generic[T]):
 
         self.database.session.add(document_from_db)
         self.database.session.commit()
+        self.log.debug("Entity updated and committed.")
         return document_from_db
 
     def delete(self, document_id: int = -1) -> None:
         """Delete document with given id from database."""
+        self.log.debug("Attempting to delete entity with id of '{%s}'.", str(document_id))
         document_to_be_removed: T = self.read(document_id=document_id)
         if not document_to_be_removed:
             return
 
         self.database.session.delete(document_to_be_removed)
         self.database.session.commit()
+        self.log.debug("Entity deleted.")
 
 
 NestedDocument = NamedTuple("NestedDocument", [("property_name", str),
@@ -104,19 +121,20 @@ class WithNestedDocumentsStore(DefaultStore):
     This class makes it easy to persist changes not only to entity, but with those columns which interacts with it.
     """
 
-    def __init__(self, model: T = None, database: SQLAlchemy = None,
+    def __init__(self, model: T = None, database: SQLAlchemy = None, logger: Logger = None,
                  nested_documents_specs: List[NestedDocument] = None) -> None:
         """
         Initialize datastore instance.
 
         :param model: SQLAlchemy entity model which datastore will work upon (table).
         :param database: SQLAlchemy instance which should be used to connect to database.
+        :param logger: Logger instance which should be used to log. Optional.
         :param nested_documents_specs: List[NestedDocuments]: list which specifies details about
         nested entities connected to given model. It should be a tuple, containing of key under which
         nested entity is attached to model, model representing nested entity and attribute name which should
         be used to differentiate between nested documents.
         """
-        super().__init__(model=model, database=database)
+        super().__init__(model=model, database=database, logger=logger)
         self.nested_documents_specs: List[NestedDocument] = nested_documents_specs
         self._load_nested_documents_properties_names()
 
