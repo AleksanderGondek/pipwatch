@@ -12,7 +12,7 @@ configure_logger()
 log: Logger = getLogger(__name__)
 
 
-@app.task(bind=True, retry_backoff=True)
+@app.task(bind=True)
 def process_project(self, processing_request: Dict[str, Any]) -> None:
     """Check if packages in given project may be updated."""
     log.debug("Starting task 'process_project'.")
