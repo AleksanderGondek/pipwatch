@@ -6,7 +6,15 @@ Pipwatch
 
 
 Easily manage and keep up to date all of your projects pip dependencies.
-Should support github and gerrit.
+
+How changes to requirements are applied
+---
+After new versions of requirement packages are verified to work, their change may be applied in the following ways:
+* Push [*Implemented*]– Just as the name indicates, the commit with changes made by pipwatch is simply pushed to master branch
+* Github flavoured pull request [*To be implemented*] – Changes are going to be staged on fork of project repository and then a pull request is going to be submitted to selected github instance (may be public or enterprise)
+* Gerrit patch [*To be implemented*] – Changes are going to be submitted as a `git-review` patchset to selected gerrit instance
+
+**Note**: Currently no monitoring is performed to verify if github/gerrit changes are merged into repository, which can become a nuisance and lead to multiple submissions of same changes.
 
 
 License
