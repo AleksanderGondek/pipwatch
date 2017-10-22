@@ -7,6 +7,10 @@ Pipwatch
 
 Easily manage and keep up to date all of your projects pip dependencies.
 
+Requirements update flow
+---
+![Worker flow](/docs/workerFlow.png)
+
 How changes to requirements are applied
 ---
 After new versions of requirement packages are verified to work, their change may be applied in the following ways:
