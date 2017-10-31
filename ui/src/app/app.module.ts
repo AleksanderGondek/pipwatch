@@ -5,12 +5,16 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 
+import { DataBrokersModule } from "./data-brokers/data-brokers.module";
+
+
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
     BrowserModule,
+    DataBrokersModule,
     FormsModule,
     HttpModule
   ],
