@@ -10,11 +10,14 @@ import { Project } from "./data-brokers/entities";
 })
 export class AppComponent  implements OnInit {
   title = 'app works!';
-
+  listOfProjects = new Array<Project>();
   constructor(private readonly broker: DataBroker<Project>) {
   }
 
   ngOnInit() {
-    this.broker.initialize("http://localhost:8080/api/v1/projects", Project);
+    this.broker.initialize("http://localhost:8080/api/v1/projects/", Project);
+    this.broker.getAll().then(response => {
+      this.listOfProjects = response;
+    }).catch(error => {});
   }
 }
