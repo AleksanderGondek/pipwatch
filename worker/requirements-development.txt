@@ -1,7 +1,7 @@
 flake8
 ipython
 mypy==0.521
-pep8
+pycodestyle
 pylint
 pytest
 pytest-mock
