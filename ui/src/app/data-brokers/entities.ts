@@ -87,3 +87,15 @@ export class Namespace implements IEntity {
         this.projects = jsonObject.projects;
     }
 }
+
+export class ProjectUpdateStatus {
+    public info: string;
+    public state: string;
+    public taskId: string;
+
+    constructor(jsonObject: any) {
+        this.info = jsonObject.info;
+        this.state = jsonObject.state;
+        this.taskId = jsonObject.taskId;
+    }
+}
