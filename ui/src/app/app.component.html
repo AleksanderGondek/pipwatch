@@ -1,4 +1,6 @@
 <h1>
   {{title}}
 </h1>
-<li *ngFor="let project of listOfProjects">{{project.name}}</li>
+<li *ngFor="let project of listOfProjects">
+  {{project.name}} - <span (click)="projectUpdate(project.id)">Fire update</span>
+</li>

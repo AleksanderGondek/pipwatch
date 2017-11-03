@@ -25,7 +25,7 @@ export class ProjectsUpdateService {
     }
 
     triggerUpdate(projectId: number): void {
-        this.http.post(this.baseUrl + "/projects-updates/" + projectId, {})
+        this.http.post(this.baseUrl + "/projects-updates/" + projectId, null)
             .toPromise()
             .then(response => {})
             .catch(this.handleException);
