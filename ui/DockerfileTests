@@ -1,0 +1,9 @@
+FROM node:8-alpine as builder
+
+LABEL Description="Pipwatch-ui tests container" Maintainer="Aleksander Gondek" Version="alpha"
+
+WORKDIR /pipwatch-ui-builder
+ADD . /pipwatch-ui-builder
+RUN yarn cache clean && yarn install --non-interactive
+
+CMD ["./node_modules/.bin/ng lint"]
