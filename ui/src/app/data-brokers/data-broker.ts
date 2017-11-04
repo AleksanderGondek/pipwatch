@@ -8,14 +8,14 @@ import { IEntity } from "./entities";
 
 @Injectable()
 export class DataBroker<T extends IEntity> {
-    private requestHeaders = new Headers({"Content-Type": "application/json"});
-    private cls: {new(jsonObject: any): T};
+    private requestHeaders = new Headers({ "Content-Type": "application/json" });
+    private cls: { new(jsonObject: any): T };
 
     public baseUrl = "";
 
     constructor(private http: Http) { }
 
-    initialize(baseUrl: string, cls: {new(jsonObject: any): T}): void {
+    initialize(baseUrl: string, cls: { new(jsonObject: any): T }): void {
         this.baseUrl = baseUrl;
         this.cls = cls;
     }
@@ -27,10 +27,10 @@ export class DataBroker<T extends IEntity> {
             .catch(this.handleException);
     }
 
-    private handleResponse(response: any, cls: {new(jsonObject: any): T}): T[] {
+    private handleResponse(response: any, cls: { new(jsonObject: any): T }): T[] {
         // Enforce response having full typing of T
         const collection = response.json();
-        const entityCollection = collection.map(function(item: any) {
+        const entityCollection = collection.map(function (item: any) {
             return new cls(item);
         });
         return entityCollection as T[];

@@ -7,11 +7,11 @@ import { ProjectsUpdateService } from "./projectsUpdateService";
 
 
 @NgModule({
-  imports: [
-    CommonModule,
-    HttpModule
-  ],
-  declarations: [],
-  providers: [DataBroker, ProjectsUpdateService]
+    imports: [
+        CommonModule,
+        HttpModule
+    ],
+    declarations: [],
+    providers: [DataBroker, ProjectsUpdateService]
 })
 export class DataBrokersModule { }
