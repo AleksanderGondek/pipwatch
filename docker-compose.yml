@@ -3,7 +3,7 @@ services:
     pipwatch_api:
         build: ./api
         ports:
-            - "4000:8080"
+            - "8081:8081"
     pipwatch_worker:
         build: ./worker
     redis:
