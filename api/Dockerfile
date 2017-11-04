@@ -8,7 +8,7 @@ WORKDIR /pipwatch-api
 ADD . /pipwatch-api
 ADD ./config-for-docker.ini /pipwatch-api/config-override.ini
 
-EXPOSE 8080
+EXPOSE 8081
 
 RUN pip install -r requirements.txt
 
