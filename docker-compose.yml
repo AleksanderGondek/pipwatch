@@ -6,6 +6,10 @@ services:
             - "8081:8081"
     pipwatch_worker:
         build: ./worker
+    pipwatch_ui:
+        build: ./ui
+        ports:
+            - "8080:80"
     redis:
         image: "redis:latest"
         ports:

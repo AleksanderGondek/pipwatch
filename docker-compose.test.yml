@@ -10,3 +10,8 @@ services:
             context: ./worker
             dockerfile: DockerfileTests
         command: ""
+    pipwatch_ui:
+        build:
+            context: ./ui
+            dockerfile: DockerfileTests
+        command: ""
