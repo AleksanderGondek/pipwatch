@@ -26,6 +26,20 @@ jobs:
                 name: Run tox tests
                 working_directory: ~/pipwatch-api/api
                 command: tox
+    build_ui:
+        working_directory: ~/pipwatch-ui
+        docker:
+            - image: node:8-alpine
+        steps:
+            - checkout
+            - run:
+                name: Restore node modules
+                working_directory: ~/pipwatch-ui/ui
+                command: yarn install --non-interactive
+            - run:
+                name: Build angular application
+                working_directory: ~/pipwatch-ui/ui
+                command: ./node_modules/.bin/ng build --env=prod
     build_worker:
         working_directory: ~/pipwatch-worker
         docker:
@@ -57,6 +71,7 @@ workflows:
     tests:
         jobs:
             - build_api
+            - build_ui
             - build_worker
             - test_api:
                 requires:
