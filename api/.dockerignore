@@ -1,5 +1,8 @@
 .cache
 .idea
+.mypy_cache
+pipwatch_api.egg-info
 .virtualenv
+.tox
 
 db.sqlite
