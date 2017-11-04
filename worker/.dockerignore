@@ -1,3 +1,6 @@
 .cache
 .idea
+.mypy_cache
+pipwatch_worker.egg-info
 .virtualenv
+.tox
