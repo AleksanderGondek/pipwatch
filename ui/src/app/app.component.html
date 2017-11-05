@@ -1,6 +1,20 @@
-<h1>
-  {{title}}
-</h1>
-<li *ngFor="let project of listOfProjects">
-  {{project.name}} - <span (click)="projectUpdate(project.id)">Fire update</span>
-</li>
+<h1>{{title}}</h1>
+<hr/>
+
+<h4>Projects</h4>
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Url</th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+    </tr>
+    <tr *ngFor="let project of listOfProjects">
+        <td>{{project.id}}</td>
+        <td>{{project.name}}</td>
+        <td>{{project.url}}</td>
+        <td><a href="" (click)="projectUpdate(project.id)">Run update</a></td>
+        <td><a href="">Check status</a></td>
+    </tr>
+</table>

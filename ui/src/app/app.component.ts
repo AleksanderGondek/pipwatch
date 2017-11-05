@@ -12,7 +12,7 @@ import { ProjectsUpdateService } from "./data-brokers/projectsUpdateService";
   styleUrls: ["./app.component.css"]
 })
 export class AppComponent  implements OnInit {
-  title = "app works!";
+  title = "Hello, from pipwatch-ui!";
   listOfProjects = new Array<Project>();
 
   constructor(private readonly broker: DataBroker<Project>, private readonly updateService: ProjectsUpdateService) {
