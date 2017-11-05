@@ -8,20 +8,21 @@ import { IEntity } from "./entities";
 
 @Injectable()
 export class DataBroker<T extends IEntity> {
-    private requestHeaders = new Headers({ "Content-Type": "application/json" });
+    private apiBaseUrl = "";
     private cls: { new(jsonObject: any): T };
-
-    public baseUrl = "";
+    private resourceName = "";
+    private readonly requestHeaders = new Headers({ "Content-Type": "application/json" });
 
     constructor(private http: Http) { }
 
-    initialize(baseUrl: string, cls: { new(jsonObject: any): T }): void {
-        this.baseUrl = baseUrl;
+    initialize(apiBaseUrl: string, resourceName: string, cls: { new(jsonObject: any): T }): void {
+        this.apiBaseUrl = apiBaseUrl;
+        this.resourceName = resourceName;
         this.cls = cls;
     }
 
     getAll(): Promise<T[]> {
-        return this.http.get(this.baseUrl)
+        return this.http.get(this.apiBaseUrl + this.resourceName)
             .toPromise()
             .then(response => this.handleResponse(response, this.cls))
             .catch(this.handleException);

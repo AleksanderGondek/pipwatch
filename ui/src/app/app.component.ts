@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 
+import { environment } from "../environments/environment";
+
 import { DataBroker } from "./data-brokers/data-broker";
 import { Project } from "./data-brokers/entities";
 import { ProjectsUpdateService } from "./data-brokers/projectsUpdateService";
@@ -21,8 +23,9 @@ export class AppComponent  implements OnInit {
   }
 
   ngOnInit() {
-    this.broker.initialize("http://localhost:8080/api/v1/projects/", Project);
-    this.updateService.initialize("http://localhost:8080/api/v1");
+    this.broker.initialize(environment.pipwatchApiUrl, "projects/", Project);
+    this.updateService.initialize(environment.pipwatchApiUrl);
+
     this.broker.getAll().then(response => {
       this.listOfProjects = response;
     }).catch(error => {});

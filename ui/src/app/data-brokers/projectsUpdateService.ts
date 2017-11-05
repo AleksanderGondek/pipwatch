@@ -8,24 +8,25 @@ import { ProjectUpdateStatus } from "./entities";
 
 @Injectable()
 export class ProjectsUpdateService {
-    private requestHeaders = new Headers({"Content-Type": "application/json"});
-    private baseUrl = "";
+    private apiBaseUrl = "";
+    private readonly resourceName = "projects-updates/";
+    private readonly requestHeaders = new Headers({"Content-Type": "application/json"});
 
     constructor(private http: Http) { }
 
-    initialize(baseUrl: string): void {
-        this.baseUrl = baseUrl;
+    initialize(apiBaseUrl: string): void {
+        this.apiBaseUrl = apiBaseUrl;
     }
 
     getStatus(taskId: string): Promise<ProjectUpdateStatus> {
-        return this.http.get(this.baseUrl + "/projects-updates/" + taskId)
+        return this.http.get(this.apiBaseUrl + this.resourceName + taskId)
             .toPromise()
             .then(response => this.handleResponse(response))
             .catch(this.handleException);
     }
 
     triggerUpdate(projectId: number): void {
-        this.http.post(this.baseUrl + "/projects-updates/" + projectId, null)
+        this.http.post(this.apiBaseUrl + this.resourceName + projectId, null)
             .toPromise()
             .then(response => {})
             .catch(this.handleException);
