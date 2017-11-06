@@ -40,6 +40,20 @@ jobs:
                 name: Build angular application
                 working_directory: ~/pipwatch-ui/ui
                 command: ./node_modules/.bin/ng build --env=prod
+    test_ui:
+        working_directory: ~/pipwatch-ui
+        docker:
+            - image: node:8-alpine
+        steps:
+            - checkout
+            - run:
+                name: Restore node modules
+                working_directory: ~/pipwatch-ui/ui
+                command: yarn install --non-interactive
+            - run:
+                name: Test angular application
+                working_directory: ~/pipwatch-ui/ui
+                command: ./node_modules/.bin/ng lint
     build_worker:
         working_directory: ~/pipwatch-worker
         docker:
@@ -76,6 +90,9 @@ workflows:
             - test_api:
                 requires:
                     - build_api
+            - test_ui:
+                requires:
+                    - build_ui
             - test_worker:
                 requires:
                     - build_worker
