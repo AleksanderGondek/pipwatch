@@ -9,7 +9,6 @@ import { ProjectsUpdateService } from "./data-brokers/projectsUpdateService";
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.css"]
 })
 export class AppComponent  implements OnInit {
   title = "Hello, from pipwatch-ui!";
