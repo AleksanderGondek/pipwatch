@@ -618,6 +618,18 @@ boom@5.x.x:
   dependencies:
     hoek "4.x.x"
 
+bootstrap@~4.0.0-beta.2:
+  version "4.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.0.0-beta.2.tgz#4d67d2aa2219f062cd90bc1247e6747b9e8fd051"
+
+bootswatch@^4.0.0-beta.2:
+  version "4.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/bootswatch/-/bootswatch-4.0.0-beta.2.tgz#e8a2947fd882b839cb18cb8e9bb2ad682b4f2710"
+  dependencies:
+    bootstrap "~4.0.0-beta.2"
+    jquery ">=1.9.1"
+    popper.js "^1.11.0"
+
 boxen@^1.2.1:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/boxen/-/boxen-1.2.2.tgz#3f1d4032c30ffea9d4b02c322eaf2ea741dcbce5"
@@ -2751,6 +2763,10 @@ jasminewd2@^2.1.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/jasminewd2/-/jasminewd2-2.2.0.tgz#e37cf0b17f199cce23bea71b2039395246b4ec4e"
 
+jquery@>=1.9.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
+
 js-base64@^2.1.5, js-base64@^2.1.8, js-base64@^2.1.9:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.3.2.tgz#a79a923666372b580f8e27f51845c6f7e8fbfbaf"
@@ -3694,6 +3710,10 @@ pinkie-promise@^2.0.0:
 pinkie@^2.0.0, pinkie@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/pinkie/-/pinkie-2.0.4.tgz#72556b80cfa0d48a974e80e77248e80ed4f7f870"
+
+popper.js@^1.11.0:
+  version "1.12.6"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.12.6.tgz#91e12a97b07815258b76915d64044e8ac053d426"
 
 portfinder@^1.0.9, portfinder@~1.0.12:
   version "1.0.13"
