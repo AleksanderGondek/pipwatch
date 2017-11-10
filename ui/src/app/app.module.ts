@@ -6,19 +6,21 @@ import { HttpModule } from "@angular/http";
 import { AppComponent } from "./app.component";
 
 import { DataBrokersModule } from "./data-brokers/data-brokers.module";
+import { TopMenuModule } from "./top-menu/top-menu.module";
 
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    DataBrokersModule,
-    FormsModule,
-    HttpModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent
+    ],
+    imports: [
+        BrowserModule,
+        DataBrokersModule,
+        FormsModule,
+        HttpModule,
+        TopMenuModule
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
