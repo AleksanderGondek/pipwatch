@@ -106,3 +106,6 @@ ENV/
 
 # Worker manual tests
 pipwatch-cache/
+
+# Secret directory
+.secret
