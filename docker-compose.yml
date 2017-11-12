@@ -6,6 +6,8 @@ services:
             - "8081:8081"
     pipwatch_worker:
         build: ./worker
+        volumes:
+            - ./.secret:/root/.ssh:ro
     pipwatch_ui:
         build: ./ui
         ports:
