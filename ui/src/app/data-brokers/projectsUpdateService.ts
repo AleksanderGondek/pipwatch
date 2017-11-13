@@ -25,10 +25,10 @@ export class ProjectsUpdateService {
             .catch(this.handleException);
     }
 
-    triggerUpdate(projectId: number): void {
-        this.http.post(this.apiBaseUrl + this.resourceName + projectId, null)
+    triggerUpdate(projectId: number): Promise<string> {
+        return this.http.post(this.apiBaseUrl + this.resourceName + projectId, null)
             .toPromise()
-            .then(response => {})
+            .then(response => { return response; })
             .catch(this.handleException);
     }
 
