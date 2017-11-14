@@ -28,7 +28,7 @@ export class ProjectsUpdateService {
     triggerUpdate(projectId: number): Promise<string> {
         return this.http.post(this.apiBaseUrl + this.resourceName + projectId, null)
             .toPromise()
-            .then(response => { return response; })
+            .then(response => { return response.json() as string; })
             .catch(this.handleException);
     }
 
