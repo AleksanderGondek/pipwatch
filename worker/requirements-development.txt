@@ -1,6 +1,6 @@
 flake8
 ipython
-mypy==0.521
+mypy
 pycodestyle
 pylint
 pytest
