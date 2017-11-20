@@ -17,7 +17,7 @@
                 <td>{{project.name}}</td>
                 <td>{{project.url}}</td>
                 <td><button type="button" class="btn btn-primary btn-sm" (click)="projectUpdate(project.id)">Run update</button></td>
-                <td><button type="button" class="btn btn-primary btn-sm" (click)="checkStatus(triggeredTaskId)">Check status</button></td>
+                <td><button type="button" class="btn btn-primary btn-sm" (click)="checkStatus(getTriggeredTaskIdForProject(project.id))">Check status</button></td>
             </tr>
         </table>            
     </div>

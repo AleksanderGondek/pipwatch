@@ -14,8 +14,8 @@ import { prepareProfile } from "selenium-webdriver/firefox";
 export class AppComponent  implements OnInit {
     title = "Hello, from pipwatch-ui!";
 
-    triggeredTaskId = "";
-    triggeredTaskStatus = "";
+    triggeredTasksIds = new Map<number, string>();
+    triggeredTasksStatuses = new Map<string, string>();
 
     listOfProjects = new Array<Project>();
 
@@ -24,13 +24,17 @@ export class AppComponent  implements OnInit {
 
     projectUpdate(projectId: number): void {
         this.updateService.triggerUpdate(projectId).then(taskId => {
-            this.triggeredTaskId = taskId;
+            this.triggeredTasksIds.set(projectId, taskId);
         });
+    }
+
+    getTriggeredTaskIdForProject(projectId: number): string {
+        return this.triggeredTasksIds.get(projectId);
     }
 
     checkStatus(taskId: string): void {
         this.updateService.getStatus(taskId).then(projectStatus => {
-            this.triggeredTaskStatus = projectStatus.state;
+            this.triggeredTasksStatuses.set(taskId, projectStatus.state);
         });
     }
 
