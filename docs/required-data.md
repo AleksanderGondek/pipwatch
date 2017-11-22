@@ -3,6 +3,7 @@
 ```json
 {
     "name": "pyzote2",
+    "flavour": "github|gerrit|git",
     "url": "git@github.com:TheCompany/infra-utils.git",
     "namespace": "infrastructure/utils",
     "tags": [
