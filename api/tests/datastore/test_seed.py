@@ -9,6 +9,7 @@ def test_seed_database(database) -> None:
     expected_tag_name = "example"
 
     expected_project_name = "pipwatch_api"
+    expected_project_flavour = "git"
     expected_project_url = "https://github.com/AleksanderGondek/pipwatch.git"
     expected_project_check_command = "tox"
 
@@ -26,6 +27,7 @@ def test_seed_database(database) -> None:
     project_found = Project.query.first()
     assert (project_found is not None
             and project_found.name == expected_project_name
+            and project_found.flavour == expected_project_flavour
             and project_found.url == expected_project_url
             and project_found.check_command == expected_project_check_command)
 

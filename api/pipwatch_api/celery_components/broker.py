@@ -69,6 +69,7 @@ class ProjectUpdateBroker(Broker):
             "id": project.id,
             "namespace_id": project.namespace_id,
             "name": project.name,
+            "flavour": project.flavour,
             "url": project.url,
             "check_command": project.check_command,
             "requirements_files": [

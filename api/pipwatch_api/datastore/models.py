@@ -61,6 +61,7 @@ class Project(DATABASE.Model):
     """Represents a single project entry."""
     id = DATABASE.Column(DATABASE.Integer, primary_key=True)  # pylint: disable=invalid-name
     name = DATABASE.Column(DATABASE.String(length=200, convert_unicode=True), unique=False, nullable=False)
+    flavour = DATABASE.Column(DATABASE.String(length=20, convert_unicode=True), unique=False, nullable=False)
     url = DATABASE.Column(DATABASE.String(length=400, convert_unicode=True), unique=True, nullable=False)
     check_command = DATABASE.Column(DATABASE.String(length=400, convert_unicode=True), unique=False, nullable=False)
 
@@ -69,9 +70,16 @@ class Project(DATABASE.Model):
     tags = DATABASE.relationship("Tag", secondary=TAGS, backref=DATABASE.backref("projects", lazy="dynamic"))
     requirements_files = DATABASE.relationship("RequirementsFile", backref="project", lazy="dynamic")
 
-    def __init__(self, name: str = "", url: str = "", check_command="", namespace_id: int = -1) -> None:
+    def __init__(  # pylint: disable=too-many-arguments
+            self,
+            name: str = "",
+            flavour: str = "",
+            url: str = "",
+            check_command="",
+            namespace_id: int = -1) -> None:
         """Initialize class instance."""
         self.name = name
+        self.flavour = flavour
         self.url = url
         self.check_command = check_command
 
@@ -86,6 +94,7 @@ class Project(DATABASE.Model):
         """Return class instance representation."""
         return "<{class_name}(" \
                "{self.name!r}," \
+               "{self.flavour!r}," \
                "{self.url!r}," \
                "{self.check_command!r}," \
                "{self.namespace_id!r})>".format(
