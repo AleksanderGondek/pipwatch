@@ -149,6 +149,7 @@ class Project:
                  id: int,  # pylint: disable=redefined-builtin
                  namespace_id: int,
                  name: str,
+                 flavour: str,
                  url: str,
                  check_command: str,
                  requirements_files: List[RequirementsFile]) -> None:
@@ -156,6 +157,7 @@ class Project:
         self.id: int = id  # pylint: disable=invalid-name
         self.namespace_id: int = namespace_id
         self.name: str = name
+        self.flavour: str = flavour
         self.url: str = url
         self.check_command: str = check_command
 
@@ -177,5 +179,6 @@ class Project:
     def __repr__(self) -> str:
         """Return class instance representation."""
         return "<{class_name}({self.id!r},{self.namespace_id!r}," \
-               "{self.url!r},{self.name!r},{self.url!r},{self.check_command!r})>".format(
+               "{self.url!r},{self.name!r},{self.flavour!r}{self.url!r}," \
+               "{self.check_command!r})>".format(
                    class_name=self.__class__.__module__ + "." + self.__class__.__name__, self=self)
