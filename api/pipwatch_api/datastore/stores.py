@@ -42,8 +42,8 @@ class DefaultStore(Generic[T]):
     def create(self, document: Dict = None) -> T:
         """Create new document and save it to database."""
         self.log.debug("Attempting to create new entity of '%s' from document of '%s'.",
-                       type=type(self.model).__qualname__,
-                       document=repr(document))
+                       type(self.model).__qualname__,
+                       repr(document))
         new_instance: T = self.model()
         for column_name in self._naive_get_columns_names():
             passed_in_value: str = document.get(column_name, "")
