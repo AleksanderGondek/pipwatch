@@ -38,3 +38,5 @@
     ]
 }
 ```
+
+Upstream_url is required for working in github-flow. Should point to original repository (not clone.).
