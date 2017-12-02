@@ -74,23 +74,39 @@ class Git(Command):  # pylint: disable=too-few-public-methods
     Command will ensure that the project is cloned.
     """
 
-    def __init__(self, project_id: int, project_url: str) -> None:
+    def __init__(self, project_id: int, project_url: str, project_upstream: str = None) -> None:
         """Create method instance."""
         super().__init__(project_id=project_id)
         self.project_url = project_url
+        self.project_upstream_url = project_upstream
 
     def __call__(self, command: str, cwd: str = None) -> bytes:
         """Execute git command in given project repository."""
         os.makedirs(self._projects_dir_path, exist_ok=True)
         if not os.path.exists(self._project_dir_path):
-            self._execute(
-                command="git clone {} {}".format(self.project_url, str(self.project_id)),
-                cwd=self._projects_dir_path if not cwd else cwd
-            )
+            self._clone_repository(cwd=cwd)
+            self._setup_upstream(cwd=cwd)
 
         return self._execute(
             command="git {}".format(command),
             cwd=self._project_dir_path if not cwd else cwd
+        )
+
+    def _clone_repository(self, cwd: str = None):
+        """Clone given git repository."""
+        self._execute(
+            command="git clone {} {}".format(self.project_url, str(self.project_id)),
+            cwd=self._projects_dir_path if not cwd else cwd
+        )
+
+    def _setup_upstream(self, cwd: str = None):
+        """Add upstream information to cloned repository."""
+        if not self.project_upstream_url:
+            return
+
+        self._execute(
+            command="git remote add upstream {}".format(self.project_upstream_url),
+            cwd=self._projects_dir_path if not cwd else cwd
         )
 
 
