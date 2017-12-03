@@ -131,6 +131,7 @@ class ProjectSchema(marshmallow.Schema):
     namespace_id = marshmallow.fields.Int()
     name = marshmallow.fields.Str()
     url = marshmallow.fields.Str()
+    upstream_url = marshmallow.fields.Str()
     check_command = marshmallow.fields.Str()
     requirements_files = marshmallow.fields.Nested(RequirementsFileSchema, many=True)
 
@@ -151,6 +152,7 @@ class Project:
                  name: str,
                  flavour: str,
                  url: str,
+                 upstream_url: str,
                  check_command: str,
                  requirements_files: List[RequirementsFile]) -> None:
         """Initialize class instance."""
@@ -159,6 +161,7 @@ class Project:
         self.name: str = name
         self.flavour: str = flavour
         self.url: str = url
+        self.upstream_url: str = upstream_url
         self.check_command: str = check_command
 
         self.requirements_files: List[RequirementsFile] = requirements_files
@@ -179,6 +182,6 @@ class Project:
     def __repr__(self) -> str:
         """Return class instance representation."""
         return "<{class_name}({self.id!r},{self.namespace_id!r}," \
-               "{self.url!r},{self.name!r},{self.flavour!r}{self.url!r}," \
-               "{self.check_command!r})>".format(
+               "{self.name!r},{self.flavour!r}{self.url!r}," \
+               "{self.upstream_url},{self.check_command!r})>".format(
                    class_name=self.__class__.__module__ + "." + self.__class__.__name__, self=self)
