@@ -141,7 +141,7 @@ class ProjectSchema(marshmallow.Schema):
         return Project(**data)
 
 
-class Project:
+class Project:  # pylint: disable=too-many-instance-attributes
     """Represents a single project entry."""
 
     SCHEMA = ProjectSchema(strict=True)
