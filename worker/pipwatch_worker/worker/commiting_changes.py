@@ -6,10 +6,7 @@ from pipwatch_worker.worker.commands import Git
 
 
 class CommitChanges:  # pylint: disable=too-few-public-methods
-    """Encompasses logic of committing changes made to requirements.
-
-    Note: In future this class should NOT push changes but instead do a pull-request/gerrit-patch.
-    """
+    """Encompasses logic of committing changes made to requirements."""
 
     DEFAULT_COMMIT_MSG = "[Pipwatch] - Automatic increment of requirements versions."
 
