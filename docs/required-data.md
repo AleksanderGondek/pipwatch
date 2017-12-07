@@ -40,4 +40,4 @@
 ```
 
 Upstream_url is required for working in github-flow. Should point to original repository (not clone).
-Gerrit-flow assumes that .gerrit file is placed in root project directory.
+Gerrit-flow assumes that `.gerrit` file is placed in root project directory.
