@@ -71,6 +71,7 @@ class ProjectUpdateBroker(Broker):
             "name": project.name,
             "flavour": project.flavour,
             "url": project.url,
+            "upstream_url": project.upstream_url,
             "check_command": project.check_command,
             "requirements_files": [
                 {
