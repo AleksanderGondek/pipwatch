@@ -59,6 +59,7 @@ class AttemptUpdate(RepositoriesCacheMixin):  # pylint: disable=too-few-public-m
             str(self.project_details.id), requirements_file.path
         )
 
+        # Dirty trick, to not to worry about parsing previous version
         os.remove(full_path)
         with open(full_path, "w", encoding="utf-8") as file:
             for requirement in sorted(requirements_file.requirements, key=lambda x: x.name):
