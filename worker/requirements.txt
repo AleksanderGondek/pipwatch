@@ -1,4 +1,5 @@
 celery[redis]
+git-review
 marshmallow
 requirements-parser
 requests
