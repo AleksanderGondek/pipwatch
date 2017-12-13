@@ -17,6 +17,7 @@ class GitReview(RepositoriesCacheMixin):  # pylint: disable=too-few-public-metho
 
     def __call__(self) -> None:
         """Create gerrit patchset and submit it."""
+        self.log.debug("Attempting to run 'git-review' command..")
         self.from_venv(
             command="git-review"
         )
