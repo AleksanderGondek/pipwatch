@@ -2,10 +2,10 @@
 from logging import getLogger, Logger
 
 from pipwatch_worker.core.data_models import Project
-from pipwatch_worker.worker.commands import FromVirtualenv, RepositoriesCacheMixin
+from pipwatch_worker.worker.commands import FromVirtualenv
 
 
-class GitReview(RepositoriesCacheMixin):  # pylint: disable=too-few-public-methods
+class GitReview:  # pylint: disable=too-few-public-methods
     """Encapsulates logic of creating git-review and submitting it."""
 
     def __init__(self, logger: Logger, project_details: Project) -> None:
