@@ -1,19 +1,19 @@
 """This module contains operations related to committing and reviewing changes done to requirements."""
-from logging import Logger, getLogger
+from logging import Logger
 
 from pipwatch_worker.core.data_models import Project
 from pipwatch_worker.worker.commands import Git
+from pipwatch_worker.worker.operations.operation import Operation
 
 
-class CommitChanges:  # pylint: disable=too-few-public-methods
+class CommitChanges(Operation):  # pylint: disable=too-few-public-methods
     """Encompasses logic of committing changes made to requirements."""
 
     DEFAULT_COMMIT_MSG = "[Pipwatch] - Automatic increment of requirements versions."
 
     def __init__(self, logger: Logger, project_details: Project) -> None:
         """Initialize method instance."""
-        self.project_details = project_details
-        self.log: Logger = logger or getLogger(__name__)
+        super().__init__(logger=logger, project_details=project_details)
         self.git = Git(self.project_details.id, self.project_details.url)
 
     def __call__(self, commit_msg: str = None) -> None:

@@ -1,19 +1,17 @@
 """This module contains operations related to cloning project."""
-from logging import getLogger, Logger
+from logging import Logger
 
 from pipwatch_worker.core.data_models import Project
 from pipwatch_worker.worker.commands import Git
+from pipwatch_worker.worker.operations.operation import Operation
 
 
-class Clone:  # pylint: disable=too-few-public-methods
+class Clone(Operation):  # pylint: disable=too-few-public-methods
     """Encapsulates logic of cloning given project (and keeping it up to date)."""
 
-    def __init__(self,
-                 logger: Logger,
-                 project_details: Project) -> None:
+    def __init__(self, logger: Logger, project_details: Project) -> None:
         """Create method instance."""
-        self.log = logger or getLogger(__name__)
-        self.project_details = project_details
+        super().__init__(logger=logger, project_details=project_details)
         self.git = Git(
             project_id=self.project_details.id,
             project_url=self.project_details.url,

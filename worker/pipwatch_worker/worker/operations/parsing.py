@@ -1,22 +1,20 @@
 """This module contains operations related to parsing requirements of project."""
-from logging import getLogger, Logger
+from logging import Logger
 import os
 from typing import Any
 
 import requirements
 
 from pipwatch_worker.core.data_models import Project, RequirementsFile, Requirement
-from pipwatch_worker.worker.commands import RepositoriesCacheMixin
+from pipwatch_worker.worker.operations.operation import Operation
 
 
-class Parse(RepositoriesCacheMixin):  # pylint: disable=too-few-public-methods
+class Parse(Operation):  # pylint: disable=too-few-public-methods
     """Encapsulates logic of parsing requirements of given project (and keeping them up to date)."""
 
     def __init__(self, logger: Logger, project_details: Project) -> None:
         """Create method instance."""
-        super().__init__()
-        self.log = logger or getLogger(__name__)
-        self.project_details = project_details
+        super().__init__(logger=logger, project_details=project_details)
 
     def __call__(self) -> None:
         """Parse requirements of given project."""

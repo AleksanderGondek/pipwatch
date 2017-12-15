@@ -7,13 +7,13 @@ from typing import Callable, FrozenSet  # noqa: F401 Imported for type definitio
 from transitions import Machine
 
 from pipwatch_worker.core.data_models import Project
-from pipwatch_worker.worker.checking_updates import CheckUpdates
-from pipwatch_worker.worker.attempting_updates import AttemptUpdate
-from pipwatch_worker.worker.cloning import Clone
-from pipwatch_worker.worker.commiting_changes import CommitChanges
-from pipwatch_worker.worker.parsing import Parse
+from pipwatch_worker.worker.operations.checking_updates import CheckUpdates
+from pipwatch_worker.worker.operations.attempting_updates import AttemptUpdate
+from pipwatch_worker.worker.operations.cloning import Clone
+from pipwatch_worker.worker.operations.commiting_changes import CommitChanges
+from pipwatch_worker.worker.operations.parsing import Parse
 from pipwatch_worker.worker.states import States, WORKER_STATE_TRANSITIONS, Triggers
-from pipwatch_worker.worker.updating import Update
+from pipwatch_worker.worker.operations.updating import Update
 
 
 class Worker:
@@ -115,7 +115,8 @@ class Worker:
         self.log.debug("Changing state to {state}.".format(state=States.CHECKING_FOR_UPDATES.value))
         self.trigger(Triggers.TO_CHECK_UPDATES.value)
         self.update_celery_state(States.CHECKING_FOR_UPDATES.value)
-        self.should_attempt_update = self._check_update()
+        self._check_update()
+        self.should_attempt_update = bool(self._check_update.outdated_packages)
 
     def update_metadata(self) -> None:
         """Send update of given project information (with possible new requirements versions)."""

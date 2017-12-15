@@ -1,21 +1,21 @@
 """This module contains operations related to updating requirements status of project in db."""
 from configparser import ConfigParser  # noqa: F401 Imported for type definition
-from logging import getLogger, Logger
+from logging import Logger
 
 import requests
 
 from pipwatch_worker.core.configuration import load_config_file
 from pipwatch_worker.core.data_models import Project, RequirementsFile
+from pipwatch_worker.worker.operations.operation import Operation
 
 
-class Update:  # pylint: disable=too-few-public-methods
+class Update(Operation):  # pylint: disable=too-few-public-methods
     """Encapsulates logic of sending update of project requirements."""
 
     def __init__(self, logger: Logger, project_details: Project) -> None:
         """Create method instance."""
-        self.log = logger or getLogger(__name__)
+        super().__init__(logger=logger, project_details=project_details)
         self.config: ConfigParser = load_config_file()
-        self.project_details: Project = project_details
 
     def __call__(self) -> None:
         """Send updates for each requirement file."""

@@ -1,24 +1,19 @@
 """This module contains operations related to updating requirements of project."""
-from logging import getLogger, Logger
+from logging import Logger
 import os
 
 from pipwatch_worker.core.data_models import Project, RequirementsFile
 from pipwatch_worker.core.utils import get_pip_script_name
-from pipwatch_worker.worker.commands import Command, FromVirtualenv, Git, RepositoriesCacheMixin
+from pipwatch_worker.worker.commands import Command, FromVirtualenv, Git
+from pipwatch_worker.worker.operations.operation import Operation
 
 
-class AttemptUpdate(RepositoriesCacheMixin):  # pylint: disable=too-few-public-methods
+class AttemptUpdate(Operation):  # pylint: disable=too-few-public-methods
     """Encapsulates logic of attempt of updating requirements of given project."""
 
-    def __init__(
-            self,
-            logger: Logger,
-            project_details: Project
-    ) -> None:
+    def __init__(self, logger: Logger, project_details: Project) -> None:
         """Create method instance."""
-        super().__init__()
-        self.log = logger or getLogger(__name__)
-        self.project_details = project_details
+        super().__init__(logger=logger, project_details=project_details)
 
         self.command = Command(project_id=self.project_details.id)
         self.from_venv = FromVirtualenv(project_id=self.project_details.id)
