@@ -11,6 +11,7 @@ from pipwatch_worker.worker.operations.checking_updates import CheckUpdates
 from pipwatch_worker.worker.operations.attempting_updates import AttemptUpdate
 from pipwatch_worker.worker.operations.cloning import Clone
 from pipwatch_worker.worker.operations.commiting_changes import CommitChanges
+from pipwatch_worker.worker.operations.operation import Operation
 from pipwatch_worker.worker.operations.parsing import Parse
 from pipwatch_worker.worker.states import States, WORKER_STATE_TRANSITIONS, Triggers
 from pipwatch_worker.worker.operations.updating import Update
@@ -38,11 +39,11 @@ class Worker:
 
         self._locked_packages_ids: FrozenSet[int] = frozenset()
 
-        self._attempt_update: Callable[[], None]
-        self._commit_changes: Callable[[], None]
-        self._clone: Callable[[], None]
-        self._parse: Callable[[], None]
-        self._update: Callable[[], None]
+        self._attempt_update: Operation
+        self._commit_changes: Operation
+        self._clone: Operation
+        self._parse: Operation
+        self._update: Operation
 
     def run(self, project_to_process: Project) -> None:
         """Start worker processing of project requirements update request."""
@@ -77,22 +78,22 @@ class Worker:
 
         self._save_packages_with_locked_versions()
 
-        self._attempt_update = AttemptUpdate(  # type: ignore
+        self._attempt_update = AttemptUpdate(
             logger=self.log, project_details=self.project_details
         )
-        self._check_update = CheckUpdates(  # type: ignore
+        self._check_update = CheckUpdates(
             logger=self.log, project_details=self.project_details
         )
-        self._clone = Clone(  # type: ignore
+        self._clone = Clone(
             logger=self.log, project_details=self.project_details
         )
-        self._commit_changes = CommitChanges(  # type: ignore
+        self._commit_changes = CommitChanges(
             logger=self.log, project_details=self.project_details
         )
-        self._parse = Parse(  # type: ignore
+        self._parse = Parse(
             logger=self.log, project_details=self.project_details
         )
-        self._update = Update(  # type: ignore
+        self._update = Update(
             logger=self.log, project_details=self.project_details
         )
 
