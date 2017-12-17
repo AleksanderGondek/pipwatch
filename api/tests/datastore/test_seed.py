@@ -10,7 +10,7 @@ def test_seed_database(database) -> None:
 
     expected_project_name = "pipwatch_api"
     expected_project_flavour = "git"
-    expected_project_url = "https://github.com/AleksanderGondek/pipwatch.git"
+    expected_project_url = "git@github.com:AleksanderGondek/pipwatch.git"
     expected_project_check_command = "tox"
 
     expected_requirements_files_paths = ["api/requirements.txt", "api/requirements-development.txt"]

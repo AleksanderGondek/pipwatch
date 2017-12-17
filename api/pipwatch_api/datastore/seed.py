@@ -11,7 +11,7 @@ def seed_database(database_instance: SQLAlchemy = None) -> None:
     default_project = Project(
         name="pipwatch_api",
         flavour="git",
-        url="https://github.com/AleksanderGondek/pipwatch.git",
+        url="git@github.com:AleksanderGondek/pipwatch.git",
         check_command="tox"
     )
     example_requirements_file = RequirementsFile(path="api/requirements.txt", status="")
