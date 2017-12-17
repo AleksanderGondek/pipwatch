@@ -130,8 +130,9 @@ class ProjectSchema(marshmallow.Schema):
     id = marshmallow.fields.Int()  # pylint: disable=invalid-name
     namespace_id = marshmallow.fields.Int()
     name = marshmallow.fields.Str()
+    flavour: str = marshmallow.fields.Str(allow_none=True)
     url = marshmallow.fields.Str()
-    upstream_url = marshmallow.fields.Str()
+    upstream_url = marshmallow.fields.Str(allow_none=True)
     check_command = marshmallow.fields.Str()
     requirements_files = marshmallow.fields.Nested(RequirementsFileSchema, many=True)
 
