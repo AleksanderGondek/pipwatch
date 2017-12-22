@@ -4,14 +4,14 @@ services:
         build:
             context: ./api
             dockerfile: DockerfileTests
-        command: ""
+        command: "tox"
     pipwatch_worker:
         build:
             context: ./worker
             dockerfile: DockerfileTests
-        command: ""
+        command: "tox"
     pipwatch_ui:
         build:
             context: ./ui
             dockerfile: DockerfileTests
-        command: ""
+        command: "yarn test"
