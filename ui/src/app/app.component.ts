@@ -19,6 +19,9 @@ export class AppComponent  implements OnInit {
 
     listOfProjects = new Array<Project>();
 
+    pipwatchVersion = environment.version;
+    currentYear = new Date().getFullYear();
+
     constructor(private readonly broker: DataBroker<Project>, private readonly updateService: ProjectsUpdateService) {
     }
 
