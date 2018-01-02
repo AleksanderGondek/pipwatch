@@ -12,8 +12,6 @@ import { prepareProfile } from "selenium-webdriver/firefox";
   templateUrl: "./app.component.html",
 })
 export class AppComponent  implements OnInit {
-    title = "Hello, from pipwatch-ui!";
-
     triggeredTasksIds = new Map<number, string>();
     triggeredTasksStatuses = new Map<string, string>();
 
