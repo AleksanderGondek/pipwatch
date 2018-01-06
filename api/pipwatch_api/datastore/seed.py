@@ -1,17 +1,19 @@
 """This modules contains logic responsible for seeding the database with default values."""
 from flask_sqlalchemy import SQLAlchemy
 
-from pipwatch_api.datastore.models import Namespace, Tag, Project, RequirementsFile, Requirement
+from pipwatch_api.datastore.models import GitRepository, Namespace, Tag, Project, RequirementsFile, Requirement
 
 
 def seed_database(database_instance: SQLAlchemy = None) -> None:
     """Seed the passed-in database instance with default data."""
     default_namespace = Namespace(name="default")
     example_tag = Tag(name="example")
-    default_project = Project(
-        name="pipwatch_api",
+    example_git_repository = GitRepository(
         flavour="git",
         url="git@github.com:AleksanderGondek/pipwatch.git",
+    )
+    default_project = Project(
+        name="pipwatch_api",
         check_command="tox"
     )
     example_requirements_file = RequirementsFile(path="api/requirements.txt", status="")
@@ -22,6 +24,7 @@ def seed_database(database_instance: SQLAlchemy = None) -> None:
 
     database_instance.session.add(default_namespace)
     database_instance.session.add(example_tag)
+    database_instance.session.add(example_git_repository)
     database_instance.session.add(default_project)
     database_instance.session.add(example_requirements_file)
     database_instance.session.add(example_dev_requirements_file)
@@ -29,6 +32,7 @@ def seed_database(database_instance: SQLAlchemy = None) -> None:
     database_instance.session.add(example_dev_requirement)
     database_instance.session.commit()
 
+    example_git_repository.project_id = default_project.id
     default_namespace.projects.append(default_project)
     example_requirements_file.requirements.append(example_requirement)
     example_dev_requirements_file.requirements.append(example_dev_requirement)

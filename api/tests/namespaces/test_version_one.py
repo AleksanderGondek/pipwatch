@@ -7,6 +7,7 @@ def test_get_api_version_one(mocker) -> None:
     api_mock = mocker.patch("pipwatch_api.namespaces.version_one.Api", autospec=True)
     blueprint_mock = mocker.patch("pipwatch_api.namespaces.version_one.Blueprint", autospec=True)
 
+    git_repos_ns_mock = mocker.patch("pipwatch_api.namespaces.version_one.git_repositories_namespace", autospec=True)
     status_ns_mock = mocker.patch("pipwatch_api.namespaces.version_one.status_namespace", autospec=True)
     namespaces_ns_mock = mocker.patch("pipwatch_api.namespaces.version_one.namespaces_namespace", autospec=True)
     projects_ns_mock = mocker.patch("pipwatch_api.namespaces.version_one.projects_namespace", autospec=True)
@@ -17,8 +18,9 @@ def test_get_api_version_one(mocker) -> None:
 
     get_api_version_one()
 
-    assert api_mock.return_value.add_namespace.call_count == 7
+    assert api_mock.return_value.add_namespace.call_count == 8
     assert api_mock.return_value.add_namespace.mock_calls == [
+        mocker.call(git_repos_ns_mock),
         mocker.call(status_ns_mock),
         mocker.call(namespaces_ns_mock),
         mocker.call(projects_ns_mock),

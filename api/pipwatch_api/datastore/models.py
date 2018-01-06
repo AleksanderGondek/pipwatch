@@ -35,6 +35,43 @@ TAGS = DATABASE.Table("tags",
                       DATABASE.Column("project_id", DATABASE.Integer, DATABASE.ForeignKey("project.id")))
 
 
+class GitRepository(DATABASE.Model):
+    """Represents a single git repository and related i."""
+
+    id = DATABASE.Column(DATABASE.Integer, primary_key=True)  # pylint: disable=invalid-name
+    flavour = DATABASE.Column(DATABASE.String(length=20, convert_unicode=True), unique=False, nullable=False)
+    url = DATABASE.Column(DATABASE.String(length=400, convert_unicode=True), unique=True, nullable=False)
+    upstream_url = DATABASE.Column(DATABASE.String(length=400, convert_unicode=True), unique=True, nullable=True)
+
+    project_id = DATABASE.Column(DATABASE.Integer, DATABASE.ForeignKey("project.id"))
+
+    def __init__(self,
+                 flavour: str,
+                 url: str,
+                 upstream_url: str = None,
+                 project_id: int = -1) -> None:
+        """Initialize class instance.."""
+        self.flavour = flavour
+        self.url = url
+        self.upstream_url = upstream_url
+
+        if project_id >= 0:
+            self.project_id = project_id
+
+    def __str__(self) -> str:
+        """Return class instance human-friendly representation."""
+        return "<GitRepository {self.url!r}>".format(self=self)
+
+    def __repr__(self) -> str:
+        """Return class instance representation."""
+        return "<{class_name}(" \
+               "{self.flavour!r}," \
+               "{self.url!r}," \
+               "{self.upstream_url!r})>".format(
+                   class_name=self.__class__.__module__ + "." + self.__class__.__name__, self=self
+               )
+
+
 class Namespace(DATABASE.Model):
     """Represents a single namespace, which can contain multiple projects."""
     id = DATABASE.Column(DATABASE.Integer, primary_key=True)  # pylint: disable=invalid-name
@@ -42,7 +79,7 @@ class Namespace(DATABASE.Model):
     projects = DATABASE.relationship("Project", backref="namespace", lazy="dynamic")
 
     def __init__(self, name: str = "") -> None:
-        """Represents a single project entry."""
+        """Initialize class instance."""
         self.name = name
 
     def __str__(self) -> str:
@@ -61,29 +98,21 @@ class Project(DATABASE.Model):
     """Represents a single project entry."""
     id = DATABASE.Column(DATABASE.Integer, primary_key=True)  # pylint: disable=invalid-name
     name = DATABASE.Column(DATABASE.String(length=200, convert_unicode=True), unique=False, nullable=False)
-    flavour = DATABASE.Column(DATABASE.String(length=20, convert_unicode=True), unique=False, nullable=False)
-    url = DATABASE.Column(DATABASE.String(length=400, convert_unicode=True), unique=True, nullable=False)
-    upstream_url = DATABASE.Column(DATABASE.String(length=400, convert_unicode=True), unique=True, nullable=True)
     check_command = DATABASE.Column(DATABASE.String(length=400, convert_unicode=True), unique=False, nullable=False)
 
     namespace_id = DATABASE.Column(DATABASE.Integer, DATABASE.ForeignKey("namespace.id"))
 
-    tags = DATABASE.relationship("Tag", secondary=TAGS, backref=DATABASE.backref("projects", lazy="dynamic"))
+    git_repository = DATABASE.relationship("GitRepository", backref=DATABASE.backref("git_repository", lazy="joined"))
     requirements_files = DATABASE.relationship("RequirementsFile", backref="project", lazy="dynamic")
+    tags = DATABASE.relationship("Tag", secondary=TAGS, backref=DATABASE.backref("projects", lazy="dynamic"))
 
     def __init__(  # pylint: disable=too-many-arguments
             self,
             name: str = "",
-            flavour: str = "",
-            url: str = "",
             check_command="",
-            namespace_id: int = -1,
-            upstream_url: str = None) -> None:
+            namespace_id: int = -1) -> None:
         """Initialize class instance."""
         self.name = name
-        self.flavour = flavour
-        self.url = url
-        self.upstream_url = upstream_url
         self.check_command = check_command
 
         if namespace_id >= 0:
@@ -97,11 +126,8 @@ class Project(DATABASE.Model):
         """Return class instance representation."""
         return "<{class_name}(" \
                "{self.name!r}," \
-               "{self.flavour!r}," \
-               "{self.url!r}," \
                "{self.check_command!r}," \
-               "{self.namespace_id!r}"\
-               "{self.upstream_url!r})>".format(
+               "{self.namespace_id!r})>".format(
                    class_name=self.__class__.__module__ + "." + self.__class__.__name__,
                    self=self
                )

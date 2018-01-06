@@ -2,6 +2,7 @@
 from flask import Blueprint
 from flask_restplus import Api
 
+from pipwatch_api.namespaces.v1.git_repository import git_repositories_namespace
 from pipwatch_api.namespaces.v1.namespaces import namespaces_namespace
 from pipwatch_api.namespaces.v1.projects import projects_namespace
 from pipwatch_api.namespaces.v1.projects_updates import projects_updates_namespace
@@ -20,6 +21,7 @@ def get_api_version_one() -> Blueprint:
                           version=VERSION,
                           description="Restful interface for interacting with pipwatch")
 
+    api_version_one.add_namespace(git_repositories_namespace)
     api_version_one.add_namespace(status_namespace)
     api_version_one.add_namespace(namespaces_namespace)
     api_version_one.add_namespace(projects_namespace)
