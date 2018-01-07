@@ -4,19 +4,26 @@ import json
 
 import pytest
 
+from pipwatch_api.namespaces.v1.projects import git_repository_repr_structure
 from pipwatch_api.namespaces.v1.projects import project_representation_structure
 
 from tests.namespaces.v1.conftest import get_model_repr
 from tests.utils import JSONResponse
 
 
+get_git_repository_repr_empty = partial(get_model_repr, model=git_repository_repr_structure, id=None,
+                                        flavour=None, url=None)
 get_project_simple_repr_empty = partial(get_model_repr, model=project_representation_structure, id=None,
-                                        name=None, url=None, namespace=None, namespace_id=None, tags=None)
+                                        name=None, namespace=None, namespace_id=None, tags=None,
+                                        git_repository=get_git_repository_repr_empty())
 get_project_simple_repr = partial(get_model_repr, model=project_representation_structure, id=1, name="test_project",
-                                  url="http://test.io", namespace=None,  namespace_id=None, tags=None)
+                                  namespace=None,  namespace_id=None, tags=None,
+                                  git_repository=get_git_repository_repr_empty())
 
-get_project_repr_empty = partial(get_project_simple_repr_empty, requirements_files=None)
-get_project_repr = partial(get_project_simple_repr, requirements_files=None)
+get_project_repr_empty = partial(get_project_simple_repr_empty, requirements_files=None,
+                                 git_repository=get_git_repository_repr_empty())
+get_project_repr = partial(get_project_simple_repr, requirements_files=None,
+                           git_repository=get_git_repository_repr_empty())
 
 
 def test_default_get_returns_all_projects(app_client, default_store_fixture, mocker) -> None:

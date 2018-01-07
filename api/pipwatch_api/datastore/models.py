@@ -102,7 +102,9 @@ class Project(DATABASE.Model):
 
     namespace_id = DATABASE.Column(DATABASE.Integer, DATABASE.ForeignKey("namespace.id"))
 
-    git_repository = DATABASE.relationship("GitRepository", backref=DATABASE.backref("git_repository", lazy="joined"))
+    git_repository = DATABASE.relationship("GitRepository",
+                                           backref=DATABASE.backref("git_repository", lazy="joined"),
+                                           uselist=False)
     requirements_files = DATABASE.relationship("RequirementsFile", backref="project", lazy="dynamic")
     tags = DATABASE.relationship("Tag", secondary=TAGS, backref=DATABASE.backref("projects", lazy="dynamic"))
 

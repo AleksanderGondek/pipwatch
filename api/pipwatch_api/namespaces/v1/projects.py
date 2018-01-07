@@ -8,6 +8,7 @@ from flask_restplus import Namespace, Resource, fields
 from pipwatch_api.datastore.models import DATABASE, Project as ProjectModel, RequirementsFile, Tag
 from pipwatch_api.datastore.stores import NestedDocument, WithNestedDocumentsStore
 
+from pipwatch_api.namespaces.v1.git_repository import git_repository_repr_structure
 from pipwatch_api.namespaces.v1.requirements_files import requirements_file_simple_repr_structure
 from pipwatch_api.namespaces.v1.tags import tag_representation_structure
 
@@ -22,6 +23,10 @@ projects_namespace = Namespace(  # pylint: disable=invalid-name
     "projects",
     description="CRUD operations on projects"
 )
+git_repository_repr = projects_namespace.model(  # pylint: disable=invalid-name
+    "GitRepository",
+    git_repository_repr_structure
+)
 tag_representation = projects_namespace.model(  # pylint: disable=invalid-name
     "Tag",
     tag_representation_structure
@@ -29,7 +34,7 @@ tag_representation = projects_namespace.model(  # pylint: disable=invalid-name
 project_representation_structure = {  # pylint: disable=invalid-name
     "id": fields.Integer(readOnly=True, description=""),
     "name": fields.String(required=True, description=""),
-    "url": fields.String(required=True, description=""),
+    "git_repository": fields.Nested(git_repository_repr),
     "check_command": fields.String(description=""),
     "namespace_id": fields.Integer(attribute="namespace.id"),
     "namespace": fields.String(attribute="namespace.name"),
