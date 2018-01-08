@@ -69,9 +69,12 @@ class ProjectUpdateBroker(Broker):
             "id": project.id,
             "namespace_id": project.namespace_id,
             "name": project.name,
-            "flavour": project.flavour,
-            "url": project.url,
-            "upstream_url": project.upstream_url,
+            "git_repository": {
+                "id": project.git_repository.id,
+                "flavour": project.git_repository.flavour,
+                "url": project.git_repository.url,
+                "upstream_url": project.git_repository.upstream_url
+            },
             "check_command": project.check_command,
             "requirements_files": [
                 {
