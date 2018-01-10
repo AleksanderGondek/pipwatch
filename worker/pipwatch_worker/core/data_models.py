@@ -4,6 +4,63 @@ from typing import Any, Dict, List
 import marshmallow
 
 
+class GitRepositorySchema(marshmallow.Schema):
+    """Marshmellow schema of GitRepository class - allows for easy serialization/deserialization."""
+
+    id = marshmallow.fields.Int()  # pylint: disable=invalid-name
+    flavour = marshmallow.fields.Str()
+    url = marshmallow.fields.Str()
+    upstream_url = marshmallow.fields.Str(allow_none=True)
+
+    @marshmallow.post_load
+    def to_git_repository(self, data: Dict[Any, Any]) -> "GitRepository":  # pylint: disable=no-self-use
+        """Enable deserialization straight to class instance."""
+        return GitRepository(**data)
+
+
+class GitRepository:
+    """Represents a single package that should be installed via pip install."""
+
+    SCHEMA = GitRepositorySchema(strict=True)
+
+    def __init__(self,
+                 id: int = None,  # pylint: disable=redefined-builtin
+                 flavour: str = None,
+                 url: str = None,
+                 upstream_url: str = None) -> None:
+        """Initialize class instance."""
+        self.id = id  # pylint: disable=invalid-name
+        self.flavour = flavour
+        self.url = url
+        self.upstream_url = upstream_url
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Return class instance representation as dictionary."""
+        return self.SCHEMA.dump(self).data
+
+    @classmethod
+    def from_dict(cls, dictionary: Dict[str, Any]) -> "GitRepository":
+        """Create class instance from dictionary."""
+        return cls.SCHEMA.load(dictionary).data
+
+    def __str__(self):
+        """Return class representation."""
+        return "<GitRepository {self.flavour!r}({self.url!r})>".format(self=self)
+
+    def __repr__(self) -> str:
+        """Return class instance representation."""
+        return (
+            "<{class_name}("
+            "{self.id!r},"
+            "{self.flavour!r},"
+            "{self.url!r},"
+            "{self.upstream_url!r})"">".format(
+                class_name=self.__class__.__module__ + "." + self.__class__.__name__,
+                self=self
+            )
+        )
+
+
 class RequirementSchema(marshmallow.Schema):
     """Marshmellow schema of Requirement class - allows for easy serialization/deserialization."""
 
@@ -130,10 +187,9 @@ class ProjectSchema(marshmallow.Schema):
     id = marshmallow.fields.Int()  # pylint: disable=invalid-name
     namespace_id = marshmallow.fields.Int()
     name = marshmallow.fields.Str()
-    flavour: str = marshmallow.fields.Str(allow_none=True)
-    url = marshmallow.fields.Str()
-    upstream_url = marshmallow.fields.Str(allow_none=True)
+    git_repository = marshmallow.fields.Nested(GitRepositorySchema, many=False)
     check_command = marshmallow.fields.Str()
+
     requirements_files = marshmallow.fields.Nested(RequirementsFileSchema, many=True)
 
     @marshmallow.post_load
@@ -151,18 +207,14 @@ class Project:  # pylint: disable=too-many-instance-attributes
                  id: int,  # pylint: disable=redefined-builtin
                  namespace_id: int,
                  name: str,
-                 flavour: str,
-                 url: str,
-                 upstream_url: str,
+                 git_repository: GitRepository,
                  check_command: str,
                  requirements_files: List[RequirementsFile]) -> None:
         """Initialize class instance."""
         self.id: int = id  # pylint: disable=invalid-name
         self.namespace_id: int = namespace_id
         self.name: str = name
-        self.flavour: str = flavour
-        self.url: str = url
-        self.upstream_url: str = upstream_url
+        self.git_repository: GitRepository = git_repository
         self.check_command: str = check_command
 
         self.requirements_files: List[RequirementsFile] = requirements_files
@@ -178,11 +230,10 @@ class Project:  # pylint: disable=too-many-instance-attributes
 
     def __str__(self) -> str:
         """Return class representation."""
-        return "<Project {self.url!r}>".format(self=self)
+        return "<Project {self.name!r}>".format(self=self)
 
     def __repr__(self) -> str:
         """Return class instance representation."""
         return "<{class_name}({self.id!r},{self.namespace_id!r}," \
-               "{self.name!r},{self.flavour!r}{self.url!r}," \
-               "{self.upstream_url},{self.check_command!r})>".format(
+               "{self.name!r},{self.git_repository!r},{self.check_command!r})>".format(
                    class_name=self.__class__.__module__ + "." + self.__class__.__name__, self=self)

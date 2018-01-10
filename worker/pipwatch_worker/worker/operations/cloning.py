@@ -14,8 +14,8 @@ class Clone(Operation):  # pylint: disable=too-few-public-methods
         super().__init__(logger=logger, project_details=project_details)
         self.git = Git(
             project_id=self.project_details.id,
-            project_url=self.project_details.url,
-            project_upstream=self.project_details.upstream_url
+            project_url=self.project_details.git_repository.url,
+            project_upstream=self.project_details.git_repository.upstream_url
         )
 
     def __call__(self) -> None:
@@ -31,7 +31,7 @@ class Clone(Operation):  # pylint: disable=too-few-public-methods
 
     def _handle_upstream_sync(self) -> None:
         """Synchronize fork with upstream repository."""
-        if not self.project_details.upstream_url:
+        if not self.project_details.git_repository.upstream_url:
             return
 
         self.git(command="fetch upstream")

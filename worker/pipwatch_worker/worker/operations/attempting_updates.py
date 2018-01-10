@@ -19,7 +19,7 @@ class AttemptUpdate(Operation):  # pylint: disable=too-few-public-methods
         self.from_venv = FromVirtualenv(project_id=self.project_details.id)
         self.git = Git(
             project_id=self.project_details.id,
-            project_url=self.project_details.url
+            project_url=self.project_details.git_repository.url
         )
 
     def __call__(self) -> None:

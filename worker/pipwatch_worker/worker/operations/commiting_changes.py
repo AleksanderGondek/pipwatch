@@ -14,7 +14,7 @@ class CommitChanges(Operation):  # pylint: disable=too-few-public-methods
     def __init__(self, logger: Logger, project_details: Project) -> None:
         """Initialize method instance."""
         super().__init__(logger=logger, project_details=project_details)
-        self.git = Git(self.project_details.id, self.project_details.url)
+        self.git = Git(self.project_details.id, self.project_details.git_repository.url)
 
     def __call__(self, commit_msg: str = None) -> None:
         """Commit changes and push them to master branch."""
