@@ -12,6 +12,10 @@ class GitRepositorySchema(marshmallow.Schema):
     url = marshmallow.fields.Str()
     upstream_url = marshmallow.fields.Str(allow_none=True)
 
+    github_api_address = marshmallow.fields.Str(allow_none=True)
+    github_project_name = marshmallow.fields.Str(allow_none=True)
+    github_project_owner = marshmallow.fields.Str(allow_none=True)
+
     @marshmallow.post_load
     def to_git_repository(self, data: Dict[Any, Any]) -> "GitRepository":  # pylint: disable=no-self-use
         """Enable deserialization straight to class instance."""
@@ -23,16 +27,23 @@ class GitRepository:
 
     SCHEMA = GitRepositorySchema(strict=True)
 
-    def __init__(self,
+    def __init__(self,  # pylint: disable=too-many-arguments
                  id: int = None,  # pylint: disable=redefined-builtin
                  flavour: str = None,
                  url: str = None,
-                 upstream_url: str = None) -> None:
+                 upstream_url: str = None,
+                 github_api_address: str = None,
+                 github_project_name: str = None,
+                 github_project_owner: str = None) -> None:
         """Initialize class instance."""
         self.id = id  # pylint: disable=invalid-name
         self.flavour = flavour
         self.url = url
         self.upstream_url = upstream_url
+
+        self.github_api_address: str = github_api_address
+        self.github_project_name: str = github_project_name
+        self.github_project_owner: str = github_project_owner
 
     def to_dict(self) -> Dict[str, Any]:
         """Return class instance representation as dictionary."""
@@ -54,7 +65,11 @@ class GitRepository:
             "{self.id!r},"
             "{self.flavour!r},"
             "{self.url!r},"
-            "{self.upstream_url!r})"">".format(
+            "{self.upstream_url!r},"
+            "{self.github_api_address!r},"
+            "{self.github_project_name!r},"
+            "{self.github_project_owner!r},"
+            ")>".format(
                 class_name=self.__class__.__module__ + "." + self.__class__.__name__,
                 self=self
             )
