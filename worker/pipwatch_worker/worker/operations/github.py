@@ -35,9 +35,9 @@ class GitReview(Operation):  # pylint: disable=too-few-public-methods
     def _create_pull_request(self) -> None:
         """Call github http api to create a pull request."""
         url = "{github_api_address}/repos/{owner}/{repo_name}/pulls".format(
-            github_api_address="TO_BE_LOADED_FROM_PROJECT",
-            owner="TO_BE_LOADED_FROM_PROJECT",
-            repo_name=self.project_details.name
+            github_api_address=self.project_details.git_repository.github_api_address,
+            owner=self.project_details.git_repository.github_project_owner,
+            repo_name=self.project_details.git_repository.github_project_owner
         )
         payload = self._get_pull_request_body()
         self.log.debug("About to perform POST request to address '{url}' with payload {payload}".format(
