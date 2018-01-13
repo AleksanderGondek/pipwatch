@@ -8,7 +8,7 @@ from pipwatch_worker.core.data_models import Project
 from pipwatch_worker.worker.operations.operation import Operation
 
 
-class GitReview(Operation):  # pylint: disable=too-few-public-methods
+class PullRequest(Operation):  # pylint: disable=too-few-public-methods
     """Encapsulates logic of creating github pull-review."""
 
     DEFAULT_PR_TITLE = "[Pipwatch] - Automatic increment of requirements versions."

@@ -7,10 +7,14 @@ from typing import Callable, FrozenSet  # noqa: F401 Imported for type definitio
 from transitions import Machine
 
 from pipwatch_worker.core.data_models import Project
+from pipwatch_worker.core.utils import ProjectFlavour
 from pipwatch_worker.worker.operations.checking_updates import CheckUpdates
 from pipwatch_worker.worker.operations.attempting_updates import AttemptUpdate
 from pipwatch_worker.worker.operations.cloning import Clone
 from pipwatch_worker.worker.operations.commiting_changes import CommitChanges
+from pipwatch_worker.worker.operations.gerrit import GitReview
+from pipwatch_worker.worker.operations.github import PullRequest
+from pipwatch_worker.worker.operations.git_push import GitPush
 from pipwatch_worker.worker.operations.operation import Operation
 from pipwatch_worker.worker.operations.parsing import Parse
 from pipwatch_worker.worker.states import States, WORKER_STATE_TRANSITIONS, Triggers
@@ -42,7 +46,10 @@ class Worker:
         self._attempt_update: Operation
         self._commit_changes: Operation
         self._clone: Operation
+        self._git_review: Operation
+        self._git_push: Operation
         self._parse: Operation
+        self._pull_request: Operation
         self._update: Operation
 
     def run(self, project_to_process: Project) -> None:
@@ -57,6 +64,7 @@ class Worker:
             if self.should_attempt_update:
                 self.attempt_update()
                 self.commit_changes()
+                self.push_changes()
                 self.update_metadata()
 
             self.success()
@@ -90,7 +98,16 @@ class Worker:
         self._commit_changes = CommitChanges(
             logger=self.log, project_details=self.project_details
         )
+        self._git_push = GitPush(
+            logger=self.log, project_details=self.project_details
+        )
+        self._git_review = GitReview(
+            logger=self.log, project_details=self.project_details
+        )
         self._parse = Parse(
+            logger=self.log, project_details=self.project_details
+        )
+        self._pull_request = PullRequest(
             logger=self.log, project_details=self.project_details
         )
         self._update = Update(
@@ -151,6 +168,31 @@ class Worker:
             return
 
         self._commit_changes()
+
+    def push_changes(self) -> None:
+        """Send changes to original repository as push / gerrit patch / github pull request."""
+        self.log.debug("Changing state to {state}.".format(state=States.PUSHING_CHANGES.value))
+        self.trigger(Triggers.TO_PUSH_CHANGES.value)
+        self.update_celery_state(States.PUSHING_CHANGES.value)
+
+        project_flavour = self.project_details.git_repository.flavour.casefold()
+        self.log.debug("{flavour} repository type detected", project_flavour)
+        if project_flavour == ProjectFlavour.GIT:
+            self.log.debug("Attempting to push changes")
+            self._git_push()
+            return
+
+        if project_flavour == ProjectFlavour.GITHUB:
+            self.log.debug("Attempting to push changes")
+            self._git_push()
+            self.log.debug("Attempting to create github pull request")
+            self._pull_request()
+            return
+
+        if project_flavour == ProjectFlavour.GERRIT:
+            self.log.debug("Attempting to create gerrit patch")
+            self._git_review()
+            return
 
     def success(self) -> None:
         """Signify that processing of given request has succeeded."""

@@ -27,5 +27,3 @@ class CommitChanges(Operation):  # pylint: disable=too-few-public-methods
             message=commit_msg
         ))
         self.git("commit -m {commit_msg}".format(commit_msg=commit_msg))
-        self.log.debug("Attempting to push changes")
-        self.git("push origin/master")

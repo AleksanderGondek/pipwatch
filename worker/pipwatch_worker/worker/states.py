@@ -11,6 +11,7 @@ class States(Enum):
     FAILURE: str = "Failure"
     INITIALIZING: str = "Initializing"
     PARSING_REQUIREMENTS: str = "Parsing_Requirements"
+    PUSHING_CHANGES: str = "Pushing_Changes"
     SUCCESS: str = "Success"
     UPDATING_METADATA: str = "Updating_Metadata"
 
@@ -21,6 +22,7 @@ class Triggers(Enum):
     TO_COMMIT: str = "to_commit_changes"
     TO_FAIL: str = "to_fail"
     TO_PARSE_REQ: str = "to_parse_requirements"
+    TO_PUSH_CHANGES: str = "to_push_changes"
     TO_SUCCESS: str = "to_success"
     TO_UPDATE_META: str = "to_update_metadata"
     TO_UPDATE_PGS: str = "to_attempt_update"
@@ -64,6 +66,11 @@ WORKER_STATE_TRANSITIONS = [
     },
     {
         "source": States.COMMITTING_CHANGES.value,
+        "dest": States.PUSHING_CHANGES.value,
+        "trigger": Triggers.TO_PUSH_CHANGES.value
+    },
+    {
+        "source": States.PUSHING_CHANGES.value,
         "dest": States.UPDATING_METADATA.value,
         "trigger": Triggers.TO_UPDATE_META.value
     },
