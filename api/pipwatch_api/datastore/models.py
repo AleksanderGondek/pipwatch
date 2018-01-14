@@ -43,17 +43,28 @@ class GitRepository(DATABASE.Model):
     url = DATABASE.Column(DATABASE.String(length=400, convert_unicode=True), unique=True, nullable=False)
     upstream_url = DATABASE.Column(DATABASE.String(length=400, convert_unicode=True), unique=True, nullable=True)
 
+    github_api_address = DATABASE.Column(DATABASE.String(length=400, convert_unicode=True), nullable=True)
+    github_project_name = DATABASE.Column(DATABASE.String(length=400, convert_unicode=True), nullable=True)
+    github_project_owner = DATABASE.Column(DATABASE.String(length=400, convert_unicode=True), nullable=True)
+
     project_id = DATABASE.Column(DATABASE.Integer, DATABASE.ForeignKey("project.id"))
 
-    def __init__(self,
+    def __init__(self,  # pylint: disable=too-many-arguments
                  flavour: str,
                  url: str,
                  upstream_url: str = None,
+                 github_api_address: str = None,
+                 github_project_name: str = None,
+                 github_project_owner: str = None,
                  project_id: int = -1) -> None:
         """Initialize class instance.."""
         self.flavour = flavour
         self.url = url
         self.upstream_url = upstream_url
+
+        self.github_api_address = github_api_address
+        self.github_project_name = github_project_name
+        self.github_project_owner = github_project_owner
 
         if project_id >= 0:
             self.project_id = project_id
@@ -67,7 +78,10 @@ class GitRepository(DATABASE.Model):
         return "<{class_name}(" \
                "{self.flavour!r}," \
                "{self.url!r}," \
-               "{self.upstream_url!r})>".format(
+               "{self.upstream_url!r},"\
+               "{self.github_api_address!r}," \
+               "{self.github_project_name!r}," \
+               "{self.github_project_owner!r})>".format(
                    class_name=self.__class__.__module__ + "." + self.__class__.__name__, self=self
                )
 

@@ -15,7 +15,11 @@ git_repositories_namespace = Namespace(  # pylint: disable=invalid-name
 git_repository_repr_structure = {  # pylint: disable=invalid-name
     "id": fields.Integer(readOnly=True, description=""),
     "flavour": fields.String(required=True, description=""),
-    "url": fields.String(required=True, description="")
+    "url": fields.String(required=True, description=""),
+    "upstream_url": fields.String(required=False, description=""),
+    "github_api_address": fields.String(required=False, description=""),
+    "github_project_name": fields.String(required=False, description=""),
+    "github_project_owner": fields.String(required=False, description="")
 }
 git_repository_repr = git_repositories_namespace.model(  # pylint: disable=invalid-name
     "GitRepository", git_repository_repr_structure
