@@ -73,7 +73,10 @@ class ProjectUpdateBroker(Broker):
                 "id": project.git_repository.id,
                 "flavour": project.git_repository.flavour,
                 "url": project.git_repository.url,
-                "upstream_url": project.git_repository.upstream_url
+                "upstream_url": project.git_repository.upstream_url,
+                "github_api_address": project.git_repository.github_api_address,
+                "github_project_name": project.git_repository.github_project_name,
+                "github_project_owner": project.git_repository.github_project_owner
             },
             "check_command": project.check_command,
             "requirements_files": [
