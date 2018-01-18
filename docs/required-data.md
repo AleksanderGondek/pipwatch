@@ -6,7 +6,10 @@
     "git_repository": {
         "flavour": "github|gerrit|git",
         "url": "git@github.com:TheCompany/infra-utils.git",
-        "upstream_url": "git@github.com:TheCompany/infra-utils.git"    
+        "upstream_url": "git@github.com:TheCompany/infra-utils.git",
+        "github_api_address": "http://api.github.com",
+        "github_project_name": "infra-utils",
+        "github_project_owner": "owner"
     },
     "namespace": "infrastructure/utils",
     "tags": [
