@@ -14,6 +14,31 @@ export class Tag implements IEntity {
     }
 }
 
+export class GitRepository implements IEntity {
+    public id: number;
+    public flavour: string;
+    public url: string;
+    public upstreamUrl: string;
+
+    public githubApiAddress: string;
+    public githubProjectName: string;
+    public githubProjectOwner: string;
+
+    public projectId: number;
+
+    constructor(jsonObject: any) {
+        this.id = jsonObject.id;
+        this.flavour = jsonObject.flavour;
+        this.url = jsonObject.url;
+        this.upstreamUrl = jsonObject.upstream_url;
+        this.githubApiAddress = jsonObject.github_api_address;
+        this.githubProjectName = jsonObject.github_project_name;
+        this.githubProjectOwner = jsonObject.github_project_owner;
+
+        this.projectId = jsonObject.project_id;
+    }
+}
+
 export class Requirement implements IEntity {
     public id: number;
     public name: string;
@@ -55,20 +80,24 @@ export class RequirementsFile implements IEntity {
 export class Project implements IEntity {
     public id: number;
     public name: string;
+    public checkCommand: string;
     public namespace: string;
-    public url: string;
 
     public namespaceId: number;
-    public tags: Array<Tag>;
+
+    public gitRepository: GitRepository;
     public requirementsFiles: Array<RequirementsFile>;
+    public tags: Array<Tag>;
+
 
     constructor(jsonObject: any) {
         this.id = jsonObject.id;
         this.name = jsonObject.name;
+        this.checkCommand = jsonObject.check_command;
         this.namespace = jsonObject.namespace;
-        this.url = jsonObject.url;
 
         this.namespaceId = jsonObject.namespace_id;
+        this.gitRepository = jsonObject.git_repository;
         this.tags = jsonObject.tags;
         this.requirementsFiles = jsonObject.requirements_files;
     }

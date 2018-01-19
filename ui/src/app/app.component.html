@@ -15,7 +15,7 @@
             <tr *ngFor="let project of listOfProjects">
                 <td>{{project.id}}</td>
                 <td>{{project.name}}</td>
-                <td>{{project.url}}</td>
+                <td>{{project.gitRepository.url}}</td>
                 <td><button type="button" class="btn btn-primary btn-sm" (click)="projectUpdate(project.id)">Run update</button></td>
                 <td><button type="button" class="btn btn-primary btn-sm" (click)="checkStatus(getTriggeredTaskIdForProject(project.id))">Check status</button></td>
             </tr>
