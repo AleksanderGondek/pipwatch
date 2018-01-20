@@ -22,7 +22,7 @@ class CheckUpdates(Operation):  # pylint: disable=too-few-public-methods
         """Create method instance."""
         super().__init__(logger=logger, project_details=project_details)
 
-        self.outdated_packages: List[PackageUpdateSuggestion] = None
+        self.outdated_packages: List[PackageUpdateSuggestion] = []
         self.from_venv = FromVirtualenv(project_id=self.project_details.id)
 
     def __call__(self) -> None:
