@@ -5,12 +5,13 @@ from typing import Dict  # noqa: F401 Imported for type definition
 from flask import request
 from flask_restplus import Namespace, Resource, fields
 
-from pipwatch_api.datastore.models import DATABASE, RequirementsFile as RequirementsFileModel
-from pipwatch_api.datastore.stores import DefaultStore
+from pipwatch_api.datastore.models import DATABASE, Requirement, RequirementsFile as RequirementsFileModel
+from pipwatch_api.datastore.stores import NestedDocument, WithNestedDocumentsStore
 
 from pipwatch_api.namespaces.v1.requirements import requirement_repr_structure
 
 
+RequirementNestedDocument = NestedDocument("requirements", Requirement,"name")
 requirements_files_namespace = Namespace(  # pylint: disable=invalid-name
     "requirements-files",
     description="CRUD operations on requirements-files"
@@ -41,7 +42,10 @@ class RequirementsFiles(Resource):
     def __init__(self, *args, **kwargs):
         """Initialize resource instance."""
         super().__init__(*args, **kwargs)
-        self.datastore = DefaultStore(model=RequirementsFileModel, database=DATABASE)
+        self.datastore = WithNestedDocumentsStore(
+            model=RequirementsFileModel, database=DATABASE,
+            nested_documents_specs=[RequirementNestedDocument]
+        )
 
     @requirements_files_namespace.marshal_list_with(requirements_file_simple_repr)
     def get(self):
@@ -67,7 +71,10 @@ class RequirementsFile(Resource):
     def __init__(self, *args, **kwargs):
         """Initialize resource instance."""
         super().__init__(*args, **kwargs)
-        self.datastore = DefaultStore(model=RequirementsFileModel, database=DATABASE)
+        self.datastore = WithNestedDocumentsStore(
+            model=RequirementsFileModel, database=DATABASE,
+            nested_documents_specs=[RequirementNestedDocument]
+        )
 
     @requirements_files_namespace.marshal_with(requirements_file_repr)
     @requirements_files_namespace.response(200, "Requirements-file found.")
