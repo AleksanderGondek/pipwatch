@@ -11,7 +11,7 @@ from pipwatch_api.datastore.stores import NestedDocument, WithNestedDocumentsSto
 from pipwatch_api.namespaces.v1.requirements import requirement_repr_structure
 
 
-RequirementNestedDocument = NestedDocument("requirements", Requirement,"name")
+RequirementNestedDocument = NestedDocument("requirements", Requirement, "name")  # pylint: disable=invalid-name
 requirements_files_namespace = Namespace(  # pylint: disable=invalid-name
     "requirements-files",
     description="CRUD operations on requirements-files"

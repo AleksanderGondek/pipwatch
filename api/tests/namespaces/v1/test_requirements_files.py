@@ -22,7 +22,7 @@ def test_default_get_returns_all_requirements_files(app_client, default_store_fi
         get_req_file_repr(id=2)
     ]
     default_store_fixture.read_all.return_value = expected_response
-    mocker.patch("pipwatch_api.namespaces.v1.requirements_files.DefaultStore", return_value = default_store_fixture)
+    mocker.patch("pipwatch_api.namespaces.v1.requirements_files.WithNestedDocumentsStore", return_value = default_store_fixture)
 
     response: JSONResponse = app_client.get("/api/v1/requirements-files/")
 
@@ -41,7 +41,7 @@ def test_post_creates_a_new_requirements_file(payload, content_type, asserts, ap
                                               default_store_fixture, mocker) -> None:
     """Endpoint should create new requirements_file and return it."""
     default_store_fixture.create.return_value = asserts[2]
-    mocker.patch("pipwatch_api.namespaces.v1.requirements_files.DefaultStore", return_value = default_store_fixture)
+    mocker.patch("pipwatch_api.namespaces.v1.requirements_files.WithNestedDocumentsStore", return_value = default_store_fixture)
 
     response: JSONResponse = app_client.post("/api/v1/requirements-files/", data=payload, content_type=content_type)
 
@@ -61,7 +61,7 @@ def test_get_id_returns_document(document_id, mock_response, asserts, app_client
                                  default_store_fixture, mocker) -> None:
     """Endpoint should get a requirements_file with given id."""
     default_store_fixture.read.return_value = mock_response
-    mocker.patch("pipwatch_api.namespaces.v1.requirements_files.DefaultStore", return_value = default_store_fixture)
+    mocker.patch("pipwatch_api.namespaces.v1.requirements_files.WithNestedDocumentsStore", return_value = default_store_fixture)
 
     response: JSONResponse = app_client.get("/api/v1/requirements-files/{0}".format(document_id))
 
@@ -87,7 +87,7 @@ def test_put_updates_document(document_id, mock_response, payload,
                               asserts, app_client, default_store_fixture, mocker) -> None:
     """Endpoint should update requirements_file with given id."""
     default_store_fixture.update.return_value = mock_response
-    mocker.patch("pipwatch_api.namespaces.v1.requirements_files.DefaultStore", return_value = default_store_fixture)
+    mocker.patch("pipwatch_api.namespaces.v1.requirements_files.WithNestedDocumentsStore", return_value = default_store_fixture)
 
     response: JSONResponse = app_client.put("/api/v1/requirements-files/{0}".format(document_id),
                                             data=json.dumps(payload[0]),
@@ -103,7 +103,7 @@ def test_put_updates_document(document_id, mock_response, payload,
 
 def test_delete_requirements_file(app_client, default_store_fixture, mocker) -> None:
     """Endpoint should create new requirements_file and return it."""
-    mocker.patch("pipwatch_api.namespaces.v1.requirements_files.DefaultStore", return_value = default_store_fixture)
+    mocker.patch("pipwatch_api.namespaces.v1.requirements_files.WithNestedDocumentsStore", return_value = default_store_fixture)
 
     document_id = 1
     response: JSONResponse = app_client.delete("/api/v1/requirements-files/{}".format(document_id))
