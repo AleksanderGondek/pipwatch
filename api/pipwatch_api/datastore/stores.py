@@ -42,7 +42,7 @@ class DefaultStore(Generic[T]):
     def create(self, document: Dict = None) -> T:
         """Create new document and save it to database."""
         self.log.debug("Attempting to create new entity of '%s' from document of '%s'.",
-                       type(self.model).__qualname__,
+                       self.model.__qualname__,
                        repr(document))
         new_instance: T = self.model()
         for column_name in self._naive_get_columns_names():
@@ -70,13 +70,13 @@ class DefaultStore(Generic[T]):
 
     def read_all(self) -> List[T]:
         """Retrieve all instances of model from database.."""
-        self.log.debug("Attempting to return all entities of type '%s'.", type(self.model).__qualname__)
+        self.log.debug("Attempting to return all entities of type '%s'.", self.model.__qualname__)
         return self.model.query.all()
 
     def update(self, document_id: int = -1, document: Dict = None) -> Optional[T]:
         """Attempt to update document with given id in database."""
         self.log.debug("Attempting to update entity of '%s' with id of '%s' from document of '%s'.",
-                       type(self.model).__qualname__,
+                       self.model.__qualname__,
                        str(document_id),
                        repr(document))
         document_from_db: T = self.read(document_id=document_id)
