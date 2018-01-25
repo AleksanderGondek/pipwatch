@@ -13,8 +13,8 @@ tags_namespace = Namespace(  # pylint: disable=invalid-name
     description="CRUD operations on tags"
 )
 tag_representation_structure = {  # pylint: disable=invalid-name
-    "id": fields.Integer(readOnly=True, description=""),
-    "name": fields.String(required=True, description="")
+    "id": fields.Integer(readOnly=True, description="Id of given tag, unique across the database"),
+    "name": fields.String(required=True, description="Name of given tag (i.e. 'awesome-sauce')")
 }
 tag_representation = tags_namespace.model("Tag", tag_representation_structure)  # pylint: disable=invalid-name
 

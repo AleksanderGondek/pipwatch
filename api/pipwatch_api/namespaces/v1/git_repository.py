@@ -13,13 +13,13 @@ git_repositories_namespace = Namespace(  # pylint: disable=invalid-name
     description="CRUD operations on git repositories"
 )
 git_repository_repr_structure = {  # pylint: disable=invalid-name
-    "id": fields.Integer(readOnly=True, description=""),
-    "flavour": fields.String(required=True, description=""),
-    "url": fields.String(required=True, description=""),
-    "upstream_url": fields.String(required=False, description=""),
-    "github_api_address": fields.String(required=False, description=""),
-    "github_project_name": fields.String(required=False, description=""),
-    "github_project_owner": fields.String(required=False, description="")
+    "id": fields.Integer(readOnly=True, description="Id of given git repository, unique across database"),
+    "flavour": fields.String(required=True, description="Type of git repository (git|github|gerrit)"),
+    "url": fields.String(required=True, description="Git url for repository to use while cloning"),
+    "upstream_url": fields.String(required=False, description="[Github only] Link to upstream repository"),
+    "github_api_address": fields.String(required=False, description="[Github only] Link to github instance"),
+    "github_project_name": fields.String(required=False, description="[Github only] Name of upstream project"),
+    "github_project_owner": fields.String(required=False, description="[Github only] Owner of upstream project")
 }
 git_repository_repr = git_repositories_namespace.model(  # pylint: disable=invalid-name
     "GitRepository", git_repository_repr_structure

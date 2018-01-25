@@ -20,8 +20,8 @@ project_repr = namespaces_namespace.model(  # pylint: disable=invalid-name
     project_representation_structure
 )
 namespace_repr_structure = {  # pylint: disable=invalid-name
-    "id": fields.Integer(readOnly=True, description=""),
-    "name": fields.String(required=True, description="")
+    "id": fields.Integer(readOnly=True, description="Id of given namespace, unique across the database"),
+    "name": fields.String(required=True, description="Name of namespace (i.e. 'building-tools')")
 }
 namespace_repr = namespaces_namespace.model("Namespace", namespace_repr_structure)  # pylint: disable=invalid-name
 namespace_repr_detailed = namespaces_namespace.inherit(  # pylint: disable=invalid-name

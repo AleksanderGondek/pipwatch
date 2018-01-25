@@ -32,10 +32,10 @@ tag_representation = projects_namespace.model(  # pylint: disable=invalid-name
     tag_representation_structure
 )
 project_representation_structure = {  # pylint: disable=invalid-name
-    "id": fields.Integer(readOnly=True, description=""),
-    "name": fields.String(required=True, description=""),
+    "id": fields.Integer(readOnly=True, description="If of given project, unique across the database"),
+    "name": fields.String(required=True, description="Name of project (i.e. 'pipwatch')"),
     "git_repository": fields.Nested(git_repository_repr),
-    "check_command": fields.String(description=""),
+    "check_command": fields.String(description="Command to be used to verify update success (i.e. 'test')"),
     "namespace_id": fields.Integer(attribute="namespace.id"),
     "namespace": fields.String(attribute="namespace.name"),
     "tags": fields.List(fields.Nested(tag_representation))

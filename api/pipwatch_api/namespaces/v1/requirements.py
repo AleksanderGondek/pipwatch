@@ -14,10 +14,10 @@ requirements_namespace = Namespace(  # pylint: disable=invalid-name
     description="CRUD operations on requirements"
 )
 requirement_repr_structure = {  # pylint: disable=invalid-name
-    "id": fields.Integer(readOnly=True, description=""),
-    "name": fields.String(required=True, description=""),
-    "current_version": fields.String(required=True, description=""),
-    "desired_version": fields.String(required=True, description=""),
+    "id": fields.Integer(readOnly=True, description="Id of given requirement, unique across the database"),
+    "name": fields.String(required=True, description="Name of given package (i.e. 'requests')"),
+    "current_version": fields.String(required=True, description="Version of package as present in requirements file"),
+    "desired_version": fields.String(required=True, description="Desired version of given package"),
     "status": fields.String(required=True, description=""),
     "requirements_file_id": fields.Integer(required=True, attribute="requirements_file.id")
 }
