@@ -1,0 +1,18 @@
+<div class="starter-template">       
+    <h3>Projects</h3>
+    <hr/>
+    <table class="table table-striped table-hover table-bordered">
+        <tr>
+            <th>Name</th>
+            <th>Url</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr *ngFor="let project of listOfProjects">
+            <td><a [routerLink]="['/details', project.id]">{{project.name}}</a></td>
+            <td>{{project.gitRepository.url}}</td>
+            <td><button type="button" class="btn btn-primary btn-sm" (click)="projectUpdate(project.id)">Run update</button></td>
+            <td><button type="button" class="btn btn-primary btn-sm" (click)="checkStatus(getTriggeredTaskIdForProject(project.id))">Check status</button></td>
+        </tr>
+    </table>            
+</div>

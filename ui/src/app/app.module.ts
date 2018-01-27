@@ -8,20 +8,25 @@ import { AppRouting } from "./app-routing.module";
 
 import { DataBrokersModule } from "./data-brokers/data-brokers.module";
 import { MenuComponent } from "./top-menu/menu.component";
+import { ProjectDetailsComponent } from "./project-details/project-details.component";
+import { ProjectsOverviewComponent } from "./projects-overview/projects-overview.component";
 
 
 @NgModule({
     declarations: [
         AppComponent,
-        MenuComponent
+        MenuComponent,
+        ProjectDetailsComponent,
+        ProjectsOverviewComponent
     ],
     imports: [
         BrowserModule,
         DataBrokersModule,
         FormsModule,
-        HttpModule
+        HttpModule,
+        AppRouting
     ],
-    providers: [AppRouting],
+    providers: [],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
