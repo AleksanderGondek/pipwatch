@@ -4,6 +4,7 @@ import { FormsModule } from "@angular/forms";
 import { HttpModule } from "@angular/http";
 
 import { AppComponent } from "./app.component";
+import { AppRouting } from "./app-routing.module";
 
 import { DataBrokersModule } from "./data-brokers/data-brokers.module";
 import { MenuComponent } from "./top-menu/menu.component";
@@ -11,7 +12,8 @@ import { MenuComponent } from "./top-menu/menu.component";
 
 @NgModule({
     declarations: [
-        AppComponent, MenuComponent
+        AppComponent,
+        MenuComponent
     ],
     imports: [
         BrowserModule,
@@ -19,7 +21,7 @@ import { MenuComponent } from "./top-menu/menu.component";
         FormsModule,
         HttpModule
     ],
-    providers: [],
+    providers: [AppRouting],
     bootstrap: [AppComponent]
 })
 export class AppModule { }
