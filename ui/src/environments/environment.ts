@@ -6,5 +6,5 @@
 export const environment = {
   production: false,
   pipwatchApiUrl: "http://localhost:8081/api/v1/",
-  version: "alpha"
+  version: "0.0.1"
 };

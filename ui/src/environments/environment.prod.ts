@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
   pipwatchApiUrl: "/api/v1/",
-  version: "alpha"
+  version: "0.0.1"
 };
