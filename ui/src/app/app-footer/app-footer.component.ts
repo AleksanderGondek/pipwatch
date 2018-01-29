@@ -3,7 +3,7 @@ import { Component, OnInit } from "@angular/core";
 import { environment } from "environments/environment";
 
 @Component({
-  selector: "app-app-footer",
+  selector: "app-footer",
   templateUrl: "./app-footer.component.html"
 })
 export class AppFooterComponent implements OnInit {
