@@ -24,11 +24,25 @@ export class DataBroker<T extends IEntity> {
     getAll(): Promise<T[]> {
         return this.http.get(this.apiBaseUrl + this.resourceName)
             .toPromise()
-            .then(response => this.handleResponse(response, this.cls))
+            .then(response => this.handleResponseAsCollection(response, this.cls))
             .catch(this.handleException);
     }
 
-    private handleResponse(response: any, cls: { new(jsonObject: any): T }): T[] {
+    get(id: string): Promise<T> {
+        return this.http.get(this.apiBaseUrl + this.resourceName + "/" + id)
+            .toPromise()
+            .then(response => this.handleResponseForItem(response, this.cls))
+            .catch(this.handleException);
+    }
+
+    private handleResponseForItem(response: any, cls: { new(jsonObject: any): T}): T {
+        // Enforce response having full typing of T
+        const itemJson = response.json();
+        const item = new cls(itemJson);
+        return item as T;
+    }
+
+    private handleResponseAsCollection(response: any, cls: { new(jsonObject: any): T }): T[] {
         // Enforce response having full typing of T
         const collection = response.json();
         const entityCollection = collection.map(function (item: any) {

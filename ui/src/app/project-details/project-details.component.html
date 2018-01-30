@@ -1,3 +1,10 @@
-<p>
-  project-details works!
-</p>
+<div *ngIf="projectDetails">
+    <h2>{{projectDetails.name}} details!</h2>
+
+    <div><label>Id:&nbsp;</label>{{projectDetails.id}}</div>
+    <div><label>Name:&nbsp;</label>{{projectDetails.name}}</div>
+    <div><label>Namespace:&nbsp;</label>{{projectDetails.namespace}}</div>
+    <div><label>Check command:&nbsp;</label>{{projectDetails.checkCommand}}</div>
+
+    <button (click)="goBack()">Back</button>
+</div>
