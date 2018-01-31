@@ -6,5 +6,19 @@
     <div><label>Namespace:&nbsp;</label>{{projectDetails.namespace}}</div>
     <div><label>Check command:&nbsp;</label>{{projectDetails.checkCommand}}</div>
 
+    <div><label>Git repository</label>
+        <div><label>Url:&nbsp;</label>{{projectDetails.gitRepository.url}}</div>
+        <div><label>Flavour:&nbsp;</label>{{projectDetails.gitRepository.flavour}}</div>
+
+        <div><label>Upstream url:&nbsp;</label>{{projectDetails.gitRepository.upstreamUrl}}</div>
+        <div><label>Github instance api address:&nbsp;</label>{{projectDetails.gitRepository.githubApiAddress}}</div>
+        <div><label>Github project name:&nbsp;</label>{{projectDetails.gitRepository.githubProjectName}}</div>
+        <div><label>Github project owner:&nbsp;</label>{{projectDetails.gitRepository.githubProjectOwner}}</div>
+    </div>
+
+    <div><label>Tags</label>
+        <span *ngFor="let tag of projectDetails.tags">{{tag.name}}</span>
+    </div>
+
     <button (click)="goBack()">Back</button>
 </div>
