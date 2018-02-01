@@ -16,6 +16,11 @@
         <div><label>Github project owner:&nbsp;</label>{{projectDetails.gitRepository.githubProjectOwner}}</div>
     </div>
 
+    <div *ngFor="let requirmentFile of projectDetails.requirementsFiles"><label>Requirement file</label>
+        <div><label>Path:&nbsp;</label>{{requirmentFile.fullPath}}</div>
+        <div><label>Status:&nbsp;</label>{{requirmentFile.status}}</div>
+    </div>
+
     <div><label>Tags</label>
         <span *ngFor="let tag of projectDetails.tags">{{tag.name}}</span>
     </div>
