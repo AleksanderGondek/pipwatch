@@ -1,3 +1,5 @@
+import * as _ from "lodash";
+
 export interface IEntity {
     readonly id: number;
 }
@@ -61,7 +63,7 @@ export class Requirement implements IEntity {
 
 export class RequirementsFile implements IEntity {
     public id: number;
-    public fullPath: string;
+    public path: string;
     public status: string;
 
     public projectId: number;
@@ -69,11 +71,13 @@ export class RequirementsFile implements IEntity {
 
     constructor(jsonObject: any) {
         this.id = jsonObject.id;
-        this.fullPath = jsonObject.full_path;
+        this.path = jsonObject.path;
         this.status = jsonObject.status;
 
         this.projectId = jsonObject.project_id;
-        this.requirements = jsonObject.requirements;
+        this.requirements = _.flatMap(jsonObject.requirements, (requirement) => {
+             return new Requirement(requirement);
+        });
     }
 }
 
@@ -97,9 +101,11 @@ export class Project implements IEntity {
         this.namespace = jsonObject.namespace;
 
         this.namespaceId = jsonObject.namespace_id;
-        this.gitRepository = jsonObject.git_repository;
-        this.tags = jsonObject.tags;
-        this.requirementsFiles = jsonObject.requirements_files;
+        this.gitRepository = new GitRepository(jsonObject.git_repository);
+        this.tags = _.flatMap(jsonObject.tags, (tag) => { return new Tag(tag); });
+        this.requirementsFiles = _.flatMap(jsonObject.requirements_files, (file) => {
+            return new RequirementsFile(file);
+        });
     }
 }
 

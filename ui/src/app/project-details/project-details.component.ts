@@ -24,7 +24,7 @@ export class ProjectDetailsComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.broker.initialize(environment.pipwatchApiUrl, "projects/", Project);
+        this.broker.initialize(environment.pipwatchApiUrl, "projects", Project);
 
         this.route.paramMap.switchMap((params: ParamMap) => this.broker.get(params.get("id")))
         .subscribe(projectDetails => this.projectDetails = projectDetails);
