@@ -19,6 +19,11 @@
     <div *ngFor="let requirmentFile of projectDetails.requirementsFiles"><label>Requirement file</label>
         <div><label>Path:&nbsp;</label>{{requirmentFile.path}}</div>
         <div><label>Status:&nbsp;</label>{{requirmentFile.status}}</div>
+
+        <div>
+            <label>List of packages:</label>
+            <div>{{requirmentFile.id}}</div>
+        </div>
     </div>
 
     <div><label>Tags</label>
