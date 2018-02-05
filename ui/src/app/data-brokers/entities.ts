@@ -119,7 +119,9 @@ export class Namespace implements IEntity {
         this.id = jsonObject.id;
         this.name = jsonObject.name;
 
-        this.projects = jsonObject.projects;
+        this.projects = _.flatMap(jsonObject.projects, (project) => {
+             return new Project(project);
+        });
     }
 }
 
