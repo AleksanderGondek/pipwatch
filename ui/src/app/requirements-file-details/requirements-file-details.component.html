@@ -1,0 +1,9 @@
+<div *ngIf="isDataLoaded">
+    <div><label>Path:&nbsp;</label>{{requirementsFile.path}}</div>
+    <div><label>Status:&nbsp;</label>{{requirementsFile.status}}</div>
+
+    <div>
+        <label>List of packages:</label>
+        <div *ngFor="let requirment of requirementsFile.requirements">{{requirment.name}}</div>
+    </div>
+</div>

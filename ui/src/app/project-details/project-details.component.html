@@ -16,15 +16,7 @@
         <div><label>Github project owner:&nbsp;</label>{{projectDetails.gitRepository.githubProjectOwner}}</div>
     </div>
 
-    <div *ngFor="let requirmentFile of projectDetails.requirementsFiles"><label>Requirement file</label>
-        <div><label>Path:&nbsp;</label>{{requirmentFile.path}}</div>
-        <div><label>Status:&nbsp;</label>{{requirmentFile.status}}</div>
-
-        <div>
-            <label>List of packages:</label>
-            <div>{{requirmentFile.id}}</div>
-        </div>
-    </div>
+    <app-requirements-file-details *ngFor="let requirmentFile of projectDetails.requirementsFiles" [requirementsFileId]="requirmentFile.id"></app-requirements-file-details>
 
     <div><label>Tags</label>
         <span *ngFor="let tag of projectDetails.tags">{{tag.name}}</span>

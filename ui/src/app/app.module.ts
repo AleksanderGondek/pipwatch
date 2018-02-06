@@ -11,6 +11,7 @@ import { MenuComponent } from "./top-menu/menu.component";
 import { ProjectDetailsComponent } from "./project-details/project-details.component";
 import { ProjectsOverviewComponent } from "./projects-overview/projects-overview.component";
 import { AppFooterComponent } from "./app-footer/app-footer.component";
+import { RequirementsFileDetailsComponent } from "./requirements-file-details/requirements-file-details.component";
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { AppFooterComponent } from "./app-footer/app-footer.component";
         AppFooterComponent,
         MenuComponent,
         ProjectDetailsComponent,
-        ProjectsOverviewComponent
+        ProjectsOverviewComponent,
+        RequirementsFileDetailsComponent
     ],
     imports: [
         BrowserModule,
