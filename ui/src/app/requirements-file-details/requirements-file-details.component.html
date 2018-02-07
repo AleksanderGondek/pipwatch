@@ -1,9 +1,9 @@
 <div *ngIf="isDataLoaded">
-    <div><label>Path:&nbsp;</label>{{requirementsFile.path}}</div>
-    <div><label>Status:&nbsp;</label>{{requirementsFile.status}}</div>
-
-    <div>
-        <label>List of packages:</label>
-        <div *ngFor="let requirment of requirementsFile.requirements">{{requirment.name}}</div>
-    </div>
+    <h3>{{requirementsFile.path}}&nbsp;<span class="badge badge-info">{{requirementsFile.status}}</span></h3>
+    <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let requirment of requirementsFile.requirements">
+            {{requirment.name}}
+            <span class="badge badge-primary">{{requirment.currentVersion}}</span>
+        </li>
+    </ul>
 </div>
