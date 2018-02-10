@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
+import { AboutComponent } from "app/about/about.component";
 import { AppComponent } from "app/app.component";
 import { ProjectsOverviewComponent } from "app/projects-overview/projects-overview.component";
 import { ProjectDetailsComponent } from "app/project-details/project-details.component";
@@ -8,6 +9,7 @@ import { ProjectDetailsComponent } from "app/project-details/project-details.com
 const routes: Routes = [
     {path: "", redirectTo: "/home", pathMatch: "full"},
     {path: "home", component: ProjectsOverviewComponent},
+    {path: "about", component: AboutComponent},
     {path: "details/:id", component: ProjectDetailsComponent}
 ];
 
