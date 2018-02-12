@@ -7,8 +7,7 @@ import { RequirementsFile } from "app/data-brokers/entities";
 
 @Component({
     selector: "app-requirements-file-details",
-    templateUrl: "./requirements-file-details.component.html",
-    styleUrls: ["./requirements-file-details.component.css"]
+    templateUrl: "./requirements-file-details.component.html"
 })
 export class RequirementsFileDetailsComponent implements OnInit {
     isDataLoaded: boolean;

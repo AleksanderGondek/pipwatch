@@ -11,8 +11,7 @@ import { Project } from "app/data-brokers/entities";
 
 @Component({
     selector: "app-project-details",
-    templateUrl: "./project-details.component.html",
-    styleUrls: ["./project-details.component.css"]
+    templateUrl: "./project-details.component.html"
 })
 export class ProjectDetailsComponent implements OnInit {
     @Input() projectDetails: Project;
