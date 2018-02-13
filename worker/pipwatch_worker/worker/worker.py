@@ -1,11 +1,13 @@
 """This module contains pipwatch worker definition."""
 
+from configparser import ConfigParser
 from itertools import chain
 from logging import getLogger, Logger  # noqa: F401 Imported for type definition
 from typing import Callable, FrozenSet  # noqa: F401 Imported for type definition
 
 from transitions import Machine
 
+from pipwatch_worker.core.configuration import load_config_file
 from pipwatch_worker.core.data_models import Project
 from pipwatch_worker.core.utils import ProjectFlavour
 from pipwatch_worker.worker.operations.checking_updates import CheckUpdates
@@ -141,6 +143,11 @@ class Worker:
         self.log.debug("Changing state to {state}.".format(state=States.UPDATING_METADATA.value))
         self.trigger(Triggers.TO_UPDATE_META.value)
         self.update_celery_state(States.UPDATING_METADATA.value)
+
+        if not self._dry_runs_only:
+            self.log.info("Worker running in dry-runs only mode. Skipping updating metadata.")
+            return
+
         self._update()
 
     def attempt_update(self) -> None:
@@ -167,6 +174,10 @@ class Worker:
             self.log.debug("Requirements update was not successful, will not commit changes.")
             return
 
+        if not self._dry_runs_only:
+            self.log.info("Worker running in dry-runs only mode. Skipping committing changes.")
+            return
+
         self._commit_changes()
 
     def push_changes(self) -> None:
@@ -174,6 +185,10 @@ class Worker:
         self.log.debug("Changing state to {state}.".format(state=States.PUSHING_CHANGES.value))
         self.trigger(Triggers.TO_PUSH_CHANGES.value)
         self.update_celery_state(States.PUSHING_CHANGES.value)
+
+        if not self._dry_runs_only:
+            self.log.info("Worker running in dry-runs only mode. Skipping pushing changes.")
+            return
 
         project_flavour = self.project_details.git_repository.flavour.casefold()
         self.log.debug("{flavour} repository type detected", project_flavour)
@@ -228,3 +243,9 @@ class Worker:
                     continue
 
                 requirement.desired_version = ""
+
+    @property
+    def _dry_runs_only(self) -> bool:
+        """Indicates if worker should attempt to commit and push changes made."""
+        configuration: ConfigParser = load_config_file()
+        return configuration.getboolean(section="pipwatch-worker", option="dry_runs_only", fallback=False)  # noqa: E501

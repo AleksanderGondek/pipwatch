@@ -21,7 +21,7 @@ class Clone(Operation):  # pylint: disable=too-few-public-methods
     def __call__(self) -> None:
         """Clone given repository (or - if it already exists - pull latest changes)."""
         self.log.debug("Attempting to run 'git reset --hard'")
-        self.git(command="reset --hard")
+        self.git(command="reset --hard HEAD~1")
         self.log.debug("Attempting to run 'git clean -fd'")
         self.git(command="clean -fd")
         self.log.debug("Attempting to run 'git pull'")
