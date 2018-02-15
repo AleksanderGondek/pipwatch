@@ -13,6 +13,7 @@ import { ProjectsOverviewComponent } from "./projects-overview/projects-overview
 import { AppFooterComponent } from "./app-footer/app-footer.component";
 import { RequirementsFileDetailsComponent } from "./requirements-file-details/requirements-file-details.component";
 import { AboutComponent } from "./about/about.component";
+import { CreateProjectComponent } from "./create-project/create-project.component";
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { AboutComponent } from "./about/about.component";
         ProjectDetailsComponent,
         ProjectsOverviewComponent,
         RequirementsFileDetailsComponent,
-        AboutComponent
+        AboutComponent,
+        CreateProjectComponent
     ],
     imports: [
         BrowserModule,
