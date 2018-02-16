@@ -3,23 +3,23 @@ import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { ProjectsOverviewComponent } from "./projects-overview.component";
 
 describe("ProjectsOverviewComponent", () => {
-  let component: ProjectsOverviewComponent;
-  let fixture: ComponentFixture<ProjectsOverviewComponent>;
+    let component: ProjectsOverviewComponent;
+    let fixture: ComponentFixture<ProjectsOverviewComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ProjectsOverviewComponent ]
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [ProjectsOverviewComponent]
+        })
+            .compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(ProjectsOverviewComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(ProjectsOverviewComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it("should be created", () => {
-    expect(component).toBeTruthy();
-  });
+    it("should be created", () => {
+        expect(component).toBeTruthy();
+    });
 });
