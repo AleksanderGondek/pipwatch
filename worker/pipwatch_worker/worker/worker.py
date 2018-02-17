@@ -145,7 +145,7 @@ class Worker:
         self.update_celery_state(States.UPDATING_METADATA.value)
 
         if not self._dry_runs_only:
-            self.log.info("Worker running in dry-runs only mode. Skipping updating metadata.")
+            self.log.warning("Worker running in dry-runs only mode. Skipping updating metadata.")
             return
 
         self._update()
@@ -175,7 +175,7 @@ class Worker:
             return
 
         if not self._dry_runs_only:
-            self.log.info("Worker running in dry-runs only mode. Skipping committing changes.")
+            self.log.warning("Worker running in dry-runs only mode. Skipping committing changes.")
             return
 
         self._commit_changes()
@@ -187,7 +187,7 @@ class Worker:
         self.update_celery_state(States.PUSHING_CHANGES.value)
 
         if not self._dry_runs_only:
-            self.log.info("Worker running in dry-runs only mode. Skipping pushing changes.")
+            self.log.warning("Worker running in dry-runs only mode. Skipping pushing changes.")
             return
 
         project_flavour = self.project_details.git_repository.flavour.casefold()
