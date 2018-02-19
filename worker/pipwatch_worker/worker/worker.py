@@ -76,13 +76,13 @@ class Worker:
 
     def fail(self) -> None:
         """Signify that processing of given request has failed."""
-        self.log.debug("Changing state to {state}.".format(state=States.FAILURE.value))
+        self.log.info("Changing state to {state}.".format(state=States.FAILURE.value))
         self.trigger(Triggers.TO_FAIL.value)
         self.update_celery_state(States.FAILURE.value)
 
     def initialize(self, project_to_process: Project) -> None:
         """Initialize variables needed for further request processing."""
-        self.log.debug("Changing state to {state}.".format(state=States.INITIALIZING.value))
+        self.log.info("Changing state to {state}.".format(state=States.INITIALIZING.value))
         self.update_celery_state(States.INITIALIZING.value)
         self.project_details = project_to_process
 
@@ -118,21 +118,21 @@ class Worker:
 
     def clone(self) -> None:
         """Clone repository containing given project."""
-        self.log.debug("Changing state to {state}.".format(state=States.CLONING_REPOSITORY.value))
+        self.log.info("Changing state to {state}.".format(state=States.CLONING_REPOSITORY.value))
         self.trigger(Triggers.TO_CLONE.value)
         self.update_celery_state(States.CLONING_REPOSITORY.value)
         self._clone()
 
     def parse_requirements(self) -> None:
         """Parse and load requirements that are needed by given project."""
-        self.log.debug("Changing state to {state}.".format(state=States.PARSING_REQUIREMENTS.value))
+        self.log.info("Changing state to {state}.".format(state=States.PARSING_REQUIREMENTS.value))
         self.trigger(Triggers.TO_PARSE_REQ.value)
         self.update_celery_state(States.PARSING_REQUIREMENTS.value)
         self._parse()
 
     def check_updates(self) -> None:
         """Check if any of given required packages may be updated."""
-        self.log.debug("Changing state to {state}.".format(state=States.CHECKING_FOR_UPDATES.value))
+        self.log.info("Changing state to {state}.".format(state=States.CHECKING_FOR_UPDATES.value))
         self.trigger(Triggers.TO_CHECK_UPDATES.value)
         self.update_celery_state(States.CHECKING_FOR_UPDATES.value)
         self._check_update()
@@ -140,7 +140,7 @@ class Worker:
 
     def update_metadata(self) -> None:
         """Send update of given project information (with possible new requirements versions)."""
-        self.log.debug("Changing state to {state}.".format(state=States.UPDATING_METADATA.value))
+        self.log.info("Changing state to {state}.".format(state=States.UPDATING_METADATA.value))
         self.trigger(Triggers.TO_UPDATE_META.value)
         self.update_celery_state(States.UPDATING_METADATA.value)
 
@@ -152,7 +152,7 @@ class Worker:
 
     def attempt_update(self) -> None:
         """Check if update of given packages will break project."""
-        self.log.debug("Changing state to {state}.".format(state=States.ATTEMPTING_UPDATE.value))
+        self.log.info("Changing state to {state}.".format(state=States.ATTEMPTING_UPDATE.value))
         self.trigger(Triggers.TO_UPDATE_PGS.value)
         self.update_celery_state(States.ATTEMPTING_UPDATE.value)
 
@@ -167,11 +167,11 @@ class Worker:
 
     def commit_changes(self) -> None:
         """Commit changes to given project."""
-        self.log.debug("Changing state to {state}.".format(state=States.COMMITTING_CHANGES.value))
+        self.log.info("Changing state to {state}.".format(state=States.COMMITTING_CHANGES.value))
         self.trigger(Triggers.TO_COMMIT.value)
         self.update_celery_state(States.COMMITTING_CHANGES.value)
         if not self.update_successful:
-            self.log.debug("Requirements update was not successful, will not commit changes.")
+            self.log.info("Requirements update was not successful, will not commit changes.")
             return
 
         if not self._dry_runs_only:
@@ -182,7 +182,7 @@ class Worker:
 
     def push_changes(self) -> None:
         """Send changes to original repository as push / gerrit patch / github pull request."""
-        self.log.debug("Changing state to {state}.".format(state=States.PUSHING_CHANGES.value))
+        self.log.info("Changing state to {state}.".format(state=States.PUSHING_CHANGES.value))
         self.trigger(Triggers.TO_PUSH_CHANGES.value)
         self.update_celery_state(States.PUSHING_CHANGES.value)
 
@@ -191,27 +191,27 @@ class Worker:
             return
 
         project_flavour = self.project_details.git_repository.flavour.casefold()
-        self.log.debug("{flavour} repository type detected", project_flavour)
+        self.log.info("{flavour} repository type detected", project_flavour)
         if project_flavour == ProjectFlavour.GIT:
-            self.log.debug("Attempting to push changes")
+            self.log.info("Attempting to push changes")
             self._git_push()
             return
 
         if project_flavour == ProjectFlavour.GITHUB:
-            self.log.debug("Attempting to push changes")
+            self.log.info("Attempting to push changes")
             self._git_push()
-            self.log.debug("Attempting to create github pull request")
+            self.log.info("Attempting to create github pull request")
             self._pull_request()
             return
 
         if project_flavour == ProjectFlavour.GERRIT:
-            self.log.debug("Attempting to create gerrit patch")
+            self.log.info("Attempting to create gerrit patch")
             self._git_review()
             return
 
     def success(self) -> None:
         """Signify that processing of given request has succeeded."""
-        self.log.debug("Changing state to {state}.".format(state=States.SUCCESS.value))
+        self.log.info("Changing state to {state}.".format(state=States.SUCCESS.value))
         self.trigger(Triggers.TO_SUCCESS.value)
         self.update_celery_state(States.SUCCESS.value)
 
@@ -224,7 +224,7 @@ class Worker:
         This is needed due to 'rollback' logic if update does not succeed.
         """
         # There is something weird with mypy here - need to investigate later
-        self.log.debug("Attempting to save requirements which are pinned.")
+        self.log.info("Attempting to save requirements which are pinned.")
         self._locked_packages_ids = frozenset(
             requirement.id for requirement in chain(*(  # type: ignore
                 requirement_file.requirements for requirement_file in self.project_details.requirements_files
@@ -235,7 +235,7 @@ class Worker:
     def _rollback_requirements_desired_versions(self):
         """Reset requirements 'desired_versions' if they were not set before this update run."""
         for requirements_file in self.project_details.requirements_files:
-            self.log.debug("Rolling back requirements of '{file}'".format(
+            self.log.info("Rolling back requirements of '{file}'".format(
                 file=requirements_file.path
             ))
             for requirement in requirements_file.requirements:
