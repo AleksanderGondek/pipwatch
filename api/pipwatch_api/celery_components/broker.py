@@ -1,6 +1,6 @@
 """This module contains broker class for streamlining interaction with celery."""
 from logging import Logger, getLogger
-from typing import Any, Dict
+from typing import Any, Dict, List, NamedTuple
 
 from celery import Celery
 from celery.result import AsyncResult
@@ -8,6 +8,9 @@ from celery.result import AsyncResult
 from pipwatch_api.core.configuration import configure_celery_app
 from pipwatch_api.datastore.models import DATABASE, Project
 from pipwatch_api.datastore.stores import DefaultStore
+
+
+ActiveTask = NamedTuple("ActiveTask", [("name", str), ("args", str)])
 
 
 class Broker:
@@ -21,6 +24,17 @@ class Broker:
         self.log: Logger = logger if logger else getLogger(__name__)
         self.app: Celery = Celery("Pipwatch-api")
         configure_celery_app(celery_app=self.app)
+
+    def get_all_active_tasks(self) -> List[ActiveTask]:
+        """Return list of all currently active tasks."""
+        active_tasks: List[ActiveTask] = []
+        for worker_tasks in self.app.control.inspect().registered().values():
+            active_tasks.extend(
+                ActiveTask(task_object.get("name", "N/A"), task_object.get("args", "N/A"))
+                for task_object in worker_tasks
+            )
+
+        return active_tasks
 
     def send_task(self, task_name: str, args: Any, kwargs: Any) -> str:
         """Send celery_components task and receive its id."""

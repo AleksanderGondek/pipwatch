@@ -13,6 +13,19 @@ projects_updates_namespace = Namespace(  # pylint: disable=invalid-name
 )
 
 
+@projects_updates_namespace.route("/")
+class ProjectUpdates(Resource):
+    """Resource representing all ongoing update requests."""
+    def __init__(self, *args, **kwargs):
+        """Initialize resource instance."""
+        super().__init__(*args, **kwargs)
+        self.updates_broker = ProjectUpdateBroker()
+
+    def get(self):
+        """Return list of all currently ongoing update statuses."""
+        pass
+
+
 @projects_updates_namespace.route("/<int:project_id>")
 class ProjectsUpdate(Resource):
     """Resource representing project requirements update request."""
