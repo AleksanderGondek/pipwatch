@@ -2,7 +2,7 @@
 from typing import Dict
 
 from celery.result import AsyncResult
-from flask_restplus import Namespace, Resource
+from flask_restplus import Namespace, Resource, fields
 
 from pipwatch_api.celery_components.broker import ProjectUpdateBroker
 
@@ -10,6 +10,13 @@ from pipwatch_api.celery_components.broker import ProjectUpdateBroker
 projects_updates_namespace = Namespace(  # pylint: disable=invalid-name
     "projects-updates",
     description="Requirements update requests for given project"
+)
+project_update_repr_structure = {  # pylint: disable=invalid-name
+    "name": fields.String(required=True, description="Name of project update task"),
+    "args": fields.String(required=True, description="Parameters used for running task")
+}
+project_update_repr = projects_updates_namespace.model(  # pylint: disable=invalid-name
+    "ProjectUpdate", project_update_repr_structure
 )
 
 
@@ -21,9 +28,10 @@ class ProjectUpdates(Resource):
         super().__init__(*args, **kwargs)
         self.updates_broker = ProjectUpdateBroker()
 
+    @projects_updates_namespace.marshal_list_with(project_update_repr)
     def get(self):
         """Return list of all currently ongoing update statuses."""
-        pass
+        return self.updates_broker.get_all_active_tasks()
 
 
 @projects_updates_namespace.route("/<int:project_id>")
