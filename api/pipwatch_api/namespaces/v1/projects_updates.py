@@ -31,7 +31,12 @@ class ProjectUpdates(Resource):
     @projects_updates_namespace.marshal_list_with(project_update_repr)
     def get(self):
         """Return list of all currently ongoing update statuses."""
-        return self.updates_broker.get_all_active_tasks()
+        return [
+            {
+                "name": data.name,
+                "args": data.args
+            } for data in self.updates_broker.get_all_active_tasks()
+        ]
 
 
 @projects_updates_namespace.route("/<int:project_id>")
