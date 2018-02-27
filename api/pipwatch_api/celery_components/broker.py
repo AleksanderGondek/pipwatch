@@ -28,7 +28,9 @@ class Broker:
     def get_all_active_tasks(self) -> List[ActiveTask]:
         """Return list of all currently active tasks."""
         active_tasks: List[ActiveTask] = []
-        for worker_tasks in self.app.control.inspect().registered().values():
+
+        list_of_worker_tasks = self.app.control.inspect().registered().values() or []
+        for worker_tasks in list_of_worker_tasks:
             active_tasks.extend(
                 ActiveTask(task_object.get("name", "N/A"), task_object.get("args", "N/A"))
                 for task_object in worker_tasks
