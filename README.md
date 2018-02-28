@@ -24,7 +24,7 @@ After new versions of requirement packages are verified to work, their change ma
 License
 ---
 
-Copyright 2017 Aleksander Gondek
+Copyright 2017 - 2018 Aleksander Gondek
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
