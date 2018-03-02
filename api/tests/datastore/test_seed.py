@@ -12,7 +12,7 @@ def test_seed_database(database) -> None:
     expected_project_check_command = "tox"
 
     expected_requirements_files_paths = ["api/requirements.txt", "api/requirements-development.txt"]
-    expected_requirements_names = ["SQLAlchemy", "pytest"]
+    expected_requirements_names = ["SQLAlchemy", "celery[redis]", "pytest"]
 
     seed_database(database_instance=database)
 
@@ -32,7 +32,7 @@ def test_seed_database(database) -> None:
     for requirements_file in requirements_files_found:
         assert requirements_file.path in expected_requirements_files_paths
 
-    requirements_found = Requirement.query.limit(2).all()
-    assert requirements_found is not None and len(requirements_found) == 2
+    requirements_found = Requirement.query.limit(3).all()
+    assert requirements_found is not None and len(requirements_found) == 3
     for requirement_found in requirements_found:
         assert requirement_found.name in expected_requirements_names

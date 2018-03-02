@@ -20,7 +20,7 @@ def seed_database(database_instance: SQLAlchemy = None) -> None:
     example_dev_requirements_file = RequirementsFile(path="api/requirements-development.txt", status="")
 
     example_requirement = Requirement(name="SQLAlchemy", current_version="1.1.14", desired_version="", status="")
-    example_dev_requirement = Requirement(name="celery[redis]", current_version="4.1.0", desired_version="", status="")
+    example_requirement_two = Requirement(name="celery[redis]", current_version="4.1.0", desired_version="", status="")
     example_dev_requirement = Requirement(name="pytest", current_version="3.2.2", desired_version="", status="")
 
     database_instance.session.add(default_namespace)
@@ -30,6 +30,7 @@ def seed_database(database_instance: SQLAlchemy = None) -> None:
     database_instance.session.add(example_requirements_file)
     database_instance.session.add(example_dev_requirements_file)
     database_instance.session.add(example_requirement)
+    database_instance.session.add(example_requirement_two)
     database_instance.session.add(example_dev_requirement)
     database_instance.session.commit()
 
