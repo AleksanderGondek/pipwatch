@@ -27,12 +27,13 @@ def test_seed_database(database) -> None:
             and project_found.name == expected_project_name
             and project_found.check_command == expected_project_check_command)
 
-    requirements_files_found = RequirementsFile.query.limit(2).all()
-    assert requirements_files_found is not None and len(requirements_files_found) == 2
+    requirements_files_found = RequirementsFile.query.limit(len(expected_requirements_files_paths)).all()
+    assert requirements_files_found is not None
+    assert len(requirements_files_found) == len(expected_requirements_files_paths)
     for requirements_file in requirements_files_found:
         assert requirements_file.path in expected_requirements_files_paths
 
-    requirements_found = Requirement.query.limit(3).all()
-    assert requirements_found is not None and len(requirements_found) == 3
+    requirements_found = Requirement.query.limit(len(expected_requirements_names)).all()
+    assert requirements_found is not None and len(requirements_found) == len(expected_requirements_names)
     for requirement_found in requirements_found:
         assert requirement_found.name in expected_requirements_names
