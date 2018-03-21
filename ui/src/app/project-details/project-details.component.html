@@ -22,8 +22,12 @@
         </div>
 
         <div class="form-group row">
-                <label for="tags" class="col-sm-2 col-form-label"><em>Git repository</em></label>
-                <div class="col-sm-10"><hr/></div>
+            <label for="tags" class="col-sm-2 col-form-label">
+                <em>Git repository</em>
+            </label>
+            <div class="col-sm-10">
+                <hr/>
+            </div>
         </div>
 
         <div class="form-group row">
@@ -41,31 +45,39 @@
         <div class="form-group row">
             <label for="upstreamUrl" class="col-sm-2 col-form-label">Upstream url</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="upstreamUrl" [(ngModel)]="projectDetails.gitRepository.upstreamUrl" name="upstreamUrl" [disabled]="true">
+                <input type="text" class="form-control" id="upstreamUrl" [(ngModel)]="projectDetails.gitRepository.upstreamUrl" name="upstreamUrl"
+                    [disabled]="true">
             </div>
         </div>
         <div class="form-group row">
             <label for="githubApiAddress" class="col-sm-2 col-form-label">Github api address</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="githubApiAddress" [(ngModel)]="projectDetails.gitRepository.githubApiAddress" name="githubApiAddress" [disabled]="true">
+                <input type="text" class="form-control" id="githubApiAddress" [(ngModel)]="projectDetails.gitRepository.githubApiAddress"
+                    name="githubApiAddress" [disabled]="true">
             </div>
         </div>
         <div class="form-group row">
             <label for="githubProjectName" class="col-sm-2 col-form-label">Github project name</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="githubProjectName" [(ngModel)]="projectDetails.gitRepository.githubProjectName" name="githubProjectName" [disabled]="true">
+                <input type="text" class="form-control" id="githubProjectName" [(ngModel)]="projectDetails.gitRepository.githubProjectName"
+                    name="githubProjectName" [disabled]="true">
             </div>
         </div>
         <div class="form-group row">
             <label for="githubProjectOwner" class="col-sm-2 col-form-label">Github project owner</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="githubProjectOwner" [(ngModel)]="projectDetails.gitRepository.githubProjectOwner" name="githubProjectOwner" [disabled]="true">
+                <input type="text" class="form-control" id="githubProjectOwner" [(ngModel)]="projectDetails.gitRepository.githubProjectOwner"
+                    name="githubProjectOwner" [disabled]="true">
             </div>
         </div>
 
         <div class="form-group row">
-            <label for="tags" class="col-sm-2 col-form-label"><em>Requirements files</em></label>
-            <div class="col-sm-10"><hr/></div>
+            <label for="tags" class="col-sm-2 col-form-label">
+                <em>Requirements files</em>
+            </label>
+            <div class="col-sm-10">
+                <hr/>
+            </div>
         </div>
 
         <div class="form-group row">
@@ -77,13 +89,17 @@
 
         <div class="form-group row">
             <label for="tags" class="col-sm-2 col-form-label">&nbsp;</label>
-            <div class="col-sm-10"><hr/></div>
+            <div class="col-sm-10">
+                <hr/>
+            </div>
         </div>
 
         <div class="form-group row">
             <label for="tags" class="col-sm-2 col-form-label">Tags</label>
             <div class="col-sm-10 text-left">
-                <h3><span class="badge badge-primary" *ngFor="let tag of projectDetails.tags">{{tag.name}}</span></h3>
+                <h3>
+                    <span class="badge badge-primary" *ngFor="let tag of projectDetails.tags">{{tag.name}}</span>
+                </h3>
             </div>
         </div>
 
