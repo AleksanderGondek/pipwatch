@@ -12,7 +12,7 @@
             <td>
                 <a [routerLink]="['/details', project.id]">{{project.name}}</a>
             </td>
-            <td>{{project.gitRepository.url}}</td>
+            <td><a [routerLink]="project.gitRepository.url">{{project.gitRepository.url}}</a></td>
             <td>
                 <button type="button" class="btn btn-primary btn-sm" (click)="projectUpdate(project.id)">Run update</button>
             </td>
